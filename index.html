@@ -296,9 +296,11 @@
     ROTULOS_DETALHE.forEach(function (r) {
       var txt = p.detalhe && p.detalhe[r[0]];
       if (!txt) return;
+      // Passos numerados ("1. ... 2. ...") ganham uma linha cada.
+      var texto = /^1\.\s/.test(txt) ? txt.replace(/\s(?=\d{1,2}\.\s)/g, '\n') : txt;
       blocos.appendChild(el('section', { class: 'detail__block' }, [
         el('h3', { text: r[1] }),
-        el('p', { text: txt })
+        el('p', { text: texto })
       ]));
     });
 
