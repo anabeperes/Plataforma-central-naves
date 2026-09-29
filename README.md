@@ -11,8 +11,8 @@ Site: https://plataforma-central-naves.vercel.app
 
 | Aba | Rota | O que tem |
 | --- | --- | --- |
-| Visão geral | `#/` | Busca em tudo, números, acesso rápido, jornada do mentorado e rotinas do time |
-| Perguntar | `#/perguntar` | Chat com IA que responde qualquer pergunta sobre a operação usando os dados da central, inclusive links |
+| Visão geral | `#/` | Pergunte ao assistente: chat com IA que responde qualquer pergunta sobre a operação usando os dados da central, inclusive links |
+| Últimos acessos | `#/recentes` | O que a pessoa abriu por último (links, agentes, projetos e entregas), salvo só no navegador dela |
 | Agentes de IA | `#/agentes` | Cada agente: o que faz, para quem, onde fica, como usar, atenção |
 | Projetos | `#/projetos` | Tudo que o time construiu, por categoria, com "Como funciona" nas automações |
 | Links importantes | `#/links` | Recorrentes, eventos, integração e treinamento, canais do Slack, ferramentas |
@@ -26,7 +26,7 @@ desktop, barra inferior no celular, fonte Manrope, cartões brancos e verde-lim�
 | Arquivo | O que é |
 | --- | --- |
 | `index.html` | Casca: menu lateral, barra do celular, painel de detalhe |
-| `app.js` | Roteador por `#/rota`, busca, filtros, cards e painéis |
+| `app.js` | Roteador por `#/rota`, busca, filtros, cards, painéis e registro dos últimos acessos |
 | `style.css` | Estilos (CSS puro) |
 | `dados/projetos.js` | Projetos do time (`PROJETOS`, `CATEGORIAS`, `TIPOS`, `CONTEXTOS`) |
 | `dados/agentes.js` | Agentes de IA (`AGENTES`) |
@@ -41,13 +41,16 @@ desktop, barra inferior no celular, fonte Manrope, cartões brancos e verde-lim�
 | `LINKS-PENDENTES.md` | O que falta preencher e o que já foi buscado |
 | `prompts/central-do-fluxo-ideacao.md` | Prompt para pensar a próxima versão da central com o Claude |
 
-A página continua estática e sem login. A única parte com servidor é a aba Perguntar: uma
+A página continua estática e sem login. A única parte com servidor é o assistente da Visão geral: uma
 função em `api/chat.js` que a Vercel roda sob demanda. Deploy é servir a raiz na Vercel; ela
 instala `@google/genai` sozinha a partir do `package.json`.
 **Os arquivos em `dados/` são a única fonte de verdade.** Nunca coloque senha, código de acesso ou
 credencial neles: isso fica no 1Password.
 
-## Aba Perguntar (assistente)
+## Visão geral (assistente)
+
+A Visão geral é só o chat. Links antigos para `#/perguntar` (inclusive `#/perguntar?q=...`)
+caem nela e continuam funcionando.
 
 Como funciona: a pergunta vai para `/api/chat`; a função monta um texto com **tudo** que está em
 `dados/*.js` (jornada, rotinas, entregas, agentes, projetos, links e perguntas frequentes), manda
@@ -145,7 +148,6 @@ Teste local sem chave: `npm run testar-base` mostra a base montada. Com a chave 
 ```
 
 - `grupo` precisa estar em `GRUPOS_LINKS` (define a ordem dos blocos).
-- `id` é usado em `ACESSO_RAPIDO` (`dados/operacao.js`) para aparecer na visão geral.
 - Cada linha tem "copiar" e "abrir em nova aba". Sem `url`, mostra "link em breve".
 
 ### Entregas (`dados/entregas.js`)
@@ -160,26 +162,40 @@ Teste local sem chave: `npm run testar-base` mostra a base montada. Com a chave 
 }
 ```
 
-### Visão geral (`dados/operacao.js`)
+### Operação (`dados/operacao.js`)
+
+Só o assistente usa estes dados (não aparecem mais na tela).
 
 - `JORNADA`: etapas do mentorado (`etapa`, `titulo`, `texto`).
 - `ROTINAS`: rotinas do time (`quando`, `titulo`, `texto`).
-- `ACESSO_RAPIDO`: lista de `id` de links que aparecem em "Acesso rápido".
+- `ACESSO_RAPIDO`: lista de `id` de links mais usados.
+
+## Últimos acessos
+
+A aba `#/recentes` lista, do mais recente para o mais antigo, o que a pessoa abriu na central:
+links externos (em qualquer aba, inclusive nas respostas do assistente e no "copiar"), e os painéis
+de agentes, projetos e entregas. Cada item aparece uma vez só (volta para o topo ao ser aberto de
+novo) e a lista guarda os 30 últimos. Fica no `localStorage` do navegador
+(`central-fluxo-recentes`): cada pessoa vê só o dela e não vai para servidor nenhum. O botão
+"Limpar histórico" apaga tudo.
 
 ## Busca e filtros
 
-- Na visão geral, a busca procura em tudo (agentes, projetos, links, entregas e rotinas) e agrupa
-  os resultados; clicar num resultado abre o painel do item.
+- A busca fica sempre à mostra; os chips ficam atrás do botão "Filtros" (que mostra quantos
+  estão ativos e já abre se o link vier filtrado).
 - Em cada aba, a busca procura em todos os textos do item (inclusive o detalhe), sem diferenciar
   acento nem maiúscula. Chips filtram; dentro do grupo vale "ou", entre grupos e com a busca "e".
 - O estado fica na URL (`#/projetos?q=...&tipo=...`), então dá para mandar um link já filtrado.
   Links antigos no formato `?q=` são redirecionados para `#/projetos`.
-- Atalho: `/` foca a busca da aba.
+- Atalho: `/` foca a busca da aba (na Visão geral, a caixa do assistente).
 
 ## Painel de detalhe
 
-"Como funciona" (projetos), "Como usar" (agentes) e "Como entregamos" (entregas) abrem um `<dialog>`
-com um bloco por pergunta, que fecha com Esc, com o X ou clicando fora e devolve o foco ao botão.
+Os cards de agentes, projetos e entregas mostram só nome, descrição curta e uma linha discreta
+(onde/para quem, tipo ou frequência). Clicar no card abre um `<dialog>` com tudo: como usar,
+como funciona ou como entregamos, quem cuida, autores, data e links extras (PRD, Git). Projeto
+sem detalhe abre direto o link. "Abrir" no canto do card leva ao link sem abrir o painel. O painel
+tem um bloco por pergunta, que fecha com Esc, com o X ou clicando fora e devolve o foco ao botão.
 Textos que começam com "1. " ganham uma linha por passo. Links internos (`#/...`) dentro do painel
 fecham o painel e navegam.
 
