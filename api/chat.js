@@ -29,8 +29,7 @@ function base() {
    Os nomes dos modelos do Gemini mudam (2.0, 2.5, 3...). Sem CHAT_MODELO, lista os modelos que a
    chave enxerga, fica só com os que geram texto e prefere: "flash" (rápido e com plano gratuito),
    sem sufixos como lite/8b/image/tts/live/audio/exp/preview, versão mais alta primeiro. */
-let modeloCache = '';
-const modelosRuins = new Set();
+let candidatosCache = null;
 function versaoDe(nome) {
   const m = /gemini-(\d+(?:\.\d+)?)/.exec(nome);
   return m ? parseFloat(m[1]) : 0;
@@ -42,23 +41,27 @@ function pontuar(nome) {
   if (/lite|8b|image|tts|live|audio|exp|preview|embedding|thinking|robotics|computer|learnlm|gemma|imagen|veo/.test(nome)) p -= 500;
   return p;
 }
-async function resolverModelo(ai) {
-  if (MODELO_FIXO) return MODELO_FIXO;
-  if (modeloCache) return modeloCache;
+async function listarCandidatos(ai) {
+  if (MODELO_FIXO) return [MODELO_FIXO];
+  if (candidatosCache) return candidatosCache;
   const nomes = [];
   const pager = await ai.models.list({ config: { pageSize: 100 } });
   for await (const m of pager) {
     const nome = String(m.name || '').replace(/^models\//, '');
     if (!/^gemini-/.test(nome)) continue;
     if (m.supportedActions && m.supportedActions.length && !m.supportedActions.includes('generateContent')) continue;
-    if (modelosRuins.has(nome)) continue;
     nomes.push(nome);
   }
   nomes.sort((a, b) => pontuar(b) - pontuar(a));
   if (!nomes.length) throw new Error('Nenhum modelo Gemini de texto disponível para esta chave.');
-  modeloCache = nomes[0];
-  console.log('Modelo escolhido: ' + modeloCache + ' (disponíveis: ' + nomes.slice(0, 6).join(', ') + ')');
-  return modeloCache;
+  candidatosCache = nomes;
+  console.log('Modelos por ordem de preferência: ' + nomes.slice(0, 8).join(', '));
+  return nomes;
+}
+// Erros em que vale tentar o próximo modelo: não existe (404), cota do plano gratuito (429),
+// sobrecarregado ou instável (500, 503).
+function valeTentarOutro(e) {
+  return e instanceof ApiError && [404, 429, 500, 503].includes(e.status);
 }
 
 const janelas = new Map();
@@ -133,17 +136,18 @@ export async function POST(req) {
       const enviar = obj => controlador.enqueue(codificador.encode(JSON.stringify(obj) + '\n'));
       let modelo = '';
       try {
-        modelo = await resolverModelo(ai);
-        let fluxo;
-        try {
-          fluxo = await ai.models.generateContentStream({ ...params, model: modelo });
-        } catch (e) {
-          // Modelo listado mas indisponível para esta chave: risca da lista e tenta o próximo.
-          if (!(e instanceof ApiError) || e.status !== 404 || MODELO_FIXO) throw e;
-          modelosRuins.add(modelo); modeloCache = '';
-          modelo = await resolverModelo(ai);
-          fluxo = await ai.models.generateContentStream({ ...params, model: modelo });
+        const candidatos = await listarCandidatos(ai);
+        let fluxo = null, ultimoErro = null;
+        for (const nome of candidatos.slice(0, 4)) {
+          modelo = nome;
+          try { fluxo = await ai.models.generateContentStream({ ...params, model: nome }); break; }
+          catch (e) {
+            ultimoErro = e;
+            if (!valeTentarOutro(e)) throw e;
+            console.warn('Modelo ' + nome + ' falhou (' + e.status + '): ' + e.message + '. Tentando o próximo.');
+          }
         }
+        if (!fluxo) throw ultimoErro;
         let texto = '';
         let motivo = '';
         let uso = null;
@@ -179,15 +183,17 @@ export async function POST(req) {
 }
 
 function mensagemErro(e, modelo) {
+  const onde = modelo ? ' (modelo ' + modelo + ')' : '';
   if (e instanceof ApiError) {
+    const detalhe = ' Detalhe do Google: ' + String(e.message || '').slice(0, 300);
     if (e.status === 400 && /api key/i.test(e.message)) return 'Chave da API inválida. Confira GEMINI_API_KEY na Vercel.';
-    if (e.status === 401 || e.status === 403) return 'Chave da API sem permissão. Confira GEMINI_API_KEY na Vercel.';
-    if (e.status === 404) return 'Modelo "' + (modelo || MODELO_FIXO) + '" não encontrado. ' + (MODELO_FIXO ? 'Ajuste ou remova CHAT_MODELO na Vercel.' : 'Tente de novo em instantes.');
-    if (e.status === 429) return 'Limite do plano gratuito atingido por enquanto. Espere um minuto e tente de novo.';
-    if (e.status >= 500) return 'A API do Gemini está instável agora. Tente de novo em instantes.';
-    return 'Erro da API (' + e.status + '): ' + e.message;
+    if (e.status === 401 || e.status === 403) return 'Chave da API sem permissão. Confira GEMINI_API_KEY na Vercel.' + detalhe;
+    if (e.status === 404) return 'Modelo não encontrado' + onde + '. ' + (MODELO_FIXO ? 'Ajuste ou remova CHAT_MODELO na Vercel.' : 'Tente de novo em instantes.') + detalhe;
+    if (e.status === 429) return 'Limite do plano gratuito atingido' + onde + '. Espere um minuto e tente de novo.' + detalhe;
+    if (e.status >= 500) return 'A API do Gemini falhou' + onde + ', erro ' + e.status + '. Tente de novo em instantes.' + detalhe;
+    return 'Erro da API (' + e.status + ')' + onde + ': ' + e.message;
   }
-  return 'Erro inesperado: ' + (e && e.message ? e.message : String(e));
+  return 'Erro inesperado' + onde + ': ' + (e && e.message ? e.message : String(e));
 }
 
 export function GET() {

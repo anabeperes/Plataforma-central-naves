@@ -741,7 +741,7 @@
             var ev; try { ev = JSON.parse(linha); } catch (e) { return; }
             if (ev.t) { resposta.texto += ev.t; corpo.innerHTML = renderMarkdown(resposta.texto); rolar(); }
             if (ev.erro) throw new Error(ev.erro);
-            if (ev.fim) status.textContent = '';
+            if (ev.fim) status.textContent = ev.modelo ? 'Respondido por ' + ev.modelo : '';
           }
           function ler() {
             return leitor.read().then(function (x) {
@@ -765,7 +765,7 @@
           terminar();
         });
     }
-    function terminar(msg) { ocupado = false; enviar.disabled = false; status.textContent = msg || ''; caixa.focus(); }
+    function terminar(msg) { ocupado = false; enviar.disabled = false; if (msg) status.textContent = msg; else if (status.textContent === 'Pensando…') status.textContent = ''; caixa.focus(); }
 
     enviar.addEventListener('click', mandar);
     caixa.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); mandar(); } });
