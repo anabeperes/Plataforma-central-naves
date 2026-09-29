@@ -29,12 +29,25 @@ Os dados ficam em arquivos que o time edita no GitHub. Toda informação veio de
 
 ## O que eu já sei que falta ou incomoda
 
-- A diretoria pergunta coisas que a central ainda não responde: números (comparecimento em salas, NPS, renovação), contratos e contas (qual CNPJ, qual conta da Hotmart), datas de eventos e bônus prometidos (Ladeira Day, Analisador Day), acessos a cursos e quem tem cada acesso. Hoje a central sabe "como funciona", mas não sabe "quanto" nem "quando é o próximo".
-- Não existe uma visão de calendário: o que acontece esta semana, os próximos eventos, os prazos fixos do mês.
-- Não existe uma visão de pessoas: quem é responsável por quê, quem cobre quem, quem procurar para cada assunto.
-- Alguns itens estão sem link porque ninguém sabe se a página existe, e as documentações do NavMaster e dos projetos de IA dentro do Fluxer ainda não foram escritas.
-- Nenhum projeto tem PRD ou repositório preenchido.
-- Não há rotina de manutenção: nada avisa quando uma informação venceu.
+Fiz uma varredura de tudo que a diretora (Clara) perguntou sobre o Fluxo no Slack em 20 meses: 114 perguntas, pedidos e cobranças. Ela quase nunca pergunta "como funciona"; ela pergunta quanto, quando, quem fechou e se está na agenda. Os temas, por frequência:
+
+- eventos do Fluxo (logística, transmissão, cenário, acesso de mentorados): 16
+- acessos e ferramentas (Fluxer, Hotmart, Zoom, cupons, importação em cursos): 16
+- entregas e bônus dos picos (10 primeiros, Ladeira Day, Analisador Day, hotseat): 14, quase sempre "isso já tem data na agenda do Leandro?"
+- financeiro, contratos, contas e reembolsos: 12
+- resultados comerciais (sinais, fechamentos, "a planilha do zoom está atualizada?"): 10
+- números de comparecimento e lotação: 8
+- links e materiais, pessoas e responsáveis, NPS e notas de navegação: o resto
+
+O que a central não responde hoje e ela precisa:
+
+- Uma agenda das entregas prometidas (data, formato, lista fechada, grupo criado, na agenda do Leandro ou não). Em 21 casos a resposta não veio ou demorou, e a maioria é isso.
+- Calendário dos próximos eventos e picos, e o que acontece esta semana.
+- Onde estão os números: planilha do zoom, planilhas de orçamento por evento, confirmações no Fluxer, NPS. A central não guarda o número, mas precisa entregar o link certo e dizer quem tem.
+- Quem cuida de quê: uma lista de pessoas por assunto (hoje só existe na cabeça de duas pessoas).
+- Regras e combinados que ela mesma anunciou e precisou repetir: qual conta e contrato para cada tipo de mentorado, regra de reembolso, acesso de mentorados a picos, validade de cupom, gravações.
+- Alguns projetos sem link e duas documentações que ainda não existem; nenhum projeto com PRD ou repositório preenchido.
+- Nenhuma rotina de manutenção: nada avisa quando uma informação venceu.
 
 ## O que eu quero de você
 

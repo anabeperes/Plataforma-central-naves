@@ -213,3 +213,12 @@ coisa da operação e recebe a resposta, inclusive links.
     uma dúvida.
 36. **Botão "Perguntar ao assistente" ao lado da busca da visão geral.** Leva o texto digitado
     junto (`#/perguntar?q=...`) e já dispara a pergunta.
+37. **Base de conhecimento do assistente veio de uma varredura do Slack (29/09/2026).** Todas as
+    mensagens da Clara sobre o Fluxo desde 01/01/2025 foram lidas (cerca de 1.115) e viraram
+    114 itens em `LEVANTAMENTO-CLARA.md`. Dali saíram 33 perguntas e respostas em
+    `dados/conhecimento.js`, cada uma com fonte (canal e data) e quem sabe mais. Regras
+    seguidas: nada inventado; IDs de produto, CNPJ, dados bancários e e-mails de mentorados
+    ficaram de fora; números antigos (ex.: conversão do perpétuo de 2025) estão marcados como
+    "confirmar antes de usar".
+38. **As sugestões da tela vazia do chat são perguntas da Clara.** Assim quem abre a aba vê o
+    tipo de pergunta que o assistente sabe responder.
