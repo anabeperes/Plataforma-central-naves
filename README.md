@@ -181,6 +181,8 @@ novo) e a lista guarda os 30 últimos. Fica no `localStorage` do navegador
 
 ## Busca e filtros
 
+- A busca fica sempre à mostra; os chips ficam atrás do botão "Filtros" (que mostra quantos
+  estão ativos e já abre se o link vier filtrado).
 - Em cada aba, a busca procura em todos os textos do item (inclusive o detalhe), sem diferenciar
   acento nem maiúscula. Chips filtram; dentro do grupo vale "ou", entre grupos e com a busca "e".
 - O estado fica na URL (`#/projetos?q=...&tipo=...`), então dá para mandar um link já filtrado.
@@ -189,8 +191,11 @@ novo) e a lista guarda os 30 últimos. Fica no `localStorage` do navegador
 
 ## Painel de detalhe
 
-"Como funciona" (projetos), "Como usar" (agentes) e "Como entregamos" (entregas) abrem um `<dialog>`
-com um bloco por pergunta, que fecha com Esc, com o X ou clicando fora e devolve o foco ao botão.
+Os cards de agentes, projetos e entregas mostram só nome, descrição curta e uma linha discreta
+(onde/para quem, tipo ou frequência). Clicar no card abre um `<dialog>` com tudo: como usar,
+como funciona ou como entregamos, quem cuida, autores, data e links extras (PRD, Git). Projeto
+sem detalhe abre direto o link. "Abrir" no canto do card leva ao link sem abrir o painel. O painel
+tem um bloco por pergunta, que fecha com Esc, com o X ou clicando fora e devolve o foco ao botão.
 Textos que começam com "1. " ganham uma linha por passo. Links internos (`#/...`) dentro do painel
 fecham o painel e navegam.
 

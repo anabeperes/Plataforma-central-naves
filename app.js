@@ -47,6 +47,7 @@
     link: '<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',
     gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v9h14v-9"/><path d="M12 8c-2-3-6-3-6-1s3 1 6 1zm0 0c2-3 6-3 6-1s-3 1-6 1z"/>',
     search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+    filter: '<path d="M4 6h16M7 12h10M10 18h4"/>',
     clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     x: '<path d="M6 6l12 12M18 6 6 18"/>',
     arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
@@ -181,6 +182,43 @@
     });
     return grupo;
   }
+  // Busca sempre à mostra; os chips ficam atrás do botão "Filtros" (abre sozinho se já houver filtro na URL).
+  function barraFiltros(sb, grupos, contarAtivos) {
+    var painel = el('div', { class: 'toolbar__filters', id: 'filtros-' + Math.random().toString(36).slice(2, 8) }, grupos);
+    var botao = el('button', { class: 'btn btn--ghost toolbar__toggle', type: 'button', 'aria-controls': painel.id });
+    function abrir(sim) { painel.hidden = !sim; botao.setAttribute('aria-expanded', sim ? 'true' : 'false'); botao.classList.toggle('toolbar__toggle--on', sim); }
+    botao.addEventListener('click', function () { abrir(painel.hidden); });
+    var barra = el('div', { class: 'toolbar card' }, [el('div', { class: 'toolbar__row' }, [sb, botao]), painel]);
+    barra.atualizar = function () {
+      var n = contarAtivos();
+      botao.innerHTML = svg('filter', 'btn__ico') + ' Filtros' + (n ? ' <span class="toolbar__n">' + n + '</span>' : '');
+    };
+    abrir(contarAtivos() > 0);
+    barra.atualizar();
+    return barra;
+  }
+  // Card enxuto: título, descrição e uma linha discreta. Clicar no card abre o painel de detalhe
+  // (ou o link, quando não há detalhe); "Abrir" fica num canto quando há os dois.
+  function cardEnxuto(o) {
+    var art = el('article', { class: 'card item item--clean' + (o.pendente ? ' item--pending' : o.suave ? ' item--soft' : ''), 'data-acesso-tipo': o.tipoAcesso, 'data-acesso-nome': o.nome });
+    var alvo;
+    if (o.detalhe) {
+      alvo = el('button', { class: 'item__hit', type: 'button', 'aria-haspopup': 'dialog', text: o.nome });
+      alvo.addEventListener('click', function () { o.detalhe(alvo); });
+    } else if (o.url) {
+      alvo = el('a', Object.assign({ class: 'item__hit', text: o.nome }, linkAttrs(o.url)));
+    } else {
+      alvo = document.createTextNode(o.nome);
+    }
+    art.appendChild(el('h3', { class: 'item__title' }, [alvo]));
+    if (o.descricao) art.appendChild(el('p', { class: 'item__desc', text: o.descricao }));
+    var pe = el('div', { class: 'item__foot' }, [el('span', { class: 'item__meta', text: o.meta || '' })]);
+    if (o.pendente) pe.appendChild(el('span', { class: 'pending-label', text: 'link em breve' }));
+    else if (o.detalhe && o.url) pe.appendChild(el('a', Object.assign({ class: 'item__open', 'aria-label': 'Abrir ' + o.nome + ' em nova aba', html: 'Abrir ' + svg('ext') }, linkAttrs(o.url))));
+    else if (o.url) pe.appendChild(el('span', { class: 'item__open item__open--hint', 'aria-hidden': 'true', html: 'Abrir ' + svg('ext') }));
+    art.appendChild(pe);
+    return art;
+  }
   function contador(n, s, p) { return el('span', { class: 'count', 'aria-live': 'polite', text: plural(n, s, p) }); }
   function vazio(texto, onLimpar) {
     return el('div', { class: 'empty' }, [
@@ -264,29 +302,19 @@
     abrirDetalhe({ tipoAcesso: 'Agente', kicker: 'Agente de IA', titulo: a.nome, descricao: a.descricao, meta: meta, blocos: ROTULOS_AGENTE.map(function (r) { return [r[1], a.detalhe && a.detalhe[r[0]]]; }), links: links }, origem);
   }
   function cardAgente(a) {
-    var art = el('article', { class: 'card item' + (a.status === 'em construção' ? ' item--soft' : ''), 'data-acesso-tipo': 'Agente', 'data-acesso-nome': a.nome });
-    art.appendChild(el('div', { class: 'item__top' }, [
-      el('span', { class: 'item__icon', html: svg('bot') }),
-      el('div', { class: 'item__tags' }, [tag(a.onde, 'tag--onde')].concat((a.paraQuem || []).map(function (p) { return el('span', { class: 'ctx', text: p }); })))
-    ]));
-    art.appendChild(el('h3', { class: 'item__title', text: a.nome }));
-    art.appendChild(el('p', { class: 'item__desc', text: a.descricao }));
-    art.appendChild(el('p', { class: 'item__meta', text: (a.responsavel ? 'Cuida: ' + a.responsavel : '') + (a.status !== 'no ar' ? ' · ' + a.status : '') }));
-    var acoes = el('div', { class: 'item__actions' });
-    if (a.url) acoes.appendChild(botaoLink(a.url, 'Abrir', true));
-    var b = el('button', { class: 'btn btn--ghost btn--detail', type: 'button', text: 'Como usar', 'aria-haspopup': 'dialog' });
-    b.addEventListener('click', function () { abrirAgente(a, b); });
-    acoes.appendChild(b);
-    art.appendChild(acoes);
-    return art;
+    var construcao = a.status === 'em construção';
+    return cardEnxuto({
+      tipoAcesso: 'Agente', nome: a.nome, descricao: a.descricao, url: a.url, suave: construcao,
+      meta: [a.onde].concat(a.paraQuem || []).join(' · ') + (construcao ? ' · em construção' : ''),
+      detalhe: function (b) { abrirAgente(a, b); }
+    });
   }
   function viewAgentes(params) {
     var q = params.get('q') || '';
     var quem = new Set((params.get('quem') || '').split(',').filter(Boolean));
     var onde = new Set((params.get('onde') || '').split(',').filter(Boolean));
     var root = el('div', { class: 'view fade-in' });
-    var cont = contador(0, 'agente', 'agentes');
-    root.appendChild(cabecalho('Agentes de IA', 'O que cada agente faz, para quem é, onde fica dentro da operação e como usar sem errar.', [cont]));
+    root.appendChild(cabecalho('Agentes de IA', 'O que cada agente faz. Clique num card para ver como usar.'));
     var todosQuem = []; D.agentes.forEach(function (a) { (a.paraQuem || []).forEach(function (p) { if (todosQuem.indexOf(p) === -1) todosQuem.push(p); }); });
     var todosOnde = []; D.agentes.forEach(function (a) { if (todosOnde.indexOf(a.onde) === -1) todosOnde.push(a.onde); });
     var grade = el('div', { class: 'grid' });
@@ -303,12 +331,12 @@
         return bate(a._indice, q);
       });
       vis.forEach(function (a) { grade.appendChild(cardAgente(a)); });
-      cont.textContent = plural(vis.length, 'agente', 'agentes');
+      barra.atualizar();
       if (!vis.length) grade.appendChild(vazio(null, function () { q = ''; quem.clear(); onde.clear(); sb.input.value = ''; barra.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); }); gravar(); render(); }));
       gravar();
     }
     var sb = busca(q, 'Buscar agente por nome, uso ou responsável…', function (v) { q = v; render(); });
-    var barra = el('div', { class: 'toolbar card' }, [sb, chips('Para quem', todosQuem, quem, render), chips('Onde', todosOnde, onde, render)]);
+    var barra = barraFiltros(sb, [chips('Para quem', todosQuem, quem, render), chips('Onde', todosOnde, onde, render)], function () { return quem.size + onde.size; });
     root.appendChild(barra);
     root.appendChild(grade);
     render();
@@ -329,38 +357,17 @@
     abrirDetalhe({ tipoAcesso: 'Projeto', kicker: 'Projeto · ' + p.categoria, titulo: p.nome, descricao: p.descricao, meta: meta, blocos: ROTULOS_PROJETO.map(function (r) { return [r[1], p.detalhe && p.detalhe[r[0]]]; }), links: links }, origem);
   }
   function cardProjeto(p) {
-    var pendente = !p.url;
-    var art = el('article', { class: 'card item' + (pendente ? ' item--pending' : ''), 'aria-label': p.nome, 'data-acesso-tipo': 'Projeto', 'data-acesso-nome': p.nome });
-    art.appendChild(el('div', { class: 'item__top' }, [el('span', { class: 'item__icon', html: svg(p.tipo) }), tag(p.tipo, 'tag--' + p.tipo)]));
-    var titulo = el('h3', { class: 'item__title', text: p.nome });
-    var desc = el('p', { class: 'item__desc', text: p.descricao });
-    if (pendente) art.appendChild(el('div', {}, [titulo, desc]));
-    else art.appendChild(el('a', { class: 'item__link', href: p.url, target: '_blank', rel: 'noopener noreferrer' }, [titulo, desc]));
-    if (p.autores && p.autores.length) art.appendChild(el('p', { class: 'item__authors', text: p.autores.join(' · ') }));
-    var meta = el('div', { class: 'item__metarow' });
-    (p.contexto || []).forEach(function (c) { meta.appendChild(el('span', { class: 'ctx', text: c })); });
-    if (p.status && p.status !== 'no ar') meta.appendChild(el('span', { class: 'status' + (p.status === 'em construção' ? ' status--construcao' : ''), text: p.status }));
-    var d = formatarData(p.data); if (d) meta.appendChild(el('span', { class: 'item__date', text: d }));
-    art.appendChild(meta);
-    var acoes = el('div', { class: 'item__actions' });
-    if (pendente) acoes.appendChild(el('span', { class: 'pending-label', text: 'link em breve' }));
-    else acoes.appendChild(botaoLink(p.url, 'Abrir', true));
-    if (p.prd) acoes.appendChild(botaoLink(p.prd, 'Baixar PRD'));
-    if (p.git && p.git !== p.url) acoes.appendChild(botaoLink(p.git, 'Ver no Git'));
-    if (p.detalhe) {
-      var b = el('button', { class: 'btn btn--ghost btn--detail', type: 'button', text: 'Como funciona', 'aria-haspopup': 'dialog' });
-      b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); abrirProjeto(p, b); });
-      acoes.appendChild(b);
-    }
-    art.appendChild(acoes);
-    return art;
+    return cardEnxuto({
+      tipoAcesso: 'Projeto', nome: p.nome, descricao: p.descricao, url: p.url, pendente: !p.url && !p.detalhe,
+      meta: p.tipo + (p.status && p.status !== 'no ar' ? ' · ' + p.status : ''),
+      detalhe: p.detalhe ? function (b) { abrirProjeto(p, b); } : null
+    });
   }
   function viewProjetos(params) {
     var q = params.get('q') || '';
     var sel = { tipo: new Set((params.get('tipo') || '').split(',').filter(Boolean)), contexto: new Set((params.get('contexto') || '').split(',').filter(Boolean)), categoria: new Set((params.get('categoria') || '').split(',').filter(Boolean)) };
     var root = el('div', { class: 'view fade-in' });
-    var cont = contador(0, 'projeto', 'projetos');
-    root.appendChild(cabecalho('Projetos do time', 'Tudo que o time do Fluxo construiu ou de que participa. Cada card responde o que é, para que serve e, nas automações e documentações, como funciona, onde roda e o que fazer se quebrar.', [cont]));
+    root.appendChild(cabecalho('Projetos do time', 'Tudo que o time do Fluxo construiu. Clique num card para abrir ou ver como funciona.'));
     var tiposPresentes = D.tipos.filter(function (t) { return D.projetos.some(function (p) { return p.tipo === t; }); });
     var secoes = el('div');
     function gravar() {
@@ -387,15 +394,14 @@
           grade
         ]));
       });
-      cont.textContent = plural(vis.length, 'projeto', 'projetos');
+      barra.atualizar();
       if (!vis.length) secoes.appendChild(vazio(null, function () { q = ''; sb.input.value = ''; Object.keys(sel).forEach(function (k) { sel[k].clear(); }); barra.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); }); render(); }));
       gravar();
     }
     var sb = busca(q, 'Buscar por nome, descrição, autor ou como funciona…', function (v) { q = v; render(); });
-    var barra = el('div', { class: 'toolbar card' }, [sb, chips('Tipo', tiposPresentes, sel.tipo, render), chips('Contexto', D.contextos, sel.contexto, render), chips('Categoria', D.categorias, sel.categoria, render)]);
+    var barra = barraFiltros(sb, [chips('Categoria', D.categorias, sel.categoria, render), chips('Tipo', tiposPresentes, sel.tipo, render), chips('Contexto', D.contextos, sel.contexto, render)], function () { return sel.tipo.size + sel.contexto.size + sel.categoria.size; });
     root.appendChild(barra);
     root.appendChild(secoes);
-    root.appendChild(el('p', { class: 'footnote', text: 'Os links abrem em uma nova aba. Para adicionar ou corrigir um projeto, edite dados/projetos.js.' }));
     render();
     return root;
   }
@@ -440,11 +446,12 @@
         lista.appendChild(card);
       });
       cont.textContent = plural(vis.length, 'link', 'links');
+      barra.atualizar();
       if (!vis.length) lista.appendChild(vazio(null, function () { q = ''; sb.input.value = ''; grupos.clear(); barra.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); }); render(); }));
       gravar();
     }
     var sb = busca(q, 'Buscar link por nome, descrição ou endereço…', function (v) { q = v; render(); });
-    var barra = el('div', { class: 'toolbar card' }, [sb, chips('Grupo', D.gruposLinks, grupos, render)]);
+    var barra = barraFiltros(sb, [chips('Grupo', D.gruposLinks, grupos, render)], function () { return grupos.size; });
     root.appendChild(barra);
     root.appendChild(lista);
     root.appendChild(el('p', { class: 'footnote', text: 'Senhas e códigos de acesso nunca entram aqui: ficam no 1Password. Para adicionar um link, edite dados/links.js.' }));
@@ -460,25 +467,16 @@
     abrirDetalhe({ tipoAcesso: 'Entrega', kicker: 'Entrega ' + e.tipo, titulo: e.nome, descricao: e.descricao, meta: meta, blocos: [['Como entregamos', e.operacao], ['Frequência', e.frequencia], ['Quem cuida', e.responsavel]], links: links }, origem);
   }
   function cardEntrega(e) {
-    var art = el('article', { class: 'card item', 'data-acesso-tipo': 'Entrega', 'data-acesso-nome': e.nome });
-    art.appendChild(el('div', { class: 'item__top' }, [el('span', { class: 'item__icon', html: svg('gift') }), tag(e.tipo, 'tag--entrega-' + normalizar(e.tipo).replace(/[^a-z]/g, ''))]));
-    art.appendChild(el('h3', { class: 'item__title', text: e.nome }));
-    art.appendChild(el('p', { class: 'item__desc item__desc--4', text: e.descricao }));
-    art.appendChild(el('p', { class: 'item__meta', text: (e.frequencia ? e.frequencia : '') + (e.responsavel ? ' · ' + e.responsavel : '') }));
-    var acoes = el('div', { class: 'item__actions' });
-    var b = el('button', { class: 'btn btn--ghost btn--detail', type: 'button', text: 'Como entregamos', 'aria-haspopup': 'dialog' });
-    b.addEventListener('click', function () { abrirEntrega(e, b); });
-    if (e.links && e.links[0]) acoes.appendChild(botaoLink(e.links[0].url, e.links[0].rotulo, true));
-    acoes.appendChild(b);
-    art.appendChild(acoes);
-    return art;
+    return cardEnxuto({
+      tipoAcesso: 'Entrega', nome: e.nome, descricao: e.descricao, meta: e.frequencia,
+      detalhe: function (b) { abrirEntrega(e, b); }
+    });
   }
   function viewEntregas(params) {
     var q = params.get('q') || '';
     var tipos = new Set((params.get('tipo') || '').split(',').filter(Boolean));
     var root = el('div', { class: 'view fade-in' });
-    var cont = contador(0, 'entrega', 'entregas');
-    root.appendChild(cabecalho('Entregas do Fluxo', 'O que o mentorado recebe, com a explicação do pitch, e como o time entrega por dentro: frequência, quem cuida e o processo.', [cont]));
+    root.appendChild(cabecalho('Entregas do Fluxo', 'O que o mentorado recebe. Clique num card para ver como o time entrega.'));
     var secoes = el('div');
     var ROTULO_TIPO = { 'individual': 'Entregas individuais', 'coletiva': 'Entregas coletivas', 'extra': 'Entregas extras', 'bônus': 'Bônus' };
     function gravar() { params.delete('q'); params.delete('tipo'); if (q) params.set('q', q); if (tipos.size) params.set('tipo', Array.from(tipos).join(',')); gravarRota('/entregas', params); }
@@ -496,15 +494,14 @@
           grade
         ]));
       });
-      cont.textContent = plural(vis.length, 'entrega', 'entregas');
+      barra.atualizar();
       if (!vis.length) secoes.appendChild(vazio(null, function () { q = ''; sb.input.value = ''; tipos.clear(); barra.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); }); render(); }));
       gravar();
     }
     var sb = busca(q, 'Buscar entrega por nome, descrição ou processo…', function (v) { q = v; render(); });
-    var barra = el('div', { class: 'toolbar card' }, [sb, chips('Tipo', D.tiposEntrega, tipos, render)]);
+    var barra = barraFiltros(sb, [chips('Tipo', D.tiposEntrega, tipos, render)], function () { return tipos.size; });
     root.appendChild(barra);
     root.appendChild(secoes);
-    root.appendChild(el('p', { class: 'footnote', text: 'Descrições seguem o Resumo do Pitch Fluxo. Para adicionar ou corrigir uma entrega, edite dados/entregas.js.' }));
     render();
     return root;
   }
