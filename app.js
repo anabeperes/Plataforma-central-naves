@@ -41,6 +41,8 @@
   var I = {
     home: '<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/>',
     bot: '<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9 17h6"/>',
+    chat: '<path d="M21 12a8 8 0 0 1-8 8H7l-4 3V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/><path d="M9 12h.01M12 12h.01M15 12h.01"/>',
+    send: '<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/>',
     grid: '<rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/>',
     link: '<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',
     gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v9h14v-9"/><path d="M12 8c-2-3-6-3-6-1s3 1 6 1zm0 0c2-3 6-3 6-1s-3 1-6 1z"/>',
@@ -106,6 +108,7 @@
   /* =========================== rotas =========================== */
   var SECOES = [
     { rota: '/', nome: 'Visão geral', curto: 'Geral', icone: 'home' },
+    { rota: '/perguntar', nome: 'Perguntar', curto: 'Perguntar', icone: 'chat' },
     { rota: '/agentes', nome: 'Agentes de IA', curto: 'Agentes', icone: 'bot' },
     { rota: '/projetos', nome: 'Projetos', curto: 'Projetos', icone: 'grid' },
     { rota: '/links', nome: 'Links importantes', curto: 'Links', icone: 'link' },
@@ -255,9 +258,12 @@
 
     var resultados = el('div', { class: 'gsearch__results' });
     var sb = busca(q, 'Buscar em tudo: agentes, projetos, links, entregas e rotinas…', function (v) {
-      q = v; params.set('q', v); if (!v) params.delete('q'); gravarRota('/', params); renderResultados();
+      q = v; params.set('q', v); if (!v) params.delete('q'); gravarRota('/', params); renderResultados(); atualizarPerguntar();
     });
-    root.appendChild(el('div', { class: 'gsearch card' }, [sb, resultados]));
+    var perguntar = el('a', { class: 'btn btn--primary gsearch__ask', href: '#/perguntar', html: svg('chat', 'btn__ico') + ' Perguntar ao assistente' });
+    function atualizarPerguntar() { perguntar.setAttribute('href', '#/perguntar' + (q.trim() ? '?q=' + encodeURIComponent(q.trim()) : '')); }
+    atualizarPerguntar();
+    root.appendChild(el('div', { class: 'gsearch card' }, [el('div', { class: 'gsearch__row' }, [sb, perguntar]), resultados]));
 
     function renderResultados() {
       resultados.innerHTML = '';
@@ -617,8 +623,172 @@
     return root;
   }
 
+  /* =========================== perguntar (chat) =========================== */
+  var CHAVE_CHAT = 'central-fluxo-chat';
+  var CHAVE_CODIGO = 'central-fluxo-codigo';
+  var SUGESTOES = typeof SUGESTOES_CHAT !== 'undefined' ? SUGESTOES_CHAT : [
+    'Qual é o link do Zoom semanal?',
+    'Como funciona a automação de links das análises?',
+    'O que o mentorado recebe no Fluxo?',
+    'Quem cuida da remoção de inativos dos grupos?',
+    'Onde vejo se o NavMaster está funcionando?'
+  ];
+  function lerConversa() { try { return JSON.parse(sessionStorage.getItem(CHAVE_CHAT) || '[]'); } catch (e) { return []; } }
+  function gravarConversa(c) { try { sessionStorage.setItem(CHAVE_CHAT, JSON.stringify(c.slice(-30))); } catch (e) { /* sem storage */ } }
+  function lerCodigo() { try { return localStorage.getItem(CHAVE_CODIGO) || ''; } catch (e) { return ''; } }
+  function gravarCodigo(c) { try { if (c) localStorage.setItem(CHAVE_CODIGO, c); else localStorage.removeItem(CHAVE_CODIGO); } catch (e) { /* sem storage */ } }
+
+  // Markdown mínimo e seguro: escapa tudo, depois liga links, negrito e listas.
+  function renderMarkdown(txt) {
+    var s = esc(txt);
+    s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|#\/[^\s)]*)\)/g, function (m, t, u) { return ancora(u, t); });
+    s = s.replace(/(^|[\s(])((?:https?:\/\/)[^\s<)]+)/g, function (m, pre, u) { return pre + ancora(u, u.replace(/^https?:\/\//, '')); });
+    s = s.replace(/(^|[\s(])(#\/[a-z]*(?:\?[^\s<)]*)?)(?=[\s.,;)]|$)/g, function (m, pre, u) { return pre + ancora(u, u); });
+    s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    var linhas = s.split('\n'), html = '', lista = null;
+    function fechar() { if (lista) { html += '</' + lista + '>'; lista = null; } }
+    linhas.forEach(function (l) {
+      var mUl = /^\s*[-•*]\s+(.*)$/.exec(l), mOl = /^\s*\d+[.)]\s+(.*)$/.exec(l);
+      if (mUl || mOl) {
+        var tipo = mUl ? 'ul' : 'ol';
+        if (lista !== tipo) { fechar(); lista = tipo; html += '<' + tipo + '>'; }
+        html += '<li>' + (mUl ? mUl[1] : mOl[1]) + '</li>';
+      } else if (!l.trim()) { fechar(); }
+      else { fechar(); html += '<p>' + l + '</p>'; }
+    });
+    fechar();
+    return html;
+  }
+  function ancora(u, t) {
+    var ext = /^https?:/i.test(u);
+    return '<a href="' + u + '"' + (ext ? ' target="_blank" rel="noopener noreferrer"' : '') + '>' + t + '</a>';
+  }
+
+  function viewPerguntar(params) {
+    var root = el('div', { class: 'view fade-in view--chat' });
+    root.appendChild(cabecalho('Pergunte ao Fluxo', 'Um assistente que responde com o que está na central: o que é cada coisa, como funciona, quem cuida e o link certo. Se não souber, ele diz quem sabe.'));
+
+    var conversa = lerConversa();
+    var lista = el('div', { class: 'chat__log', role: 'log', 'aria-live': 'polite', 'aria-label': 'Conversa' });
+    var caixa = el('textarea', { class: 'chat__input', rows: '1', placeholder: 'Pergunte qualquer coisa sobre a operação do Fluxo…', 'aria-label': 'Sua pergunta', maxlength: '4000' });
+    var enviar = el('button', { class: 'btn btn--primary chat__send', type: 'button', 'aria-label': 'Enviar', html: svg('send', 'btn__ico') });
+    var limpar = el('button', { class: 'btn btn--ghost', type: 'button', text: 'Limpar conversa' });
+    var status = el('p', { class: 'chat__status', 'aria-live': 'polite' });
+    var ocupado = false;
+
+    function bolha(papel, texto) {
+      var b = el('div', { class: 'chat__msg chat__msg--' + papel });
+      b.appendChild(el('span', { class: 'chat__who', text: papel === 'usuario' ? 'Você' : 'Central' }));
+      var corpo = el('div', { class: 'chat__body' });
+      corpo.innerHTML = papel === 'usuario' ? '<p>' + esc(texto).replace(/\n/g, '<br>') + '</p>' : renderMarkdown(texto);
+      b.appendChild(corpo);
+      return b;
+    }
+    function renderLog() {
+      lista.innerHTML = '';
+      if (!conversa.length) {
+        var boas = el('div', { class: 'chat__hello' }, [
+          el('p', { text: 'Exemplos do que dá para perguntar:' }),
+          el('div', { class: 'chat__sugestoes' }, SUGESTOES.map(function (s) {
+            return el('button', { class: 'chip', type: 'button', text: s, on: { click: function () { caixa.value = s; mandar(); } } });
+          }))
+        ]);
+        lista.appendChild(boas);
+      }
+      conversa.forEach(function (m) { lista.appendChild(bolha(m.papel, m.texto)); });
+      rolar();
+    }
+    function rolar() { lista.scrollTop = lista.scrollHeight; }
+    function ajustarAltura() { caixa.style.height = 'auto'; caixa.style.height = Math.min(caixa.scrollHeight, 160) + 'px'; }
+
+    function pedirCodigo(msg) {
+      var c = window.prompt((msg || 'Esta central pede um código de acesso para o assistente.') + '\nDigite o código:');
+      if (c === null) return false;
+      gravarCodigo(c.trim());
+      return true;
+    }
+
+    function mandar() {
+      var texto = caixa.value.trim();
+      if (!texto || ocupado) return;
+      ocupado = true; enviar.disabled = true; status.textContent = 'Pensando…';
+      caixa.value = ''; ajustarAltura();
+      conversa.push({ papel: 'usuario', texto: texto });
+      gravarConversa(conversa); renderLog();
+      var resposta = { papel: 'assistente', texto: '' };
+      var b = bolha('assistente', '');
+      b.classList.add('chat__msg--typing');
+      lista.appendChild(b); rolar();
+      var corpo = b.querySelector('.chat__body');
+
+      var headers = { 'Content-Type': 'application/json' };
+      var codigo = lerCodigo(); if (codigo) headers['x-central-codigo'] = codigo;
+      fetch('/api/chat', { method: 'POST', headers: headers, body: JSON.stringify({ mensagens: conversa.slice(-16) }) })
+        .then(function (r) {
+          if (!r.ok) {
+            return r.json().catch(function () { return {}; }).then(function (j) {
+              if (r.status === 401 && j.pedirCodigo) {
+                conversa.pop(); gravarConversa(conversa);
+                if (pedirCodigo(j.erro)) { caixa.value = texto; terminar(); mandar(); return null; }
+                terminar('Sem o código, o assistente não responde.'); renderLog(); return null;
+              }
+              throw new Error(j.erro || ('Erro ' + r.status));
+            });
+          }
+          var leitor = r.body.getReader(), dec = new TextDecoder(), resto = '';
+          function processar(linha) {
+            if (!linha.trim()) return;
+            var ev; try { ev = JSON.parse(linha); } catch (e) { return; }
+            if (ev.t) { resposta.texto += ev.t; corpo.innerHTML = renderMarkdown(resposta.texto); rolar(); }
+            if (ev.erro) throw new Error(ev.erro);
+            if (ev.fim) status.textContent = '';
+          }
+          function ler() {
+            return leitor.read().then(function (x) {
+              if (x.done) { if (resto) processar(resto); return; }
+              resto += dec.decode(x.value, { stream: true });
+              var partes = resto.split('\n'); resto = partes.pop();
+              partes.forEach(processar);
+              return ler();
+            });
+          }
+          return ler();
+        })
+        .then(function () {
+          if (resposta.texto) { conversa.push(resposta); gravarConversa(conversa); }
+          b.classList.remove('chat__msg--typing');
+          terminar();
+        })
+        .catch(function (e) {
+          b.classList.remove('chat__msg--typing');
+          corpo.innerHTML = '<p class="chat__erro">' + esc(e.message || 'Não deu para responder agora.') + '</p>';
+          terminar();
+        });
+    }
+    function terminar(msg) { ocupado = false; enviar.disabled = false; status.textContent = msg || ''; caixa.focus(); }
+
+    enviar.addEventListener('click', mandar);
+    caixa.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); mandar(); } });
+    caixa.addEventListener('input', ajustarAltura);
+    limpar.addEventListener('click', function () { conversa = []; gravarConversa(conversa); renderLog(); caixa.focus(); });
+
+    var painel = el('section', { class: 'card chat' }, [
+      lista,
+      el('div', { class: 'chat__compose' }, [caixa, enviar]),
+      el('div', { class: 'chat__foot' }, [status, limpar])
+    ]);
+    root.appendChild(painel);
+    root.appendChild(el('p', { class: 'footnote', text: 'O assistente responde só com o que está em dados/*.js e nas perguntas frequentes. Ele não vê o Slack nem o Fluxer em tempo real. Nada de senha ou código por aqui.' }));
+    renderLog();
+
+    var inicial = (params.get('q') || '').trim();
+    if (inicial) { params.delete('q'); gravarRota('/perguntar', params); caixa.value = inicial; setTimeout(mandar, 50); }
+    setTimeout(function () { caixa.focus(); }, 0);
+    return root;
+  }
+
   /* =========================== montagem =========================== */
-  var VIEWS = { '/': viewGeral, '/agentes': viewAgentes, '/projetos': viewProjetos, '/links': viewLinks, '/entregas': viewEntregas };
+  var VIEWS = { '/': viewGeral, '/perguntar': viewPerguntar, '/agentes': viewAgentes, '/projetos': viewProjetos, '/links': viewLinks, '/entregas': viewEntregas };
   var app = document.getElementById('app');
   function render() {
     var r = lerRota();
@@ -632,7 +802,7 @@
   window.addEventListener('hashchange', render);
   document.addEventListener('keydown', function (e) {
     if (e.key === '/' && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName) && !dlg.open) {
-      var i = app.querySelector('.search__input'); if (i) { e.preventDefault(); i.focus(); }
+      var i = app.querySelector('.search__input') || app.querySelector('.chat__input'); if (i) { e.preventDefault(); i.focus(); }
     }
   });
   render();

@@ -178,3 +178,38 @@ projetos, links importantes e entregas.
 | Links curtos (zoom-semanal, live-semanal-leandro, mandala360, feedback, analisador-day-online, estudio_criativo, zoom-duvidas) | #fluxo-infos-navegadores, agosto e setembro/2026 (AnaBe, Ester, Natasha, Ellen) |
 | Central de Gestão de Eventos | AnaBe, #fluxo-evento-e-entregáveis 25/09 e 28/09/2026 |
 | Canais do Slack e finalidade | IDs pela busca de canais; finalidade a partir do uso e do alinhamento da Ellen (DM própria da Ana, 22/09/2026) |
+
+
+---
+
+# Aba Perguntar (assistente com IA)
+
+Pedido da Ana em 29/09/2026: um chat onde qualquer pessoa (a Clara em especial) pergunta qualquer
+coisa da operação e recebe a resposta, inclusive links.
+
+29. **Função na Vercel, não chave no navegador.** A chave da API não pode ficar no HTML, então
+    o chat passou a ter uma função (`api/chat.js`). A página continua estática; a função só
+    existe para a aba Perguntar. Precisa da variável `ANTHROPIC_API_KEY` na Vercel.
+30. **A base do assistente é o próprio `dados/*.js`.** Nada é duplicado: `api/_base.js` lê os
+    mesmos arquivos da página e vira texto. Corrigiu um link na central, o assistente já sabe.
+    Foi criado `dados/conhecimento.js` só para o que não cabe nas outras coleções: perguntas
+    frequentes, combinados e regras que vivem no Slack.
+31. **Modelo `claude-opus-5-5`, esforço médio, resposta em streaming.** Sem pensamento
+    prolongado visível; o custo por pergunta é dominado pela base (cerca de 21 mil tokens),
+    que fica cacheada pela API por alguns minutos, então perguntas seguidas custam pouco.
+    Fallback do servidor ligado (`fallbacks: 'default'`): se o modelo recusar por política,
+    a API refaz num modelo de reserva; se a conta não aceitar esse beta, a função repete sem ele.
+32. **O assistente não inventa.** As instruções mandam responder só com a base, dizer
+    "não encontrei isso na central" e apontar quem sabe. Perguntas de número (comparecimento,
+    faturamento, NPS) recebem "onde o dado vive e quem tem", não estimativas.
+33. **Página sem login continua sem login.** Como qualquer pessoa com a URL poderia gastar a
+    chave, a função aceita só chamadas da própria página, limita 20 perguntas por minuto por
+    IP e tem um código opcional (`CHAT_CODIGO`) que a página pede uma vez. Recomendo ligar
+    o código antes de mandar a URL para fora do time.
+34. **Conversa fica no navegador.** Nada é gravado no servidor; sessionStorage some ao fechar
+    a aba. Sem histórico para a liderança ler, de propósito: é uma ferramenta de consulta.
+35. **Barra inferior do celular passou de 5 para 6 itens.** Perguntar entrou em segundo lugar
+    no menu, logo depois da visão geral, porque é o caminho mais curto para quem chega com
+    uma dúvida.
+36. **Botão "Perguntar ao assistente" ao lado da busca da visão geral.** Leva o texto digitado
+    junto (`#/perguntar?q=...`) e já dispara a pergunta.

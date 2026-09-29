@@ -12,6 +12,7 @@ Site: https://plataforma-central-naves.vercel.app
 | Aba | Rota | O que tem |
 | --- | --- | --- |
 | Visão geral | `#/` | Busca em tudo, números, acesso rápido, jornada do mentorado e rotinas do time |
+| Perguntar | `#/perguntar` | Chat com IA que responde qualquer pergunta sobre a operação usando os dados da central, inclusive links |
 | Agentes de IA | `#/agentes` | Cada agente: o que faz, para quem, onde fica, como usar, atenção |
 | Projetos | `#/projetos` | Tudo que o time construiu, por categoria, com "Como funciona" nas automações |
 | Links importantes | `#/links` | Recorrentes, eventos, integração e treinamento, canais do Slack, ferramentas |
@@ -32,13 +33,60 @@ desktop, barra inferior no celular, fonte Manrope, cartões brancos e verde-lim�
 | `dados/links.js` | Links importantes (`LINKS`, `GRUPOS_LINKS`) |
 | `dados/entregas.js` | Entregas (`ENTREGAS`, `TIPOS_ENTREGA`) |
 | `dados/operacao.js` | Jornada do mentorado, rotinas do time e acesso rápido (`JORNADA`, `ROTINAS`, `ACESSO_RAPIDO`) |
+| `dados/conhecimento.js` | Perguntas frequentes e combinados que só o assistente usa (`CONHECIMENTO`, `SUGESTOES_CHAT`) |
+| `api/chat.js` | Função da Vercel que recebe a pergunta e responde com o Claude (streaming) |
+| `api/_base.js` | Transforma `dados/*.js` no texto que o assistente lê (base de conhecimento) |
+| `LEVANTAMENTO-CLARA.md` | O que a diretoria pergunta sobre o Fluxo e o que falta reunir |
 | `DECISOES.md` | Decisões tomadas e a fonte no Slack de cada informação |
 | `LINKS-PENDENTES.md` | O que falta preencher e o que já foi buscado |
 | `prompts/central-do-fluxo-ideacao.md` | Prompt para pensar a próxima versão da central com o Claude |
 
-Sem build, sem dependências, sem backend, sem login. Deploy é servir a raiz na Vercel.
+A página continua estática e sem login. A única parte com servidor é a aba Perguntar: uma
+função em `api/chat.js` que a Vercel roda sob demanda. Deploy é servir a raiz na Vercel; ela
+instala `@anthropic-ai/sdk` sozinha a partir do `package.json`.
 **Os arquivos em `dados/` são a única fonte de verdade.** Nunca coloque senha, código de acesso ou
 credencial neles: isso fica no 1Password.
+
+## Aba Perguntar (assistente)
+
+Como funciona: a pergunta vai para `/api/chat`; a função monta um texto com **tudo** que está em
+`dados/*.js` (jornada, rotinas, entregas, agentes, projetos, links e perguntas frequentes), manda
+para o Claude com instruções de responder só com o que está lá, e devolve a resposta em streaming.
+O texto da base é cacheado pela API, então cada pergunta custa uma fração da primeira.
+
+Configuração na Vercel (Settings > Environment Variables, para Production e Preview):
+
+| Variável | Obrigatória | Para quê |
+| --- | --- | --- |
+| `ANTHROPIC_API_KEY` | sim | Chave da API da Anthropic (console.anthropic.com). Sem ela, a aba mostra erro. |
+| `CHAT_CODIGO` | não | Um código simples (ex.: `fluxo2026`). Se definido, a página pede uma vez e guarda no navegador. Evita que qualquer pessoa com a URL use o assistente. |
+| `CHAT_MODELO` | não | Modelo. Padrão `claude-opus-5-5`. |
+
+Regras do assistente (em `api/_base.js`, constante `INSTRUCOES`): responde em português, direto,
+só com a base; entrega o link completo quando pedem; quando não sabe, diz "não encontrei isso na
+central" e aponta quem sabe; nunca inventa link, número ou processo; não fala de senha.
+
+Para ensinar algo novo ao assistente, edite `dados/conhecimento.js`:
+
+```js
+{
+  pergunta: 'Como a Clara pergunta, do jeito que ela pergunta',
+  resposta: 'A resposta combinada, com nomes e datas',
+  tema: 'Contratos',            // agrupa
+  quem: 'Fernanda',              // quem sabe mais
+  fonte: '#fluxo-time-rtg, 03/07/2026',
+  links: ['https://...']
+}
+```
+
+`SUGESTOES_CHAT` são as perguntas de exemplo que aparecem na tela vazia.
+
+Proteções na função: só aceita chamadas da própria página (mesma origem), limita a 20 perguntas
+por minuto por IP, corta mensagens muito longas e envia no máximo as 16 últimas mensagens da
+conversa. A conversa fica só no navegador de quem pergunta (sessionStorage) e some ao fechar a aba.
+
+Teste local sem chave: `npm run testar-base` mostra a base montada. Com a chave exportada em
+`ANTHROPIC_API_KEY`, use `npx vercel dev` para rodar página e função juntas.
 
 ## Como editar cada aba
 
