@@ -34,7 +34,7 @@ desktop, barra inferior no celular, fonte Manrope, cartões brancos e verde-lim�
 | `dados/entregas.js` | Entregas (`ENTREGAS`, `TIPOS_ENTREGA`) |
 | `dados/operacao.js` | Jornada do mentorado, rotinas do time e acesso rápido (`JORNADA`, `ROTINAS`, `ACESSO_RAPIDO`) |
 | `dados/conhecimento.js` | Perguntas frequentes e combinados que só o assistente usa (`CONHECIMENTO`, `SUGESTOES_CHAT`) |
-| `api/chat.js` | Função da Vercel que recebe a pergunta e responde com o Claude (streaming) |
+| `api/chat.js` | Função da Vercel que recebe a pergunta e responde com o Gemini (streaming) |
 | `api/_base.js` | Transforma `dados/*.js` no texto que o assistente lê (base de conhecimento) |
 | `LEVANTAMENTO-CLARA.md` | O que a diretoria pergunta sobre o Fluxo e o que falta reunir |
 | `DECISOES.md` | Decisões tomadas e a fonte no Slack de cada informação |
@@ -43,7 +43,7 @@ desktop, barra inferior no celular, fonte Manrope, cartões brancos e verde-lim�
 
 A página continua estática e sem login. A única parte com servidor é a aba Perguntar: uma
 função em `api/chat.js` que a Vercel roda sob demanda. Deploy é servir a raiz na Vercel; ela
-instala `@anthropic-ai/sdk` sozinha a partir do `package.json`.
+instala `@google/genai` sozinha a partir do `package.json`.
 **Os arquivos em `dados/` são a única fonte de verdade.** Nunca coloque senha, código de acesso ou
 credencial neles: isso fica no 1Password.
 
@@ -51,16 +51,22 @@ credencial neles: isso fica no 1Password.
 
 Como funciona: a pergunta vai para `/api/chat`; a função monta um texto com **tudo** que está em
 `dados/*.js` (jornada, rotinas, entregas, agentes, projetos, links e perguntas frequentes), manda
-para o Claude com instruções de responder só com o que está lá, e devolve a resposta em streaming.
-O texto da base é cacheado pela API, então cada pergunta custa uma fração da primeira.
+para o Gemini (Google) com instruções de responder só com o que está lá, e devolve a resposta em
+streaming. O texto da base vai sempre igual, então a API reaproveita esse prefixo entre perguntas.
 
 Configuração na Vercel (Settings > Environment Variables, para Production e Preview):
 
 | Variável | Obrigatória | Para quê |
 | --- | --- | --- |
-| `ANTHROPIC_API_KEY` | sim | Chave da API da Anthropic (console.anthropic.com). Sem ela, a aba mostra erro. |
+| `GEMINI_API_KEY` | sim | Chave da API do Gemini. Gratuita: entre em aistudio.google.com com uma conta Google, clique em "Get API key" e crie uma. Sem ela, a aba mostra erro. |
 | `CHAT_CODIGO` | não | Um código simples (ex.: `fluxo2026`). Se definido, a página pede uma vez e guarda no navegador. Evita que qualquer pessoa com a URL use o assistente. |
-| `CHAT_MODELO` | não | Modelo. Padrão `claude-opus-5-5`. |
+| `CHAT_MODELO` | não | Modelo. Padrão `gemini-2.5-flash`, que tem plano gratuito. Outros modelos: ver aistudio.google.com. |
+
+Plano gratuito: a chave do AI Studio funciona sem cartão, com limite de pedidos por minuto e por
+dia (o Google muda esses limites; hoje ficam na casa de algumas dezenas por minuto e algumas
+centenas por dia para o Flash). Se o limite estourar, a aba mostra "Limite do plano gratuito
+atingido" e volta a funcionar sozinha no minuto seguinte. Cada pergunta manda a base inteira
+(cerca de 26 mil tokens), então o limite de tokens por minuto também conta.
 
 Regras do assistente (em `api/_base.js`, constante `INSTRUCOES`): responde em português, direto,
 só com a base; entrega o link completo quando pedem; quando não sabe, diz "não encontrei isso na
@@ -86,7 +92,7 @@ por minuto por IP, corta mensagens muito longas e envia no máximo as 16 última
 conversa. A conversa fica só no navegador de quem pergunta (sessionStorage) e some ao fechar a aba.
 
 Teste local sem chave: `npm run testar-base` mostra a base montada. Com a chave exportada em
-`ANTHROPIC_API_KEY`, use `npx vercel dev` para rodar página e função juntas.
+`GEMINI_API_KEY`, use `npx vercel dev` para rodar página e função juntas.
 
 ## Como editar cada aba
 

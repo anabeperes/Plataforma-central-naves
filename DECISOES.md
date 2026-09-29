@@ -222,3 +222,11 @@ coisa da operação e recebe a resposta, inclusive links.
     "confirmar antes de usar".
 38. **As sugestões da tela vazia do chat são perguntas da Clara.** Assim quem abre a aba vê o
     tipo de pergunta que o assistente sabe responder.
+39. **Assistente trocado do Claude para o Gemini (29/09/2026), a pedido da Ana.** Motivo: a chave
+    do Gemini no AI Studio é gratuita, sem cartão, e a do Claude exige crédito pré-pago. Mudou só
+    `api/chat.js` e a dependência (`@google/genai` no lugar de `@anthropic-ai/sdk`); a base,
+    as instruções, a tela e o formato do streaming continuam iguais. Modelo padrão
+    `gemini-2.5-flash` (troca pela variável `CHAT_MODELO`). Sem cache explícito: o prefixo
+    (instruções + base) vai sempre idêntico e a API reaproveita sozinha. Temperatura 0,2 para a
+    resposta ficar presa à base. Limite do plano gratuito vira a mensagem "Limite do plano
+    gratuito atingido" na tela, sem quebrar a página.
