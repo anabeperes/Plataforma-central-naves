@@ -1,0 +1,16 @@
+{
+  "name": "central-do-fluxo",
+  "private": true,
+  "type": "module",
+  "description": "Central do Fluxo: página estática + função /api/chat que responde perguntas sobre a operação.",
+  "scripts": {
+    "servir": "python3 -m http.server 8765",
+    "testar-base": "node api/_testar-base.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.129.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
