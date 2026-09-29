@@ -5,20 +5,16 @@ O que ainda falta para a Ana completar em `projetos.js`, com os termos já busca
 
 ## Itens sem link (`url: ''`)
 
-### Mecanismo único do Fluxo (status: link pendente)
-- Falta: `url`, `descricao` confiável, `autores`, `data`.
-- Buscado no Slack sem resultado útil: "mecanismo único", "mecanismo unico", "mecanismo" (com
-  link, desde 06/2026). Só apareceu a própria lista da Ellen e um PDF de aula do FLP
-  ("Mecanismo-Catia-Damasceno-Aperta-e-Solta.pdf"), que não é isso.
-- Sugestão: perguntar à Ellen se a página já existe ou se é para criar.
+### Mecanismo único do Fluxo (resolvido em 29/09/2026)
+- A Ana passou o link: mecanismo-fluxo.vercel.app. Card preenchido com descrição e detalhe.
+- Ainda sem `autores` (a página não assina; assumido Ellen como responsável).
 
-### Extensão de respostas rápidas (FLP) (status: link pendente)
-- Falta: `url` público do zip da extensão (hoje está no Drive/Slack) e link do guia em PDF.
-  Opcionalmente `git` se a Ana subir o código para um repositório.
-- Encontrado: guia `Guia-Extensao-Respostas-Rapidas-FLP.pdf` postado em #fluxo-infos-navegadores
-  (23/09/2026, arquivo do Slack, precisa de login); zip `extensao-respostas-rapidas.zip`
-  compartilhado via Drive (DM Ana/Manu 22/09/2026), sem o link do Drive na mensagem.
-- Buscado: "extensão respostas", "extensao-respostas-rapidas", "extensão" + "respostas".
+### Extensão de respostas rápidas (FLP) (resolvido em 29/09/2026)
+- Zip e guia em PDF agora ficam hospedados na própria Central, em `arquivos/`:
+  `arquivos/extensao-respostas-rapidas.zip` e `arquivos/guia-extensao-respostas-rapidas-flp.pdf`.
+  O card usa o campo `guia` (botão "Guia de instalação (PDF)").
+- Origem dos arquivos: zip da pasta "Extensão suporte zoom" no Drive da Ana; PDF postado em
+  #fluxo-infos-navegadores (23/09/2026). Opcionalmente `git` se a Ana subir o código.
 
 ### Skills do time (status: em construção)
 - Falta: um card por skill, com link. Skills que apareceram no Slack:
@@ -50,7 +46,6 @@ O que ainda falta para a Ana completar em `projetos.js`, com os termos já busca
 
 ## Campos `[preencher]` em itens com link
 
-- **Mecanismo único do Fluxo**: `descricao` está marcada como `[preencher: confirmar descrição e link]`.
 - **Documentação dos projetos de IA dentro do Fluxer**: `detalhe.comoFunciona` e
   `detalhe.ondeVerSeEstaFuncionando`.
 
@@ -69,7 +64,6 @@ PRD e Git. Nenhum item abaixo tem esses links no Slack:
 | Acervo do Fluxo | PRD existe (Ana ofereceu no privado ao Felipe Faé, 27/08/2026), sem link | não achado |
 | Fluxer Lab | não achado | não achado |
 | Calculadora de lançamento pago | não achado | não achado |
-| Calculadora de Black (Vilas Boas) | não achado | não achado |
 | Documentação da ficha de qualificação | Drive do projeto (ligado) | repositório existe (Douglas foi convidado em 09/09/2026), link não apareceu |
 | Automação de exclusão de grupos | não achado | ligado |
 | Automação de links das análises | não achado | ligado |
@@ -78,9 +72,11 @@ Buscado: "PRD" (com link, desde 01/2026) e "github.com" (desde 01/2026).
 
 ## Para confirmar com a Ellen (interpretações minhas, ver DECISOES.md)
 
-- "Platão 24h" = Plantão do Fluxo 24h (severino-chat.vercel.app)?
-- "Calculadora de black do Vilas Boas" = playbook-black-friday.vercel.app?
-- "Página com todos os resultados do fluxo" = prints-fluxo.vercel.app?
+- ~~"Platão 24h" = Plantão do Fluxo 24h~~ Confirmado pela Ana em 29/09/2026.
+- ~~"Calculadora de black do Vilas Boas" = playbook-black-friday.vercel.app?~~ Não é. A Ana pediu
+  para tirar a calculadora do material (card removido em 29/09/2026). O playbook continua na aba
+  Links e na entrega do Retiro da Black, porque é outra coisa.
+- ~~"Página com todos os resultados do fluxo" = prints-fluxo.vercel.app~~ Confirmado pela Ana em 29/09/2026.
 - "Links das páginas de materiais de todos os eventos" = quadro do Monday, ou a Ellen quer uma
   página própria listando os links?
 
@@ -89,8 +85,8 @@ Buscado: "PRD" (com link, desde 01/2026) e "github.com" (desde 01/2026).
 # Pendências da Central do Fluxo (v3)
 
 ## Agentes de IA (`dados/agentes.js`)
-- **Plano de ação inteligente**: confirmar com o Gabriel José o nome oficial e como funciona por
-  dentro (campo `atencao` tem `[preencher]`). Fonte usada: só o anúncio da Ellen de 09/09/2026.
+- ~~**Plano de ação inteligente**~~ Resolvido em 29/09/2026: o nome está certo; ele gera o plano
+  de ação a partir da transcrição da análise do mapa mental (Ana).
 - **IAF**: confirmar com a Fernanda e a Ellen o escopo oficial (o que entra e o que não entra).
 - **Skills do time**: centralizar os links das skills (`ondeFica` tem `[preencher]`).
 

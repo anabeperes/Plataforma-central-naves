@@ -352,6 +352,7 @@
     if (p.status) meta.push(el('span', { class: 'status', text: p.status }));
     var links = [];
     if (p.url) links.push(botaoLink(p.url, 'Abrir', true));
+    if (p.guia) links.push(botaoLink(p.guia, 'Guia de instalação (PDF)'));
     if (p.prd) links.push(botaoLink(p.prd, 'Baixar PRD'));
     if (p.git && p.git !== p.url) links.push(botaoLink(p.git, 'Ver no Git'));
     abrirDetalhe({ tipoAcesso: 'Projeto', kicker: 'Projeto · ' + p.categoria, titulo: p.nome, descricao: p.descricao, meta: meta, blocos: ROTULOS_PROJETO.map(function (r) { return [r[1], p.detalhe && p.detalhe[r[0]]]; }), links: links }, origem);

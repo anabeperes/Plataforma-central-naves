@@ -48,16 +48,24 @@ const PROJETOS = [
 
   {
     nome: 'Mecanismo único do Fluxo',
-    descricao: 'Página que apresenta o mecanismo único da Mentoria Fluxo. [preencher: confirmar descrição e link]',
-    url: '',
+    descricao: 'Página que explica o método da Mentoria Fluxo: os 6 pilares, os níveis de faturamento, as 7 estratégias e o ciclo plano de ação, execução e análise, com o Severino e o Fluxer como apoio.',
+    url: 'https://mecanismo-fluxo.vercel.app/',
     tipo: 'página',
     categoria: 'Resultados e método do Fluxo',
     contexto: ['fluxo'],
     autores: [],
-    data: '',
+    data: '2026-09',
     prd: '',
     git: '',
-    status: 'link pendente'
+    status: 'no ar',
+    detalhe: {
+      oQueFaz: 'Mostra, numa página só, o que é o mecanismo único do Fluxo: 6 pilares (metodologia, IA, feedback, acompanhamento, referência e network), 6 níveis de faturamento (do zero a 2 milhões+), 7 estratégias (low, mid e high ticket, lançamento pago, VSL, pitch, conteúdo e tráfego) e o ciclo contínuo de plano de ação, execução e análise, com o navegador no WhatsApp.',
+      comoFunciona: 'Página estática na Vercel. Serve para mostrar ao lead ou ao mentorado como o método funciona por dentro; também cita o Severino (IA treinada no método) e o Fluxer (diagnóstico, planos e análises).',
+      ondeRoda: 'Vercel (mecanismo-fluxo.vercel.app).',
+      responsavel: 'Ellen Cecilia.',
+      ondeVerSeEstaFuncionando: 'Abra o link e confira se as seções carregam.',
+      oQueFazerSeQuebrar: 'Avise a Ellen no #fluxo-infos-navegadores.'
+    }
   },
 
   {
@@ -153,7 +161,8 @@ const PROJETOS = [
   {
     nome: 'Extensão de respostas rápidas (FLP)',
     descricao: 'Extensão do Chrome que abre a página de respostas rápidas no painel lateral, na mesma tela do chat do Zoom.',
-    url: '',
+    url: 'https://plataforma-central-naves.vercel.app/arquivos/extensao-respostas-rapidas.zip',
+    guia: 'https://plataforma-central-naves.vercel.app/arquivos/guia-extensao-respostas-rapidas-flp.pdf',
     tipo: 'extensão',
     categoria: 'Ferramentas do dia a dia',
     contexto: ['pico', 'evento'],
@@ -161,11 +170,11 @@ const PROJETOS = [
     data: '2026-09',
     prd: '',
     git: '',
-    status: 'link pendente',
+    status: 'no ar',
     detalhe: {
       oQueFaz: 'Coloca a página de respostas rápidas num painel lateral do Chrome, então não precisa trocar nem dividir tela: o chat do Zoom e as respostas ficam lado a lado. Ideia da Manu, executada pela Ana sobre a página da Ellen.',
       comoFunciona: 'A extensão não está na loja do Chrome, a instalação é manual em 3 passos: 1. Baixe e descompacte o zip numa pasta. 2. Abra chrome://extensions, ligue o Modo do desenvolvedor e clique em "Carregar sem compactação", escolhendo a pasta que tem o manifest.json. 3. Fixe o ícone na barra (ícone de quebra-cabeça) e clique nele: o painel abre ao lado e acompanha qualquer aba. Só funciona com o Zoom aberto no Chrome.',
-      ondeRoda: 'No Chrome de cada navegador. O zip e o guia em PDF foram enviados no Slack (#fluxo-infos-navegadores, 22 e 23/09/2026).',
+      ondeRoda: 'No Chrome de cada navegador. O zip e o guia em PDF ficam hospedados aqui na Central (botões "Abrir" e "Guia de instalação"); os mesmos arquivos foram enviados no Slack (#fluxo-infos-navegadores, 22 e 23/09/2026).',
       responsavel: 'AnaBe.',
       ondeVerSeEstaFuncionando: 'Clicou no ícone e o painel lateral abriu com a página: está funcionando.',
       oQueFazerSeQuebrar: 'Erro "não achou o manifest.json": o zip não foi extraído de verdade ou tem pasta dentro de pasta. Abra a pasta e confira se os 4 arquivos (manifest.json, background.js, sidepanel.html, icon.png) aparecem soltos; selecione essa pasta. O guia em PDF tem a tabela "Deu problema?" com os casos mais comuns.'
@@ -274,20 +283,6 @@ const PROJETOS = [
       ondeVerSeEstaFuncionando: 'Página abrindo e simulação salvando.',
       oQueFazerSeQuebrar: 'Atenção: "Apagar" não pede confirmação. Se algo quebrar, mande o print para a Ellen no #fluxo-ia.'
     }
-  },
-
-  {
-    nome: 'Calculadora de Black (Vilas Boas)',
-    descricao: 'Playbook do Retiro da Black que faz o planejamento de datas e etapas da Black Friday do mentorado.',
-    url: 'https://playbook-black-friday.vercel.app/',
-    tipo: 'calculadora',
-    categoria: 'Calculadoras',
-    contexto: ['pico'],
-    autores: ['Gabriel Vilas Boas'],
-    data: '2026-08',
-    prd: '',
-    git: '',
-    status: 'no ar'
   },
 
   /* ================= Skills e instaladores ================= */

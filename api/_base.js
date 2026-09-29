@@ -98,6 +98,7 @@ export function montarBase(d = carregarDados()) {
     t += `## ${p.nome} [${p.tipo}; ${p.categoria}; ${p.status || ''}]\n`;
     t += linha('Descrição', p.descricao);
     t += linha('Link', p.url || '(sem link ainda)');
+    t += linha('Guia', p.guia);
     t += linha('PRD', p.prd);
     t += linha('Repositório', p.git);
     t += linha('Contexto', p.contexto);

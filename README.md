@@ -112,6 +112,7 @@ Teste local sem chave: `npm run testar-base` mostra a base montada. Com a chave 
   autores: ['Nome'],
   data: '2026-09',           // AAAA-MM: criação ou última atualização ('' se não souber)
   prd: '',                   // link do PRD (mostra "Baixar PRD")
+  guia: '',                  // link de um guia/manual em PDF (mostra "Guia de instalação (PDF)")
   git: '',                   // link do repositório (mostra "Ver no Git")
   status: 'no ar',           // no ar | em construção | link pendente
   detalhe: {                 // obrigatório para automação e documentação; opcional para o resto

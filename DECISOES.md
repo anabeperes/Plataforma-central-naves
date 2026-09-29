@@ -37,16 +37,19 @@ e de onde veio cada link ou explicação encontrada no Slack, para a Ana conferi
 12. **"Platão 24h" foi interpretado como "Plantão do Fluxo 24h"** (severino-chat.vercel.app).
     A Fernanda apresentou o chatbot em #fluxo-time-rtg (02/06/2026) exatamente como
     "Plantão Fluxo 24 horas"; nenhuma busca por "platão"/"platao" encontrou outra coisa.
-    **Confirmar com a Ellen.**
+    Confirmado pela Ana em 29/09/2026.
 13. **"Calculadora de black que o Vilas Boas fez"** foi interpretada como o playbook
     `playbook-black-friday.vercel.app`: a Fernanda o compartilhou como "playbook do Gabriel
     Vilas Boas" (#fluxo-evento-e-entregáveis, 27/08/2026) e descreveu que "faz toda a parte de
     planejamento de datas" (#fluxo-time-rtg, 14/09/2026). Não há outro link de calculadora dele.
     Existe também `playbook-black-friday-mid-ticket.vercel.app`, mas é da aula do Felipe Matheus
-    (10/09), não do Vilas Boas. **Confirmar.**
+    (10/09), não do Vilas Boas. **Estava errado**: em 29/09/2026 a Ana disse que a calculadora
+    não é o playbook e pediu para tirá-la do material. O card foi removido; o playbook segue
+    listado como playbook.
 14. **"Página com todos os resultados do fluxo"** = página de prints/depoimentos
     `prints-fluxo.vercel.app` (Ellen, #fluxo-infos-navegadores, 21/09/2026). Também há o
     `resultado.vtsd.com.br` ("Cases Venda Todo Santo Dia"), mas é do VTSD, não do Fluxo.
+    Confirmado pela Ana em 29/09/2026.
 15. **"Links das páginas de materiais de todos os eventos"** = quadro "Central de Links da
     Mentoria" no Monday (Natasha, #fluxo-time-rtg, 01/06/2026: "Todos os materiais dos eventos
     você encontra no Monday > Materiais Eventos"). Não é vercel/lovable/drive, mas é o único

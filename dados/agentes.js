@@ -40,7 +40,7 @@ const AGENTES = [
   },
   {
     nome: 'Plano de ação inteligente',
-    descricao: 'Apoia o analisador na montagem do próximo plano de ação (entregáveis e prazos), liberado direto para o mentorado.',
+    descricao: 'Gera o rascunho do próximo plano de ação a partir da transcrição da análise do mapa mental; o analisador revisa e libera direto para o mentorado.',
     onde: 'Fluxer',
     paraQuem: ['analisadores'],
     status: 'no ar',
@@ -49,10 +49,10 @@ const AGENTES = [
     autores: ['Time de no-code'],
     data: '2026-09',
     detalhe: {
-      oQueFaz: 'Ajuda o analisador a montar o plano de ação seguinte com mais agilidade. Desde 09/09/2026 o analisador libera o plano direto para o mentorado, sem passar pela revisão do navegador.',
-      comoUsar: '1. O analisador monta o próximo plano (entregáveis + prazos). 2. Define a data de entrega do plano. 3. Usa "Concluir análise e liberar plano". 4. O plano fica disponível para o mentorado na hora; o mentorado recebe e-mail e o navegador recebe aviso no Slack.',
+      oQueFaz: 'Lê a transcrição da análise do mapa mental e gera, a partir dela, o rascunho do plano de ação seguinte (entregáveis e prazos). O analisador revisa, ajusta e libera. Desde 09/09/2026 o plano vai direto para o mentorado, sem passar pela revisão do navegador.',
+      comoUsar: '1. Com a análise transcrita, o analisador revisa o plano gerado pela IA (entregáveis + prazos) e ajusta o que precisar. 2. Define a data de entrega do plano. 3. Usa "Concluir análise e liberar plano". 4. O plano fica disponível para o mentorado na hora; o mentorado recebe e-mail e o navegador recebe aviso no Slack.',
       ondeFica: 'Fluxer, análise do mentorado.',
-      atencao: 'Todo entregável precisa ter prazo, e a data de entrega do plano não pode ser anterior ao prazo de nenhum entregável. A IA não substitui o olhar do analisador em cada tarefa nem a checagem se o prazo faz sentido para aquele mentorado. [preencher: nome oficial e detalhes técnicos com o Gabriel José]',
+      atencao: 'Todo entregável precisa ter prazo, e a data de entrega do plano não pode ser anterior ao prazo de nenhum entregável. A IA não substitui o olhar do analisador em cada tarefa nem a checagem se o prazo faz sentido para aquele mentorado.',
       ondeVerSeEstaFuncionando: 'O navegador recebe no Slack o aviso de plano liberado. Dúvidas: #fluxo-diagnósticos.'
     }
   },
