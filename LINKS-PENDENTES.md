@@ -83,3 +83,31 @@ Buscado: "PRD" (com link, desde 01/2026) e "github.com" (desde 01/2026).
 - "Página com todos os resultados do fluxo" = prints-fluxo.vercel.app?
 - "Links das páginas de materiais de todos os eventos" = quadro do Monday, ou a Ellen quer uma
   página própria listando os links?
+
+---
+
+# Pendências da Central do Fluxo (v3)
+
+## Agentes de IA (`dados/agentes.js`)
+- **Plano de ação inteligente**: confirmar com o Gabriel José o nome oficial e como funciona por
+  dentro (campo `atencao` tem `[preencher]`). Fonte usada: só o anúncio da Ellen de 09/09/2026.
+- **IAF**: confirmar com a Fernanda e a Ellen o escopo oficial (o que entra e o que não entra).
+- **Skills do time**: centralizar os links das skills (`ondeFica` tem `[preencher]`).
+
+## Links importantes (`dados/links.js`)
+- **Reunião de integração (Zoom)**: dois links circularam em 2026 (…82597295248 em março e
+  …82593341298 em junho). Confirmar qual vale hoje.
+- **Terminus**: confirmar a URL de acesso (usei app.terminusapp.com por inferência).
+- **Agenda Google da mentoria** e **playlists de depoimentos no YouTube**: não achei link; não entraram.
+- **Canal #treinamento-navegação** e **#rtg-zoom**: não achei o ID; não entraram na lista de canais.
+
+## Entregas (`dados/entregas.js`)
+- **Retiro do Instagram**: `operacao` está `[preencher]` (sem data ou formato no Slack).
+- **Retiro high ticket com IA**: só a observação das skills /ht-*; falta data e formato.
+- Confirmar com a Ellen se as entregas fora do pitch (live semanal, Mandala 360, calls coletivas,
+  Analisador Day, Ladeira Day, Retiro Levantamento de Caixa, cadeira de sócio) devem mesmo aparecer
+  na aba, ou se a aba deve seguir só o pitch.
+
+## Visão geral (`dados/operacao.js`)
+- Jornada e rotinas foram escritas só com o que está documentado no Slack. Vale a Ellen e a
+  Fernanda revisarem os textos, principalmente "Renovação" e "Lázaro".

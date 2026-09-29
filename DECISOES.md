@@ -107,3 +107,74 @@ e de onde veio cada link ou explicação encontrada no Slack, para a Ana conferi
 - **Automação de comunicação no WhatsApp** (Fernanda, 09/09/2026): ainda em teste.
 - **Versão anterior das mensagens rápidas** (respostas-rapidas-ana-be-s-projects.vercel.app, Ana,
   01/06/2026): substituída pela página da Ellen; não criei card.
+
+---
+
+# Central do Fluxo (v3): de central de projetos a central da operação
+
+Pedido da Ana em 29/09/2026: a plataforma vira uma **Central do Fluxo** com visual parecido com a
+Central de Gestão de Eventos (central-do-retiro.vercel.app) e abas de operação, agentes de IA,
+projetos, links importantes e entregas.
+
+## Estrutura
+
+21. **Cinco abas com roteador por hash** (`#/`, `#/agentes`, `#/projetos`, `#/links`, `#/entregas`),
+    sem build e sem backend. Um `app.js` monta as telas a partir de `dados/*.js`. Os links antigos
+    (`?q=...`) continuam funcionando: são redirecionados para `#/projetos`.
+22. **Visual copiado da Central de Gestão de Eventos** (repositório `retirolevantamentodecaixa`,
+    `app/globals.css` e `components/layout/nav.tsx`): paleta (#f6f6f6, #ffffff, #e7e7e7, #171717,
+    #bef47b, #4d7c0f), fonte Manrope (Google Fonts), raio 12px, menu lateral fixo de 256px no
+    desktop e barra inferior de 5 itens no celular, marca quadrada verde-limão com o X. Não copiei
+    login, autosave nem histórico: a central continua estática.
+23. **`projetos.js` foi movido para `dados/projetos.js`** e ganhou companhia: `agentes.js`,
+    `links.js`, `entregas.js`, `operacao.js`. Uma coleção por arquivo para o time editar sem medo.
+24. **Aba Agentes de IA**: um card por agente com filtros "para quem" e "onde". O painel "Como usar"
+    tem cinco blocos (o que faz, como usar, onde fica, atenção, onde ver se está funcionando).
+    Entraram: NavMaster, gerador de contexto de pré-análise, plano de ação inteligente, Plantão do
+    Fluxo 24h, Severino, Estúdio Criativo, agentes GPT, IAF, skill de diagnóstico comercial e skills
+    do time. O NavMaster e a ficha de tom de voz foram tratados como um agente só.
+25. **Aba Links importantes** em cinco grupos (recorrentes, eventos, integração e treinamento, canais
+    do Slack, ferramentas), com botão de copiar e abrir, como na tela Links da Central de Gestão de
+    Eventos. Nenhuma senha ou código de acesso do Slack entrou; as mensagens que os traziam foram
+    usadas só para o link.
+26. **Aba Entregas**: a `descricao` de cada entrega é o texto do "Resumo do Pitch Fluxo" com as
+    explicações curtas que a própria Ana escreveu para a Ellen em 18/09/2026, na mesma ordem
+    (individuais, coletivas, extras, bônus). O bloco "Como entregamos" é o lado de dentro, montado
+    a partir dos combinados no Slack. Adicionei entregas que existem na operação mas não estão no
+    pitch: live semanal com o Leandro, Mandala 360, calls coletivas, Analisador Day, Ladeira Day e
+    hotseat, Retiro Levantamento de Caixa, cadeira de sócio e as ferramentas de IA.
+27. **Visão geral**: busca em tudo (agrupa resultados por coleção e abre o painel do item), quatro
+    números que levam às abas, acesso rápido (12 links marcados em `ACESSO_RAPIDO`), jornada do
+    mentorado em cinco etapas e dez rotinas do time. Jornada e rotinas foram escritas só com o que
+    está documentado no Slack; onde não havia fonte, não inventei etapa.
+28. **Botão copiar** usa a API de clipboard com fallback e mostra um aviso "Link copiado".
+
+## Fontes das novas abas (Slack)
+
+| Conteúdo | Fonte |
+| --- | --- |
+| NavMaster: ciclos, modo manual, tom de voz, regras anti "cara de IA", uso das sugestões | Ellen, #fluxo-ia 14/08, 25/08 e 18/09/2026; Gabriel José, #fluxo-ia 21/09/2026 e 31/08/2026 (ficha de tom de voz) |
+| Gerador de contexto de pré-análise | Gabriel José, #fluxo-ia 31/08/2026 (crédito ao Felipe Faé) |
+| Plano de ação inteligente e liberação direta do plano | Ellen, #fluxo-infos-navegadores e #fluxo-diagnósticos 09/09/2026 |
+| Estúdio Criativo e manual | Ellen, #fluxo-infos-navegadores 11/08 e 01/09/2026 |
+| Severino: skills faltantes, instaladores, releases | Aline Carvalho e Ellen, #fluxo-ia 13/08/2026; Gabriel José 27/08 e 03/09/2026; Ellen, #fluxo-evento-e-entregáveis 12/08 e 24/08/2026 |
+| Agentes GPT e mudança da OpenAI | Sabrina, #fluxo-evento-e-entregáveis 08/07/2025; Ellen, #fluxo-infos-navegadores 13/10/2025, 20/08/2026 e 09/09/2026 |
+| IAF | Ellen, DM 18/09/2026 (pitch); Fernanda, #fluxo-evento-e-entregáveis 27/04/2026; Natasha 21/07/2026 |
+| Entregáveis do pitch e explicações | Ellen, #evento-flp 22/08/2026 e DM com Ana 18/09/2026; AnaBe, DM com Ellen 18/09/2026 (textos) |
+| Vitalício condicional dos cursos | Fernanda, #fluxo-time-rtg 23/09/2026; Ellen, #fluxo-infos-navegadores 23/09/2026 |
+| Mandala 360 (funcionamento, público, feedback, proposta de 2 salas) | AnaBe, #fluxo-infos-navegadores 16/09/2026 e #fluxo-evento-e-entregáveis 21/09 e 25/09/2026 |
+| Live semanal, zoom semanal da Black, retrôs de entregas | AnaBe, #fluxo-evento-e-entregáveis 21/09 e 25/09/2026 |
+| Zooms diários e escala | Ester e Natasha, #fluxo-infos-navegadores 03/06 e 09/07/2026 |
+| Calls coletivas no Fluxer | Fernanda, #fluxo-evento-e-entregáveis 18/09/2026; Gabriel José, #nocode-comunicados-fluxer 18/09/2026 |
+| Analisador Day | Ester 24/08/2026; AnaBe 21/09 e 25/09/2026 (#fluxo-infos-navegadores e #fluxo-evento-e-entregáveis) |
+| Ladeira Day e hotseat | Clara Coppola, #fluxo-evento-e-entregáveis 23/09/2026; Ester 10/09/2026 |
+| Integração: acesso completo só depois da reunião | Tassia, #fluxo-comercial-duvidas 30/05/2026; links de integração 23/03 e 12/06/2026 |
+| Lázaro (reunião semanal) e higiene do Fluxo | Fernanda, #fluxo-infos-navegadores 25/08 e 08/09/2026; #ana-fe-ellen 23/07 e 31/08/2026 |
+| Fechamento das análises (competência 26 a 25) | Ellen, #fluxo-diagnósticos 28/09/2026 |
+| Zooms e entregáveis dos analisadores (dia 09) | Fernanda, #fluxo-evento-e-entregáveis 10/07/2026 |
+| Backup do Zoom | Ellen, #fluxo-evento-e-entregáveis 21/09/2026 |
+| Checklist de comunicação de evento e canal certo por tipo de mensagem | AnaBe, DM própria 22/09/2026 (ajustes do dia 1 do FLP) |
+| Regra dos links de Zoom pelo Terminus; tutoriais Terminus, Active e Tally | Fernanda, DM em grupo 15/09/2026 |
+| Links curtos (zoom-semanal, live-semanal-leandro, mandala360, feedback, analisador-day-online, estudio_criativo, zoom-duvidas) | #fluxo-infos-navegadores, agosto e setembro/2026 (AnaBe, Ester, Natasha, Ellen) |
+| Central de Gestão de Eventos | AnaBe, #fluxo-evento-e-entregáveis 25/09 e 28/09/2026 |
+| Canais do Slack e finalidade | IDs pela busca de canais; finalidade a partir do uso e do alinhamento da Ellen (DM própria da Ana, 22/09/2026) |

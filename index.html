@@ -3,80 +3,52 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Central de Projetos do Fluxo</title>
-<meta name="description" content="Tudo que o time do Fluxo construiu ou de que participa: projetos, páginas, skills, automações, calculadoras e documentações.">
+<title>Central do Fluxo</title>
+<meta name="description" content="Central da operação do Fluxo: como funciona, agentes de IA, projetos do time, links importantes e entregas, tudo num lugar só.">
 <meta name="robots" content="noindex">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231b2410'/><text x='16' y='23' font-size='19' font-family='sans-serif' font-weight='700' fill='%23c6f24a' text-anchor='middle'>X</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%23BEF47B'/><g fill='%23000'><polygon points='14.5,13.6 28.1,13.6 37.8,32.0 26.2,52.4 12.6,52.4 24.2,32.0'/><polygon points='37.8,13.6 51.4,13.6 42.3,31.0 32.6,20.6'/><polygon points='35.9,52.4 51.4,52.4 42.3,34.9 32.6,45.4'/></g></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="topbar">
-  <div class="topbar__inner">
-    <a class="brand" href="./" aria-label="Central de Projetos do Fluxo, início">
-      <span class="logo" aria-hidden="true">X</span>
-      <span>
-        <span class="brand__name">Central de Projetos</span>
-        <span class="brand__sub">time do Fluxo</span>
-      </span>
-    </a>
-    <form class="search" role="search" id="search-form" autocomplete="off">
-      <label class="sr-only" for="busca">Buscar projeto por nome, descrição, autor ou funcionamento</label>
-      <svg class="search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input class="search__input" id="busca" type="search" placeholder="Buscar por nome, descrição, autor ou como funciona…" spellcheck="false">
-      <button class="search__clear" type="button" id="busca-limpar" aria-label="Limpar busca">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-      </button>
-    </form>
-  </div>
-</header>
+<a class="skip" href="#app">Ir para o conteúdo</a>
 
-<div class="filters" aria-label="Filtros">
-  <div class="filters__inner">
-    <div class="filter-group" role="group" aria-labelledby="f-tipo">
-      <span class="filter-group__label" id="f-tipo">Tipo</span>
-      <div class="filter-group__chips" id="chips-tipo"></div>
-    </div>
-    <div class="filter-group" role="group" aria-labelledby="f-contexto">
-      <span class="filter-group__label" id="f-contexto">Contexto</span>
-      <div class="filter-group__chips" id="chips-contexto"></div>
-    </div>
-    <div class="filter-group" role="group" aria-labelledby="f-categoria">
-      <span class="filter-group__label" id="f-categoria">Categoria</span>
-      <div class="filter-group__chips" id="chips-categoria"></div>
-    </div>
-    <button class="filters__reset" type="button" id="limpar-filtros" hidden>Limpar filtros</button>
+<aside class="sidebar" aria-label="Menu principal">
+  <a class="sidebar__brand" href="#/">
+    <span class="marca" aria-hidden="true"></span>
+    <span class="sidebar__brand-text">
+      <span class="sidebar__title">Central do Fluxo</span>
+      <span class="sidebar__sub">operação da Mentoria Fluxo</span>
+    </span>
+  </a>
+  <nav class="sidebar__nav" id="nav-lateral" aria-label="Seções"></nav>
+  <div class="sidebar__foot">
+    <p>Os dados vivem em <code>dados/*.js</code>. Para adicionar ou corrigir algo, veja o README.</p>
   </div>
+</aside>
+
+<div class="shell">
+  <header class="topbar-mobile">
+    <span class="marca marca--sm" aria-hidden="true"></span>
+    <span class="topbar-mobile__title">Central do Fluxo</span>
+    <span class="topbar-mobile__section" id="secao-atual"></span>
+  </header>
+
+  <main id="app" class="app" tabindex="-1"></main>
 </div>
 
-<main>
-  <div class="page-head">
-    <div>
-      <h1 class="page-title">Projetos do time do Fluxo</h1>
-      <p class="page-sub">Cada card responde o que é, para que serve e, quando tem automação por trás, como funciona, onde roda e o que fazer se quebrar.</p>
-    </div>
-    <span class="count" id="contador" aria-live="polite">0 projetos</span>
-  </div>
-
-  <div id="secoes"></div>
-
-  <div class="empty" id="vazio" hidden>
-    <h2>Nada por aqui com esses filtros</h2>
-    <p>Tente outra palavra, confira a grafia ou limpe os filtros para ver tudo de novo.</p>
-    <button class="btn btn--primary" type="button" id="vazio-limpar">Limpar busca e filtros</button>
-  </div>
-
-  <noscript>
-    <p class="footnote">Ative o JavaScript para carregar a lista de projetos.</p>
-  </noscript>
-
-  <p class="footnote">Os links abrem em uma nova aba. Para adicionar ou corrigir um projeto, edite o arquivo <code>projetos.js</code> (veja o README).</p>
-</main>
+<nav class="bottombar" id="nav-inferior" aria-label="Seções"></nav>
 
 <dialog class="detail" id="detalhe" aria-labelledby="detalhe-titulo">
   <div class="detail__inner">
     <div class="detail__head">
-      <h2 class="detail__title" id="detalhe-titulo"></h2>
+      <div class="min0">
+        <p class="detail__kicker" id="detalhe-kicker"></p>
+        <h2 class="detail__title" id="detalhe-titulo"></h2>
+      </div>
       <button class="detail__close" type="button" id="detalhe-fechar" aria-label="Fechar">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
       </button>
@@ -88,307 +60,15 @@
   </div>
 </dialog>
 
-<script src="projetos.js"></script>
-<script>
-(function () {
-  'use strict';
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-  /* ---------- utilidades ---------- */
-  function normalizar(s) {
-    return String(s || '')
-      .normalize('NFD')
-      .replace(/[̀-ͯ]/g, '')
-      .toLowerCase()
-      .trim();
-  }
+<noscript><p class="noscript">Ative o JavaScript para carregar a Central do Fluxo.</p></noscript>
 
-  var MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-  function formatarData(d) {
-    var m = /^(\d{4})-(\d{2})$/.exec(d || '');
-    if (!m) return '';
-    var mes = MESES[parseInt(m[2], 10) - 1];
-    return mes ? mes + '/' + m[1] : '';
-  }
-
-  function el(tag, attrs, children) {
-    var n = document.createElement(tag);
-    if (attrs) Object.keys(attrs).forEach(function (k) {
-      if (k === 'class') n.className = attrs[k];
-      else if (k === 'text') n.textContent = attrs[k];
-      else if (k === 'html') n.innerHTML = attrs[k];
-      else if (attrs[k] !== null && attrs[k] !== undefined && attrs[k] !== false) n.setAttribute(k, attrs[k]);
-    });
-    (children || []).forEach(function (c) { if (c) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
-    return n;
-  }
-
-  var ICONS = {
-    'página': '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
-    'lovable': '<path d="M12 21s-7-4.6-9-9.3C1.6 8.3 3.5 5 7 5c2 0 3.4 1.2 5 3 1.6-1.8 3-3 5-3 3.5 0 5.4 3.3 4 6.7C19 16.4 12 21 12 21z"/>',
-    'skill': '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
-    'extensão': '<path d="M10 3a2 2 0 0 1 4 0v1h3a2 2 0 0 1 2 2v3h1a2 2 0 0 1 0 4h-1v3a2 2 0 0 1-2 2h-3v1a2 2 0 0 1-4 0v-1H7a2 2 0 0 1-2-2v-3H4a2 2 0 0 1 0-4h1V6a2 2 0 0 1 2-2h3z"/>',
-    'automação': '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
-    'documentação': '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>',
-    'calculadora': '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2M16 16h0"/>',
-    'link': '<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>'
-  };
-  function svgIcone(tipo) {
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' +
-      (ICONS[tipo] || ICONS['link']) + '</svg>';
-  }
-  var ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
-
-  var ROTULOS_DETALHE = [
-    ['oQueFaz', 'O que faz'],
-    ['comoFunciona', 'Como funciona'],
-    ['ondeRoda', 'Onde roda'],
-    ['responsavel', 'Quem cuida'],
-    ['ondeVerSeEstaFuncionando', 'Onde ver se está funcionando'],
-    ['oQueFazerSeQuebrar', 'O que fazer se quebrar']
-  ];
-
-  /* ---------- estado ---------- */
-  var estado = { q: '', tipo: new Set(), contexto: new Set(), categoria: new Set() };
-
-  function lerURL() {
-    var p = new URLSearchParams(location.search);
-    estado.q = p.get('q') || '';
-    ['tipo', 'contexto', 'categoria'].forEach(function (k) {
-      estado[k] = new Set((p.get(k) || '').split(',').filter(Boolean));
-    });
-  }
-  function gravarURL() {
-    var p = new URLSearchParams();
-    if (estado.q) p.set('q', estado.q);
-    ['tipo', 'contexto', 'categoria'].forEach(function (k) {
-      if (estado[k].size) p.set(k, Array.from(estado[k]).join(','));
-    });
-    var qs = p.toString();
-    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
-  }
-  function temFiltro() {
-    return estado.tipo.size || estado.contexto.size || estado.categoria.size;
-  }
-
-  /* ---------- índice de busca ---------- */
-  var projetos = (typeof PROJETOS !== 'undefined' ? PROJETOS : []).map(function (p, i) {
-    var partes = [p.nome, p.descricao, p.tipo, p.categoria, p.status]
-      .concat(p.autores || [])
-      .concat(p.contexto || []);
-    if (p.detalhe) ROTULOS_DETALHE.forEach(function (r) { partes.push(p.detalhe[r[0]]); });
-    return { p: p, i: i, indice: normalizar(partes.join(' \n ')) };
-  });
-
-  function combina(item) {
-    var p = item.p;
-    if (estado.tipo.size && !estado.tipo.has(p.tipo)) return false;
-    if (estado.categoria.size && !estado.categoria.has(p.categoria)) return false;
-    if (estado.contexto.size) {
-      var ok = (p.contexto || []).some(function (c) { return estado.contexto.has(c); });
-      if (!ok) return false;
-    }
-    var termos = normalizar(estado.q).split(/\s+/).filter(Boolean);
-    return termos.every(function (t) { return item.indice.indexOf(t) !== -1; });
-  }
-
-  /* ---------- filtros (chips) ---------- */
-  function tiposPresentes() {
-    var set = new Set(projetos.map(function (x) { return x.p.tipo; }));
-    return (typeof TIPOS !== 'undefined' ? TIPOS : Array.from(set)).filter(function (t) { return set.has(t); });
-  }
-
-  function renderChips(containerId, chave, valores) {
-    var c = document.getElementById(containerId);
-    c.innerHTML = '';
-    valores.forEach(function (v) {
-      var b = el('button', { class: 'chip', type: 'button', 'aria-pressed': estado[chave].has(v) ? 'true' : 'false', text: v });
-      b.addEventListener('click', function () {
-        if (estado[chave].has(v)) estado[chave].delete(v); else estado[chave].add(v);
-        b.setAttribute('aria-pressed', estado[chave].has(v) ? 'true' : 'false');
-        atualizar();
-      });
-      c.appendChild(b);
-    });
-  }
-  function renderFiltros() {
-    renderChips('chips-tipo', 'tipo', tiposPresentes());
-    renderChips('chips-contexto', 'contexto', typeof CONTEXTOS !== 'undefined' ? CONTEXTOS : []);
-    renderChips('chips-categoria', 'categoria', typeof CATEGORIAS !== 'undefined' ? CATEGORIAS : []);
-  }
-  function sincronizarChips() {
-    ['tipo', 'contexto', 'categoria'].forEach(function (k) {
-      document.querySelectorAll('#chips-' + k + ' .chip').forEach(function (b) {
-        b.setAttribute('aria-pressed', estado[k].has(b.textContent) ? 'true' : 'false');
-      });
-    });
-  }
-
-  /* ---------- cards ---------- */
-  function card(p) {
-    var pendente = !p.url;
-    var art = el('article', { class: 'card' + (pendente ? ' card--pending' : ''), 'aria-label': p.nome });
-
-    var topo = el('div', { class: 'card__top' }, [
-      el('span', { class: 'card__icon', html: svgIcone(p.tipo) }),
-      el('span', { class: 'tag tag--' + p.tipo, text: p.tipo })
-    ]);
-    art.appendChild(topo);
-
-    var titulo = el('h3', { class: 'card__title', text: p.nome });
-    var desc = el('p', { class: 'card__desc', text: p.descricao });
-    if (pendente) {
-      art.appendChild(el('div', { class: 'card__body' }, [titulo, desc]));
-    } else {
-      // Link HTML real: abre em nova aba e permite "copiar link" pelo navegador.
-      art.appendChild(el('a', { class: 'card__link', href: p.url, target: '_blank', rel: 'noopener noreferrer' }, [titulo, desc]));
-    }
-
-    if (p.autores && p.autores.length) {
-      art.appendChild(el('p', { class: 'card__authors', text: p.autores.join(' · ') }));
-    }
-
-    var meta = el('div', { class: 'card__meta' });
-    (p.contexto || []).forEach(function (c) { meta.appendChild(el('span', { class: 'ctx', text: c })); });
-    if (p.status && p.status !== 'no ar') {
-      meta.appendChild(el('span', { class: 'status' + (p.status === 'em construção' ? ' status--construcao' : ''), text: p.status }));
-    }
-    var data = formatarData(p.data);
-    if (data) meta.appendChild(el('span', { class: 'card__date', text: data }));
-    art.appendChild(meta);
-
-    var acoes = el('div', { class: 'card__actions' });
-    if (pendente) {
-      acoes.appendChild(el('span', { class: 'pending-label', text: 'link em breve' }));
-    } else {
-      acoes.appendChild(el('a', { class: 'btn btn--primary', href: p.url, target: '_blank', rel: 'noopener noreferrer', html: 'Abrir ' + ARROW }));
-    }
-    if (p.prd) acoes.appendChild(el('a', { class: 'btn btn--ghost', href: p.prd, target: '_blank', rel: 'noopener noreferrer', text: 'Baixar PRD' }));
-    if (p.git && p.git !== p.url) acoes.appendChild(el('a', { class: 'btn btn--ghost', href: p.git, target: '_blank', rel: 'noopener noreferrer', text: 'Ver no Git' }));
-    if (p.detalhe) {
-      var b = el('button', { class: 'btn btn--ghost btn--detail', type: 'button', text: 'Como funciona', 'aria-haspopup': 'dialog' });
-      b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); abrirDetalhe(p, b); });
-      acoes.appendChild(b);
-    }
-    art.appendChild(acoes);
-    return art;
-  }
-
-  /* ---------- painel "Como funciona" ---------- */
-  var dlg = document.getElementById('detalhe');
-  var ultimoFoco = null;
-
-  function abrirDetalhe(p, origem) {
-    ultimoFoco = origem || document.activeElement;
-    document.getElementById('detalhe-titulo').textContent = p.nome;
-    document.getElementById('detalhe-desc').textContent = p.descricao;
-
-    var meta = document.getElementById('detalhe-meta');
-    meta.innerHTML = '';
-    meta.appendChild(el('span', { class: 'tag tag--' + p.tipo, text: p.tipo }));
-    (p.contexto || []).forEach(function (c) { meta.appendChild(el('span', { class: 'ctx', text: c })); });
-    if (p.autores && p.autores.length) meta.appendChild(el('span', { text: 'por ' + p.autores.join(', ') }));
-    var data = formatarData(p.data);
-    if (data) meta.appendChild(el('span', { text: data }));
-    if (p.status) meta.appendChild(el('span', { class: 'status', text: p.status }));
-
-    var blocos = document.getElementById('detalhe-blocos');
-    blocos.innerHTML = '';
-    ROTULOS_DETALHE.forEach(function (r) {
-      var txt = p.detalhe && p.detalhe[r[0]];
-      if (!txt) return;
-      // Passos numerados ("1. ... 2. ...") ganham uma linha cada.
-      var texto = /^1\.\s/.test(txt) ? txt.replace(/\s(?=\d{1,2}\.\s)/g, '\n') : txt;
-      blocos.appendChild(el('section', { class: 'detail__block' }, [
-        el('h3', { text: r[1] }),
-        el('p', { text: texto })
-      ]));
-    });
-
-    var links = document.getElementById('detalhe-links');
-    links.innerHTML = '';
-    if (p.url) links.appendChild(el('a', { class: 'btn btn--primary', href: p.url, target: '_blank', rel: 'noopener noreferrer', html: 'Abrir ' + ARROW }));
-    if (p.prd) links.appendChild(el('a', { class: 'btn btn--ghost', href: p.prd, target: '_blank', rel: 'noopener noreferrer', text: 'Baixar PRD' }));
-    if (p.git && p.git !== p.url) links.appendChild(el('a', { class: 'btn btn--ghost', href: p.git, target: '_blank', rel: 'noopener noreferrer', text: 'Ver no Git' }));
-
-    if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
-    dlg.querySelector('.detail__inner').scrollTop = 0;
-    document.getElementById('detalhe-fechar').focus();
-  }
-  function fecharDetalhe() {
-    if (dlg.open) dlg.close();
-  }
-  document.getElementById('detalhe-fechar').addEventListener('click', fecharDetalhe);
-  dlg.addEventListener('click', function (e) { if (e.target === dlg) fecharDetalhe(); });
-  dlg.addEventListener('close', function () { if (ultimoFoco && ultimoFoco.focus) ultimoFoco.focus(); });
-
-  /* ---------- render ---------- */
-  var secoes = document.getElementById('secoes');
-  var vazio = document.getElementById('vazio');
-  var contador = document.getElementById('contador');
-  var btnLimpar = document.getElementById('limpar-filtros');
-  var formBusca = document.getElementById('search-form');
-  var inputBusca = document.getElementById('busca');
-
-  function atualizar() {
-    var visiveis = projetos.filter(combina);
-    secoes.innerHTML = '';
-    var categorias = typeof CATEGORIAS !== 'undefined' ? CATEGORIAS : [];
-    categorias.forEach(function (cat) {
-      var itens = visiveis.filter(function (x) { return x.p.categoria === cat; });
-      if (!itens.length) return;
-      var grid = el('div', { class: 'grid' });
-      itens.forEach(function (x) { grid.appendChild(card(x.p)); });
-      var id = 'sec-' + normalizar(cat).replace(/[^a-z0-9]+/g, '-');
-      secoes.appendChild(el('section', { class: 'section', 'aria-labelledby': id }, [
-        el('div', { class: 'section__head' }, [
-          el('h2', { class: 'section__title', id: id, text: cat }),
-          el('span', { class: 'section__count', text: itens.length + (itens.length === 1 ? ' projeto' : ' projetos') })
-        ]),
-        grid
-      ]));
-    });
-
-    var n = visiveis.length;
-    contador.textContent = n + (n === 1 ? ' projeto' : ' projetos');
-    vazio.hidden = n !== 0;
-    btnLimpar.hidden = !temFiltro();
-    formBusca.classList.toggle('search--active', !!estado.q);
-    gravarURL();
-  }
-
-  function limparTudo() {
-    estado.q = '';
-    inputBusca.value = '';
-    estado.tipo.clear(); estado.contexto.clear(); estado.categoria.clear();
-    sincronizarChips();
-    atualizar();
-    inputBusca.focus();
-  }
-
-  inputBusca.addEventListener('input', function () { estado.q = inputBusca.value; atualizar(); });
-  formBusca.addEventListener('submit', function (e) { e.preventDefault(); });
-  document.getElementById('busca-limpar').addEventListener('click', function () {
-    estado.q = ''; inputBusca.value = ''; atualizar(); inputBusca.focus();
-  });
-  btnLimpar.addEventListener('click', function () {
-    estado.tipo.clear(); estado.contexto.clear(); estado.categoria.clear();
-    sincronizarChips(); atualizar();
-  });
-  document.getElementById('vazio-limpar').addEventListener('click', limparTudo);
-
-  // Atalho: "/" foca a busca (fora de campos de texto).
-  document.addEventListener('keydown', function (e) {
-    if (e.key === '/' && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName) && !dlg.open) {
-      e.preventDefault(); inputBusca.focus();
-    }
-  });
-
-  lerURL();
-  inputBusca.value = estado.q;
-  renderFiltros();
-  atualizar();
-})();
-</script>
-
+<script src="dados/projetos.js"></script>
+<script src="dados/agentes.js"></script>
+<script src="dados/links.js"></script>
+<script src="dados/entregas.js"></script>
+<script src="dados/operacao.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
