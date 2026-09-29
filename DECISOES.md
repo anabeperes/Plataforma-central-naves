@@ -225,8 +225,10 @@ coisa da operação e recebe a resposta, inclusive links.
 39. **Assistente trocado do Claude para o Gemini (29/09/2026), a pedido da Ana.** Motivo: a chave
     do Gemini no AI Studio é gratuita, sem cartão, e a do Claude exige crédito pré-pago. Mudou só
     `api/chat.js` e a dependência (`@google/genai` no lugar de `@anthropic-ai/sdk`); a base,
-    as instruções, a tela e o formato do streaming continuam iguais. Modelo padrão
-    `gemini-2.5-flash` (troca pela variável `CHAT_MODELO`). Sem cache explícito: o prefixo
+    as instruções, a tela e o formato do streaming continuam iguais. Modelo escolhido em
+    tempo de execução: a função lista os modelos que a chave enxerga e prefere o Flash de versão
+    mais alta, sem variantes lite/preview/imagem (o nome `gemini-2.5-flash`, usado na primeira
+    tentativa, já não existia em 29/09/2026). `CHAT_MODELO` força um modelo fixo. Sem cache explícito: o prefixo
     (instruções + base) vai sempre idêntico e a API reaproveita sozinha. Temperatura 0,2 para a
     resposta ficar presa à base. Limite do plano gratuito vira a mensagem "Limite do plano
     gratuito atingido" na tela, sem quebrar a página.

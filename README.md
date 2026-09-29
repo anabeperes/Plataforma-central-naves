@@ -60,7 +60,7 @@ Configuração na Vercel (Settings > Environment Variables, para Production e Pr
 | --- | --- | --- |
 | `GEMINI_API_KEY` | sim | Chave da API do Gemini. Gratuita: entre em aistudio.google.com com uma conta Google, clique em "Get API key" e crie uma. Sem ela, a aba mostra erro. |
 | `CHAT_CODIGO` | não | Um código simples (ex.: `fluxo2026`). Se definido, a página pede uma vez e guarda no navegador. Evita que qualquer pessoa com a URL use o assistente. |
-| `CHAT_MODELO` | não | Modelo. Padrão `gemini-2.5-flash`, que tem plano gratuito. Outros modelos: ver aistudio.google.com. |
+| `CHAT_MODELO` | não | Modelo fixo. Sem ela, a função lista os modelos que a chave enxerga e escolhe sozinha o Flash mais novo (os nomes do Gemini mudam com o tempo). Só defina se quiser forçar um modelo específico. |
 
 Plano gratuito: a chave do AI Studio funciona sem cartão, com limite de pedidos por minuto e por
 dia (o Google muda esses limites; hoje ficam na casa de algumas dezenas por minuto e algumas

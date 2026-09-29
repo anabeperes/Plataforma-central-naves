@@ -7,12 +7,13 @@
    - CHAT_CODIGO        opcional. Se definida, a página pede esse código uma vez e o envia no
                         cabeçalho x-central-codigo. Serve para a página pública não virar
                         um chat aberto para qualquer pessoa com a URL.
-   - CHAT_MODELO        opcional. Padrão: gemini-2.5-flash (tem plano gratuito). */
+   - CHAT_MODELO        opcional. Sem ela, a função pergunta ao Google quais modelos a chave
+                        tem e escolhe o "flash" mais novo (os nomes mudam com o tempo). */
 
 import { GoogleGenAI, ApiError } from '@google/genai';
 import { montarBase, INSTRUCOES } from './_base.js';
 
-const MODELO = process.env.CHAT_MODELO || 'gemini-2.5-flash';
+const MODELO_FIXO = process.env.CHAT_MODELO || '';
 const MAX_MENSAGENS = 16;      // histórico enviado ao modelo (pares de pergunta e resposta)
 const MAX_CARACTERES = 4000;   // por mensagem
 const MAX_TOKENS_RESPOSTA = 2000;
@@ -22,6 +23,42 @@ let baseCache = null;
 function base() {
   if (!baseCache) baseCache = montarBase();
   return baseCache;
+}
+
+/* ---------- escolha do modelo ----------
+   Os nomes dos modelos do Gemini mudam (2.0, 2.5, 3...). Sem CHAT_MODELO, lista os modelos que a
+   chave enxerga, fica só com os que geram texto e prefere: "flash" (rápido e com plano gratuito),
+   sem sufixos como lite/8b/image/tts/live/audio/exp/preview, versão mais alta primeiro. */
+let modeloCache = '';
+const modelosRuins = new Set();
+function versaoDe(nome) {
+  const m = /gemini-(\d+(?:\.\d+)?)/.exec(nome);
+  return m ? parseFloat(m[1]) : 0;
+}
+function pontuar(nome) {
+  let p = versaoDe(nome) * 100;
+  if (/flash/.test(nome)) p += 50;
+  if (/pro/.test(nome)) p += 30;
+  if (/lite|8b|image|tts|live|audio|exp|preview|embedding|thinking|robotics|computer|learnlm|gemma|imagen|veo/.test(nome)) p -= 500;
+  return p;
+}
+async function resolverModelo(ai) {
+  if (MODELO_FIXO) return MODELO_FIXO;
+  if (modeloCache) return modeloCache;
+  const nomes = [];
+  const pager = await ai.models.list({ config: { pageSize: 100 } });
+  for await (const m of pager) {
+    const nome = String(m.name || '').replace(/^models\//, '');
+    if (!/^gemini-/.test(nome)) continue;
+    if (m.supportedActions && m.supportedActions.length && !m.supportedActions.includes('generateContent')) continue;
+    if (modelosRuins.has(nome)) continue;
+    nomes.push(nome);
+  }
+  nomes.sort((a, b) => pontuar(b) - pontuar(a));
+  if (!nomes.length) throw new Error('Nenhum modelo Gemini de texto disponível para esta chave.');
+  modeloCache = nomes[0];
+  console.log('Modelo escolhido: ' + modeloCache + ' (disponíveis: ' + nomes.slice(0, 6).join(', ') + ')');
+  return modeloCache;
 }
 
 const janelas = new Map();
@@ -81,7 +118,7 @@ export async function POST(req) {
   // A instrução e a base ficam no systemInstruction, sempre iguais: o Gemini reaproveita esse
   // prefixo entre pedidos (cache implícito) e a resposta sai mais rápido.
   const params = {
-    model: MODELO,
+    model: '',
     contents,
     config: {
       systemInstruction: INSTRUCOES + '\n\n# BASE DE CONHECIMENTO DA CENTRAL DO FLUXO\n\n' + base(),
@@ -94,8 +131,19 @@ export async function POST(req) {
   const stream = new ReadableStream({
     async start(controlador) {
       const enviar = obj => controlador.enqueue(codificador.encode(JSON.stringify(obj) + '\n'));
+      let modelo = '';
       try {
-        const fluxo = await ai.models.generateContentStream(params);
+        modelo = await resolverModelo(ai);
+        let fluxo;
+        try {
+          fluxo = await ai.models.generateContentStream({ ...params, model: modelo });
+        } catch (e) {
+          // Modelo listado mas indisponível para esta chave: risca da lista e tenta o próximo.
+          if (!(e instanceof ApiError) || e.status !== 404 || MODELO_FIXO) throw e;
+          modelosRuins.add(modelo); modeloCache = '';
+          modelo = await resolverModelo(ai);
+          fluxo = await ai.models.generateContentStream({ ...params, model: modelo });
+        }
         let texto = '';
         let motivo = '';
         let uso = null;
@@ -116,11 +164,11 @@ export async function POST(req) {
           enviar({ t: 'Não encontrei isso na central. Tente perguntar de outro jeito ou fale com a Fernanda e a Ellen.' });
         }
         enviar({
-          fim: true, modelo: MODELO,
+          fim: true, modelo: modelo,
           uso: uso ? { entrada: uso.promptTokenCount || 0, cache: uso.cachedContentTokenCount || 0, saida: uso.candidatesTokenCount || 0 } : null
         });
       } catch (e) {
-        enviar({ erro: mensagemErro(e) });
+        enviar({ erro: mensagemErro(e, modelo) });
       } finally {
         controlador.close();
       }
@@ -130,11 +178,11 @@ export async function POST(req) {
   return new Response(stream, { headers: { 'Content-Type': 'application/x-ndjson; charset=utf-8', 'Cache-Control': 'no-store', 'X-Accel-Buffering': 'no' } });
 }
 
-function mensagemErro(e) {
+function mensagemErro(e, modelo) {
   if (e instanceof ApiError) {
     if (e.status === 400 && /api key/i.test(e.message)) return 'Chave da API inválida. Confira GEMINI_API_KEY na Vercel.';
     if (e.status === 401 || e.status === 403) return 'Chave da API sem permissão. Confira GEMINI_API_KEY na Vercel.';
-    if (e.status === 404) return 'Modelo "' + MODELO + '" não encontrado. Ajuste CHAT_MODELO na Vercel.';
+    if (e.status === 404) return 'Modelo "' + (modelo || MODELO_FIXO) + '" não encontrado. ' + (MODELO_FIXO ? 'Ajuste ou remova CHAT_MODELO na Vercel.' : 'Tente de novo em instantes.');
     if (e.status === 429) return 'Limite do plano gratuito atingido por enquanto. Espere um minuto e tente de novo.';
     if (e.status >= 500) return 'A API do Gemini está instável agora. Tente de novo em instantes.';
     return 'Erro da API (' + e.status + '): ' + e.message;
