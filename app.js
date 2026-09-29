@@ -47,6 +47,7 @@
     link: '<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',
     gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v9h14v-9"/><path d="M12 8c-2-3-6-3-6-1s3 1 6 1zm0 0c2-3 6-3 6-1s-3 1-6 1z"/>',
     search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     x: '<path d="M6 6l12 12M18 6 6 18"/>',
     arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
     copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
@@ -73,10 +74,7 @@
     links: typeof LINKS !== 'undefined' ? LINKS : [],
     gruposLinks: typeof GRUPOS_LINKS !== 'undefined' ? GRUPOS_LINKS : [],
     entregas: typeof ENTREGAS !== 'undefined' ? ENTREGAS : [],
-    tiposEntrega: typeof TIPOS_ENTREGA !== 'undefined' ? TIPOS_ENTREGA : [],
-    jornada: typeof JORNADA !== 'undefined' ? JORNADA : [],
-    rotinas: typeof ROTINAS !== 'undefined' ? ROTINAS : [],
-    acessoRapido: typeof ACESSO_RAPIDO !== 'undefined' ? ACESSO_RAPIDO : []
+    tiposEntrega: typeof TIPOS_ENTREGA !== 'undefined' ? TIPOS_ENTREGA : []
   };
   var ROTULOS_PROJETO = [
     ['oQueFaz', 'O que faz'], ['comoFunciona', 'Como funciona'], ['ondeRoda', 'Onde roda'],
@@ -102,13 +100,11 @@
   indexar(D.agentes, ['nome', 'descricao', 'onde', 'paraQuem', 'status', 'responsavel', 'autores', 'detalhe']);
   indexar(D.links, ['nome', 'descricao', 'obs', 'grupo', 'url']);
   indexar(D.entregas, ['nome', 'descricao', 'tipo', 'frequencia', 'responsavel', 'operacao']);
-  var linksPorId = {};
-  D.links.forEach(function (l) { linksPorId[l.id] = l; });
 
   /* =========================== rotas =========================== */
   var SECOES = [
     { rota: '/', nome: 'Visão geral', curto: 'Geral', icone: 'home' },
-    { rota: '/perguntar', nome: 'Perguntar', curto: 'Perguntar', icone: 'chat' },
+    { rota: '/recentes', nome: 'Últimos acessos', curto: 'Recentes', icone: 'clock' },
     { rota: '/agentes', nome: 'Agentes de IA', curto: 'Agentes', icone: 'bot' },
     { rota: '/projetos', nome: 'Projetos', curto: 'Projetos', icone: 'grid' },
     { rota: '/links', nome: 'Links importantes', curto: 'Links', icone: 'link' },
@@ -125,6 +121,7 @@
     var rota = i === -1 ? h : h.slice(0, i);
     var params = new URLSearchParams(i === -1 ? '' : h.slice(i + 1));
     if (!rota.startsWith('/')) rota = '/' + rota;
+    if (rota === '/perguntar') rota = '/'; // a aba Perguntar virou a Visão geral
     if (!SECOES.some(function (s) { return s.rota === rota; })) rota = '/';
     return { rota: rota, params: params };
   }
@@ -224,6 +221,9 @@
   var ultimoFoco = null;
   function abrirDetalhe(o, origem) {
     ultimoFoco = origem || document.activeElement;
+    dlg.setAttribute('data-acesso-tipo', o.tipoAcesso || '');
+    dlg.setAttribute('data-acesso-nome', o.tipoAcesso ? o.titulo : '');
+    if (o.tipoAcesso) registrarAcesso({ tipo: o.tipoAcesso, nome: o.titulo });
     document.getElementById('detalhe-kicker').textContent = o.kicker || '';
     document.getElementById('detalhe-titulo').textContent = o.titulo;
     document.getElementById('detalhe-desc').textContent = o.descricao || '';
@@ -250,120 +250,6 @@
     if (a) fecharDetalhe();
   });
 
-  /* =========================== visão geral =========================== */
-  function viewGeral(params) {
-    var q = params.get('q') || '';
-    var root = el('div', { class: 'view fade-in' });
-    root.appendChild(cabecalho('Operação do Fluxo', 'Como a Mentoria Fluxo funciona por dentro e o acesso rápido a tudo que a operação precisa: agentes de IA, projetos do time, links e entregas.'));
-
-    var resultados = el('div', { class: 'gsearch__results' });
-    var sb = busca(q, 'Buscar em tudo: agentes, projetos, links, entregas e rotinas…', function (v) {
-      q = v; params.set('q', v); if (!v) params.delete('q'); gravarRota('/', params); renderResultados(); atualizarPerguntar();
-    });
-    var perguntar = el('a', { class: 'btn btn--primary gsearch__ask', href: '#/perguntar', html: svg('chat', 'btn__ico') + ' Perguntar ao assistente' });
-    function atualizarPerguntar() { perguntar.setAttribute('href', '#/perguntar' + (q.trim() ? '?q=' + encodeURIComponent(q.trim()) : '')); }
-    atualizarPerguntar();
-    root.appendChild(el('div', { class: 'gsearch card' }, [el('div', { class: 'gsearch__row' }, [sb, perguntar]), resultados]));
-
-    function renderResultados() {
-      resultados.innerHTML = '';
-      if (!q.trim()) { resultados.hidden = true; return; }
-      resultados.hidden = false;
-      var grupos = [
-        ['Agentes de IA', D.agentes.filter(function (a) { return bate(a._indice, q); }), function (a, b) { abrirAgente(a, b); }, '#/agentes?q='],
-        ['Projetos', D.projetos.filter(function (p) { return bate(p._indice, q); }), function (p, b) { abrirProjeto(p, b); }, '#/projetos?q='],
-        ['Links importantes', D.links.filter(function (l) { return bate(l._indice, q); }), null, '#/links?q='],
-        ['Entregas', D.entregas.filter(function (e) { return bate(e._indice, q); }), function (e, b) { abrirEntrega(e, b); }, '#/entregas?q='],
-        ['Rotinas do time', D.rotinas.filter(function (r) { return bate(normalizar(r.quando + ' ' + r.titulo + ' ' + r.texto), q); }), null, null]
-      ];
-      var total = 0;
-      grupos.forEach(function (g) {
-        if (!g[1].length) return;
-        total += g[1].length;
-        var lista = el('ul', { class: 'gsearch__list' });
-        g[1].slice(0, 6).forEach(function (item) {
-          var li = el('li');
-          if (g[0] === 'Links importantes') {
-            li.appendChild(el('a', Object.assign({ class: 'gsearch__item' }, linkAttrs(item.url), { html: '<strong>' + esc(item.nome) + '</strong><span>' + esc(item.descricao) + '</span>' })));
-          } else if (g[0] === 'Rotinas do time') {
-            li.appendChild(el('div', { class: 'gsearch__item', html: '<strong>' + esc(item.titulo) + '</strong><span>' + esc(item.quando + ': ' + item.texto) + '</span>' }));
-          } else {
-            var b = el('button', { class: 'gsearch__item', type: 'button', html: '<strong>' + esc(item.nome) + '</strong><span>' + esc(item.descricao) + '</span>' });
-            b.addEventListener('click', function () { g[2](item, b); });
-            li.appendChild(b);
-          }
-          lista.appendChild(li);
-        });
-        var head = el('div', { class: 'gsearch__head' }, [el('h3', { text: g[0] }), el('span', { text: plural(g[1].length, 'resultado', 'resultados') })]);
-        if (g[3] && g[1].length > 6) head.appendChild(el('a', { href: g[3] + encodeURIComponent(q), text: 'ver todos' }));
-        resultados.appendChild(el('section', { class: 'gsearch__group' }, [head, lista]));
-      });
-      if (!total) resultados.appendChild(el('p', { class: 'gsearch__empty', text: 'Nada encontrado com "' + q + '".' }));
-    }
-    renderResultados();
-
-    // números
-    var nums = el('div', { class: 'numbers' });
-    [
-      ['#/agentes', 'Agentes de IA', D.agentes.length, 'em uso ou em construção'],
-      ['#/projetos', 'Projetos do time', D.projetos.length, plural(D.projetos.filter(function (p) { return p.detalhe; }).length, 'com "Como funciona"', 'com "Como funciona"')],
-      ['#/links', 'Links importantes', D.links.length, D.gruposLinks.length + ' grupos'],
-      ['#/entregas', 'Entregas', D.entregas.length, 'individuais, coletivas, extras e bônus']
-    ].forEach(function (n) {
-      nums.appendChild(el('a', { class: 'card number', href: n[0] }, [
-        el('span', { class: 'number__label', text: n[1] }),
-        el('span', { class: 'number__value', text: String(n[2]) }),
-        el('span', { class: 'number__detail', text: n[3] })
-      ]));
-    });
-    root.appendChild(nums);
-
-    // acesso rápido
-    var quick = el('div', { class: 'quick' });
-    D.acessoRapido.forEach(function (id) {
-      var l = linksPorId[id]; if (!l) return;
-      quick.appendChild(el('div', { class: 'quick__item' }, [
-        el('a', Object.assign({ class: 'quick__link', title: l.descricao }, linkAttrs(l.url), { html: svg('ext', 'quick__ico') + '<span>' + esc(l.nome) + '</span>' })),
-        el('button', { class: 'iconbtn', type: 'button', 'aria-label': 'Copiar link de ' + l.nome, title: 'Copiar link', html: svg('copy'), on: { click: function () { copiar(l.url); } } })
-      ]));
-    });
-    root.appendChild(el('section', { class: 'card section-card' }, [
-      el('div', { class: 'section-card__head' }, [el('h2', { text: 'Acesso rápido' }), el('a', { href: '#/links', text: 'todos os links' })]),
-      quick
-    ]));
-
-    // jornada + rotinas
-    var duas = el('div', { class: 'two' });
-    var jornada = el('ol', { class: 'journey' });
-    D.jornada.forEach(function (j, i) {
-      jornada.appendChild(el('li', { class: 'journey__step' }, [
-        el('span', { class: 'journey__n', text: String(i + 1) }),
-        el('div', {}, [
-          el('span', { class: 'journey__stage', text: j.etapa }),
-          el('h3', { text: j.titulo }),
-          el('p', { text: j.texto })
-        ])
-      ]));
-    });
-    duas.appendChild(el('section', { class: 'card section-card' }, [
-      el('div', { class: 'section-card__head' }, [el('h2', { text: 'Jornada do mentorado' }), el('a', { href: '#/entregas', text: 'ver entregas' })]),
-      jornada
-    ]));
-    var rot = el('ul', { class: 'routines' });
-    D.rotinas.forEach(function (r) {
-      rot.appendChild(el('li', { class: 'routine' }, [
-        el('span', { class: 'routine__when', text: r.quando }),
-        el('div', {}, [el('h3', { text: r.titulo }), el('p', { text: r.texto })])
-      ]));
-    });
-    duas.appendChild(el('section', { class: 'card section-card' }, [
-      el('div', { class: 'section-card__head' }, [el('h2', { text: 'Rotinas do time' })]),
-      rot
-    ]));
-    root.appendChild(duas);
-    root.appendChild(el('p', { class: 'footnote', text: 'Regras e combinados vêm dos anúncios no Slack. Encontrou algo desatualizado? Edite dados/operacao.js.' }));
-    return root;
-  }
   function esc(s) { return String(s || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
   /* =========================== agentes =========================== */
@@ -375,10 +261,10 @@
     if (a.status) meta.push(el('span', { class: 'status' + (a.status === 'em construção' ? ' status--construcao' : ''), text: a.status }));
     var links = [];
     if (a.url) links.push(botaoLink(a.url, 'Abrir', true));
-    abrirDetalhe({ kicker: 'Agente de IA', titulo: a.nome, descricao: a.descricao, meta: meta, blocos: ROTULOS_AGENTE.map(function (r) { return [r[1], a.detalhe && a.detalhe[r[0]]]; }), links: links }, origem);
+    abrirDetalhe({ tipoAcesso: 'Agente', kicker: 'Agente de IA', titulo: a.nome, descricao: a.descricao, meta: meta, blocos: ROTULOS_AGENTE.map(function (r) { return [r[1], a.detalhe && a.detalhe[r[0]]]; }), links: links }, origem);
   }
   function cardAgente(a) {
-    var art = el('article', { class: 'card item' + (a.status === 'em construção' ? ' item--soft' : '') });
+    var art = el('article', { class: 'card item' + (a.status === 'em construção' ? ' item--soft' : ''), 'data-acesso-tipo': 'Agente', 'data-acesso-nome': a.nome });
     art.appendChild(el('div', { class: 'item__top' }, [
       el('span', { class: 'item__icon', html: svg('bot') }),
       el('div', { class: 'item__tags' }, [tag(a.onde, 'tag--onde')].concat((a.paraQuem || []).map(function (p) { return el('span', { class: 'ctx', text: p }); })))
@@ -440,11 +326,11 @@
     if (p.url) links.push(botaoLink(p.url, 'Abrir', true));
     if (p.prd) links.push(botaoLink(p.prd, 'Baixar PRD'));
     if (p.git && p.git !== p.url) links.push(botaoLink(p.git, 'Ver no Git'));
-    abrirDetalhe({ kicker: 'Projeto · ' + p.categoria, titulo: p.nome, descricao: p.descricao, meta: meta, blocos: ROTULOS_PROJETO.map(function (r) { return [r[1], p.detalhe && p.detalhe[r[0]]]; }), links: links }, origem);
+    abrirDetalhe({ tipoAcesso: 'Projeto', kicker: 'Projeto · ' + p.categoria, titulo: p.nome, descricao: p.descricao, meta: meta, blocos: ROTULOS_PROJETO.map(function (r) { return [r[1], p.detalhe && p.detalhe[r[0]]]; }), links: links }, origem);
   }
   function cardProjeto(p) {
     var pendente = !p.url;
-    var art = el('article', { class: 'card item' + (pendente ? ' item--pending' : ''), 'aria-label': p.nome });
+    var art = el('article', { class: 'card item' + (pendente ? ' item--pending' : ''), 'aria-label': p.nome, 'data-acesso-tipo': 'Projeto', 'data-acesso-nome': p.nome });
     art.appendChild(el('div', { class: 'item__top' }, [el('span', { class: 'item__icon', html: svg(p.tipo) }), tag(p.tipo, 'tag--' + p.tipo)]));
     var titulo = el('h3', { class: 'item__title', text: p.nome });
     var desc = el('p', { class: 'item__desc', text: p.descricao });
@@ -516,7 +402,7 @@
 
   /* =========================== links =========================== */
   function linhaLink(l) {
-    var row = el('div', { class: 'linkrow' + (l.url ? '' : ' linkrow--empty') });
+    var row = el('div', { class: 'linkrow' + (l.url ? '' : ' linkrow--empty'), 'data-acesso-tipo': 'Link', 'data-acesso-nome': l.nome });
     var texto = el('div', { class: 'linkrow__text' }, [
       el('span', { class: 'linkrow__name', text: l.nome }),
       el('span', { class: 'linkrow__desc', text: l.descricao }),
@@ -525,7 +411,7 @@
     row.appendChild(texto);
     var acoes = el('div', { class: 'linkrow__actions' });
     if (l.url) {
-      acoes.appendChild(el('button', { class: 'iconbtn', type: 'button', 'aria-label': 'Copiar link de ' + l.nome, title: 'Copiar link', html: svg('copy'), on: { click: function () { copiar(l.url); } } }));
+      acoes.appendChild(el('button', { class: 'iconbtn', type: 'button', 'aria-label': 'Copiar link de ' + l.nome, title: 'Copiar link', html: svg('copy'), on: { click: function () { copiar(l.url); registrarAcesso({ tipo: 'Link', nome: l.nome, url: l.url }); } } }));
       acoes.appendChild(el('a', Object.assign({ class: 'iconbtn', 'aria-label': 'Abrir ' + l.nome + ' em nova aba', title: 'Abrir em nova aba', html: svg('ext') }, linkAttrs(l.url))));
     } else {
       acoes.appendChild(el('span', { class: 'pending-label', text: 'link em breve' }));
@@ -571,10 +457,10 @@
     var meta = [tag(e.tipo, 'tag--entrega-' + normalizar(e.tipo).replace(/[^a-z]/g, ''))];
     if (e.frequencia) meta.push(el('span', { text: e.frequencia }));
     var links = (e.links || []).map(function (l, i) { return botaoLink(l.url, l.rotulo, i === 0); });
-    abrirDetalhe({ kicker: 'Entrega ' + e.tipo, titulo: e.nome, descricao: e.descricao, meta: meta, blocos: [['Como entregamos', e.operacao], ['Frequência', e.frequencia], ['Quem cuida', e.responsavel]], links: links }, origem);
+    abrirDetalhe({ tipoAcesso: 'Entrega', kicker: 'Entrega ' + e.tipo, titulo: e.nome, descricao: e.descricao, meta: meta, blocos: [['Como entregamos', e.operacao], ['Frequência', e.frequencia], ['Quem cuida', e.responsavel]], links: links }, origem);
   }
   function cardEntrega(e) {
-    var art = el('article', { class: 'card item' });
+    var art = el('article', { class: 'card item', 'data-acesso-tipo': 'Entrega', 'data-acesso-nome': e.nome });
     art.appendChild(el('div', { class: 'item__top' }, [el('span', { class: 'item__icon', html: svg('gift') }), tag(e.tipo, 'tag--entrega-' + normalizar(e.tipo).replace(/[^a-z]/g, ''))]));
     art.appendChild(el('h3', { class: 'item__title', text: e.nome }));
     art.appendChild(el('p', { class: 'item__desc item__desc--4', text: e.descricao }));
@@ -782,13 +668,115 @@
     renderLog();
 
     var inicial = (params.get('q') || '').trim();
-    if (inicial) { params.delete('q'); gravarRota('/perguntar', params); caixa.value = inicial; setTimeout(mandar, 50); }
+    if (inicial) { params.delete('q'); gravarRota('/', params); caixa.value = inicial; setTimeout(mandar, 50); }
     setTimeout(function () { caixa.focus(); }, 0);
     return root;
   }
 
+  /* =========================== últimos acessos =========================== */
+  // Guarda neste navegador o que a pessoa abriu: links externos (em qualquer aba,
+  // inclusive nas respostas do assistente) e os painéis de agentes, projetos e entregas.
+  var CHAVE_RECENTES = 'central-fluxo-recentes';
+  var MAX_RECENTES = 30;
+  var ROTULO_ACESSO = { 'Link': 'Link', 'Agente': 'Agente de IA', 'Projeto': 'Projeto', 'Entrega': 'Entrega' };
+  function lerRecentes() {
+    try { var l = JSON.parse(localStorage.getItem(CHAVE_RECENTES) || '[]'); return Array.isArray(l) ? l : []; } catch (e) { return []; }
+  }
+  function gravarRecentes(l) { try { localStorage.setItem(CHAVE_RECENTES, JSON.stringify(l.slice(0, MAX_RECENTES))); } catch (e) { /* sem storage */ } }
+  // Links soltos se distinguem pelo endereço; agentes, projetos e entregas pelo nome.
+  function chaveAcesso(r) { return r.tipo + '|' + (r.tipo === 'Link' ? r.url : r.nome); }
+  function registrarAcesso(item) {
+    if (!item || !item.nome || !ROTULO_ACESSO[item.tipo]) return;
+    var novo = { tipo: item.tipo, nome: item.nome, quando: Date.now() };
+    if (item.tipo === 'Link') { if (!item.url) return; novo.url = item.url; }
+    var chave = chaveAcesso(novo);
+    gravarRecentes([novo].concat(lerRecentes().filter(function (r) { return chaveAcesso(r) !== chave; })));
+  }
+  function aoAbrirLink(e) {
+    if (e.type === 'auxclick' && e.button !== 1) return;
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a || !ehExterno(a.getAttribute('href'))) return;
+    var dono = a.closest('[data-acesso-nome]:not([data-acesso-nome=""])');
+    if (dono) registrarAcesso({ tipo: dono.getAttribute('data-acesso-tipo'), nome: dono.getAttribute('data-acesso-nome'), url: a.href });
+    else registrarAcesso({ tipo: 'Link', nome: a.textContent.trim() || a.href, url: a.href });
+  }
+  document.addEventListener('click', aoAbrirLink, true);
+  document.addEventListener('auxclick', aoAbrirLink, true);
+
+  function haQuanto(ms) {
+    var min = Math.floor((Date.now() - ms) / 60000);
+    if (min < 1) return 'agora';
+    if (min < 60) return 'há ' + min + ' min';
+    var h = Math.floor(min / 60);
+    if (h < 24) return 'há ' + h + ' h';
+    var d = Math.floor(h / 24);
+    if (d === 1) return 'ontem';
+    if (d < 7) return 'há ' + d + ' dias';
+    return new Date(ms).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+  }
+  function acharPorNome(lista, nome) { return lista.filter(function (x) { return x.nome === nome; })[0]; }
+  // Descobre descrição, link e painel de um acesso a partir dos dados atuais da central.
+  function resolverAcesso(r) {
+    var o = { descricao: '', url: r.url || '', abrir: null };
+    if (r.tipo === 'Agente') {
+      var a = acharPorNome(D.agentes, r.nome); if (!a) return null;
+      o.descricao = a.descricao; o.url = a.url || ''; o.abrir = function (b) { abrirAgente(a, b); };
+    } else if (r.tipo === 'Projeto') {
+      var p = acharPorNome(D.projetos, r.nome); if (!p) return null;
+      o.descricao = p.descricao; o.url = p.url || ''; if (p.detalhe) o.abrir = function (b) { abrirProjeto(p, b); };
+    } else if (r.tipo === 'Entrega') {
+      var en = acharPorNome(D.entregas, r.nome); if (!en) return null;
+      o.descricao = en.descricao; o.url = en.links && en.links[0] && ehExterno(en.links[0].url) ? en.links[0].url : '';
+      o.abrir = function (b) { abrirEntrega(en, b); };
+    } else {
+      var l = D.links.filter(function (x) { return x.url === r.url; })[0];
+      if (l) o.descricao = l.descricao;
+      else { try { o.descricao = new URL(r.url).hostname.replace(/^www\./, ''); } catch (e) { o.descricao = r.url; } }
+    }
+    return o;
+  }
+  function linhaRecente(r, info) {
+    var row = el('div', { class: 'linkrow recent', 'data-acesso-tipo': r.tipo, 'data-acesso-nome': r.nome });
+    row.appendChild(el('div', { class: 'linkrow__text' }, [
+      el('span', { class: 'recent__meta', text: ROTULO_ACESSO[r.tipo] + ' · ' + haQuanto(r.quando) }),
+      el('span', { class: 'linkrow__name', text: r.nome }),
+      info.descricao ? el('span', { class: 'linkrow__desc', text: info.descricao }) : null
+    ]));
+    var acoes = el('div', { class: 'linkrow__actions' });
+    if (info.abrir) {
+      var b = el('button', { class: 'btn btn--ghost btn--detail', type: 'button', text: 'Detalhes', 'aria-haspopup': 'dialog' });
+      b.addEventListener('click', function () { info.abrir(b); });
+      acoes.appendChild(b);
+    }
+    if (info.url) {
+      acoes.appendChild(el('button', { class: 'iconbtn', type: 'button', 'aria-label': 'Copiar link de ' + r.nome, title: 'Copiar link', html: svg('copy'), on: { click: function () { copiar(info.url); } } }));
+      acoes.appendChild(el('a', Object.assign({ class: 'iconbtn', 'aria-label': 'Abrir ' + r.nome + ' em nova aba', title: 'Abrir em nova aba', html: svg('ext') }, linkAttrs(info.url))));
+    }
+    row.appendChild(acoes);
+    return row;
+  }
+  function viewRecentes() {
+    var root = el('div', { class: 'view fade-in' });
+    var itens = lerRecentes().map(function (r) { return { r: r, info: resolverAcesso(r) }; }).filter(function (x) { return x.info; });
+    var cont = contador(itens.length, 'acesso', 'acessos');
+    var limpar = el('button', { class: 'btn btn--ghost', type: 'button', text: 'Limpar histórico', on: { click: function () { gravarRecentes([]); render(); } } });
+    root.appendChild(cabecalho('Últimos acessos', 'O que você abriu por último na central, do mais recente para o mais antigo: links, agentes, projetos e entregas. Fica salvo só neste navegador.', itens.length ? [cont, limpar] : null));
+    if (!itens.length) {
+      root.appendChild(el('div', { class: 'empty' }, [
+        el('h2', { text: 'Nada por aqui ainda' }),
+        el('p', { text: 'Quando você abrir um link, um agente, um projeto ou uma entrega, ele aparece aqui para você voltar em um clique.' }),
+        el('a', { class: 'btn btn--primary', href: '#/links', text: 'Ver links importantes' })
+      ]));
+      return root;
+    }
+    var card = el('section', { class: 'card linkgroup recent-list', 'aria-label': 'Últimos acessos' });
+    itens.forEach(function (x) { card.appendChild(linhaRecente(x.r, x.info)); });
+    root.appendChild(card);
+    return root;
+  }
+
   /* =========================== montagem =========================== */
-  var VIEWS = { '/': viewGeral, '/perguntar': viewPerguntar, '/agentes': viewAgentes, '/projetos': viewProjetos, '/links': viewLinks, '/entregas': viewEntregas };
+  var VIEWS = { '/': viewPerguntar, '/recentes': viewRecentes, '/agentes': viewAgentes, '/projetos': viewProjetos, '/links': viewLinks, '/entregas': viewEntregas };
   var app = document.getElementById('app');
   function render() {
     var r = lerRota();
