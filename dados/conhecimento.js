@@ -118,6 +118,15 @@ const CONHECIMENTO = [
     fonte: '#rtg-zoom 15/07/2025, 26/06/2026 e 18/08/2026; #fluxo-infos-navegadores 17/07/2025'
   },
 
+  {
+    pergunta: 'Onde está o PPT (apresentação) da reunião de integração?',
+    resposta: 'Fica no Canva, no link abaixo. É a apresentação usada na reunião de integração dos mentorados novos; serve para apresentar ou para consultar o que é dito na integração. O arquivo é editável, então não altere sem combinar com a Ellen.',
+    tema: 'Acessos',
+    quem: 'Ellen e Robson (integração)',
+    fonte: 'Enviado pela Ana em 30/09/2026',
+    links: ['https://www.canva.com/design/DAHWOjnohqw/JiKGpncaF-XLgyKC6tiw0w/edit']
+  },
+
   /* ---------- comercial e resultados ---------- */
   {
     pergunta: 'Qual é a oferta do Fluxo nos zooms do VTSD com pitch?',
