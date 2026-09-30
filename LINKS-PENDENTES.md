@@ -130,3 +130,50 @@ Buscado: "PRD" (com link, desde 01/2026) e "github.com" (desde 01/2026).
 ## Início (`dados/operacao.js`)
 - Jornada e rotinas foram escritas só com o que está documentado no Slack. Vale a Ellen e a
   Fernanda revisarem os textos, principalmente "Renovação" e "Lázaro".
+
+---
+
+# Ficou sem resposta no Slack (Leva 1, 01/08 a 30/09/2026)
+
+Pendências abertas que apareceram na leitura dos 15 canais da Leva 1 (ver DECISOES.md, "Leva 1 do
+Slack"). Cada uma aponta o item da base que fica esperando a resposta.
+
+1. Calls pontuais que o navegador decide fazer com o mentorado: a pergunta do Felipe Faé (10/08,
+   #fluxo-time-rtg) ficou sem resposta na thread (pergunta "Mentorado pediu uma call com o navegador").
+2. Percentual médio de renovação de assinatura perguntado no #fluxo-time-rtg (14/09) não foi respondido.
+3. Nova frequência do pedido de avaliação da navegação (o Leandro queria a cada 10 dias): Ellen e Fer
+   ainda buscando meio-termo (pergunta "Qual é o NPS do Fluxo, a nota da navegação e o ranking").
+4. Sugestão da Darah (02/09, #fluxo-ia): mensagens da blacklist aparecerem por padrão na caixa de
+   entrada; sem decisão (pergunta "Como funciona a blacklist").
+5. Opção por caixa para o tick azul, oferecida pelo Gabriel José (02/09): sem decisão.
+6. Melhorias do NavMaster listadas em #fluxo-ia (filtros de plano atrasado, aba de renovação,
+   mensagens rápidas, notas em grupos com sócio, ditado por voz, exportar conversa): em aberto
+   (agente NavMaster, campo "atenção").
+7. Hospedagem definitiva das páginas do PIF (o projeto não pôde ser transferido para a conta do
+   Fluxo; a Ester ficou de recriar): em discussão. Os links pif-fluxo.vercel.app podem mudar.
+8. Data e local do jantar do Desafio Express (provisório 16/12) e hotseat do SPP (tentativa de
+   30/11): dependem do Leandro (entrega "Ladeira Day e Hotseat").
+9. Resultado do Desafio do Fluxo Festival: em 09/09 sem resultado; finalistas ainda sendo tratados
+   em 29/09.
+10. Produto "Agentes Fluxo" na Hotmart para substituir os GPTs: decisão fica para o próximo sprint
+    (agente "Agentes GPT do Fluxo").
+11. Troca da data do Fluxo Online (26 a 28/11) nas demais agendas e no Fluxer: pendente.
+12. Validação do e-mail do Fluxer antes de entrar no Zoom (Ana com o José) e teste de senha no
+    Zoom: em andamento.
+13. Skills /ht-* (trilha High Ticket) no Severino: ainda serão colocadas.
+14. Aula atualizada sobre criar agentes de IA: no radar, sem data.
+15. Michelle (analisadora só de diagnóstico) ainda não tinha aberto agenda em 02/09.
+16. Formulário de interesse em palestrar no Fluxo Online: previsto para a semana de 14/09, ainda
+    como próximo passo da Ester em 29/09.
+17. Página do Retiro Black: qual URL está desatualizada (com ou sem "-2026")? A base manteve
+    retiro-ultra-black-friday.vercel.app e a `obs` avisa que a versão com "-2026" não deve ser
+    compartilhada; a Ana confirma.
+18. Responsável pelos links parcelados personalizados de renovação: Lyandra (registro de 07/08 em
+    #fluxo-time-rtg) ou modelo da Ester com a Érica gerando (17 a 29/09 em #fluxo-duvidas-financeiro)?
+    A base traz as duas versões com as datas; a confirmar com a Fernanda qual vale hoje.
+19. Grupo com sócio: notas, perfil e feedback de página no NavMaster ainda não funcionam em grupo;
+    sugestão em aberto.
+20. Telefone novo do financeiro (Lya): não entrou na base (regra: sem telefone). A Ana decide se o
+    link wa.me entra; hoje a pergunta "Qual é o contato do financeiro" diz onde ele está no Slack.
+21. Agentes do quiz refeitos pela Ellen: card criado sem `url` (o acesso está na thread de 04/09 em
+    #fluxo-time-rtg e não fica na central). Se a Ellen tiver uma página pública, entra em `url`.

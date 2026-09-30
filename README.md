@@ -88,7 +88,10 @@ Plano gratuito: a chave do AI Studio funciona sem cartão, com limite de pedidos
 dia (o Google muda esses limites; hoje ficam na casa de algumas dezenas por minuto e algumas
 centenas por dia para o Flash). Se o limite estourar, a aba mostra "Limite do plano gratuito
 atingido" e volta a funcionar sozinha no minuto seguinte. Cada pergunta manda a base inteira
-(cerca de 26 mil tokens), então o limite de tokens por minuto também conta.
+(cerca de 60 mil tokens desde a leva 1 do Slack, 30/09/2026), então o limite de tokens por minuto
+também conta: no plano gratuito cabem poucas perguntas por minuto somando página e bot do Slack. Se
+isso apertar, o caminho é ativar o faturamento da chave no AI Studio (a cobrança por pergunta é de
+centavos) ou usar o cache explícito do Gemini para a base.
 
 Regras do assistente (em `api/_base.js`, constante `INSTRUCOES`): responde em português, direto,
 só com a base; entrega o link completo quando pedem; quando não sabe, diz "não encontrei isso na

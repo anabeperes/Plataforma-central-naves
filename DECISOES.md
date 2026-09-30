@@ -300,3 +300,77 @@ Pedido da Ellen: o mesmo chat da central dentro do Slack, sem mexer na página, 
    thread num canal. Sem acesso a mensagens de canais que não mencionem o bot.
 6. **Rotas internas viram links do site** na resposta (`#/links` vira link para a central), e o
    markdown do assistente é convertido para o mrkdwn do Slack.
+
+---
+
+# Leva 1 do Slack (30/09/2026)
+
+Primeira leva de atualização da base a partir da leitura dos canais do Slack de 01/08 a 30/09/2026
+(15 canais, cerca de 816 mensagens e 342 threads), consolidada no documento "LEVA 1: sugestões para a
+base de conhecimento". A Ana aprovou tudo ("aplica tudo") e os 110 itens foram aplicados.
+
+## O que entrou
+
+- `dados/conhecimento.js`: de 34 para 128 perguntas. Blocos novos: atendimento e regras dos
+  navegadores; análises e planos de ação; renovação; sócios; Fluxer e ferramentas; IA e agentes;
+  pós-venda e suporte técnico. Os blocos antigos (entregas dos picos, acessos, comercial, financeiro
+  e contratos, números, eventos, pessoas, links) ganharam itens e tiveram as respostas corrigidas.
+  `SUGESTOES_CHAT` trocou duas perguntas (sócio e cancelamento).
+- `dados/entregas.js`: 15 entregas atualizadas (Ajuste de velas, Planos de ação, Análises, Fluxo
+  Festival, 2 eventos online, Comunidade, Zoom semanal, Calls coletivas, Retiro Black Friday,
+  Ladeira Day e Hotseat, Desafio Mandala, Retiro Levantamento de Caixa, Cadeira de sócio).
+- `dados/links.js`: de 53 para 62 links. Novos: playlists Exemplos que Inspiram e Concurso de
+  Resultado, melhores anúncios de captação, planilha de patrimônio, pasta da RTG do Retiro Black,
+  mapa mental do Caixa 10x, mapa mental dos processos da navegação, apresentação de Boas-vindas,
+  canal #pos-venda-fluxo-duvidas. Corrigidos: Miro do fluxo de entrada, retiro Black (obs),
+  integração (obs), ActiveCampaign (newsletter pausada), Hotmart (obs), Terminus (etiquetas),
+  Central de Gestão de Eventos, #fluxo-ia e #nocode-comunicados-fluxer (obs).
+- `dados/agentes.js`: NavMaster, Gerador de contexto, Severino, Estúdio Criativo e Agentes GPT
+  atualizados; agente novo "Agentes do quiz (refeitos pela Ellen)".
+- `dados/operacao.js`: jornada (integração sem horário fixo, ajuste de velas por nível, coletivas)
+  e rotinas (calls coletivas, moderador dos zooms, backup do Zoom por time, checklist de
+  comunicação e escala, remoção de inativos).
+- `LINKS-PENDENTES.md`: seção "Ficou sem resposta no Slack (Leva 1)".
+- `dados/projetos.js` não mudou: nenhum item da leva apontava para ele.
+
+## As 19 correções (o que a base dizia e o que passou a dizer)
+
+| # | Assunto | Correção aplicada |
+| --- | --- | --- |
+| C1 | Fluxo Online | 26, 27 e 28/11/2026 (era "semana de 16/11"); sábado só Pro e Master |
+| C2 | Ladeira Day do FLP | três Ladeira Days confirmados pelo Leandro: 16/11, 18/11 e 08/12; agenda registrada pela Fernanda (era "Clara agenda") |
+| C3 | Hotseat do SPP | o de 16/11 saiu da agenda; tentativa de 30/11; 2 hotseats a entregar |
+| C4 | Gravação do FLP e SPP | ao vivo continua fechado; gravação e materiais do FLP, do SPP (11/09) e da Black liberados aos mentorados |
+| C5 | Horário da integração | sem horário fixo; agenda publicada pelo Robson; link no Fluxer (conhecimento, links e jornada) |
+| C6 | Contato do financeiro | número mudou em 06/2026; a base diz onde está a mensagem, sem o telefone |
+| C7 | Newsletter | pausada (Fernanda, 29/09); ActiveCampaign fica só com e-mails de avisos |
+| C8 | Agentes GPT | param em dezembro; proposta "Agentes Fluxo" na Hotmart; decisão no próximo sprint |
+| C9 | Relacionamento | só Robson desde 29/09; Tassia (licença) e Jéssica (afastada) fora das respostas |
+| C10 | Natasha | desligada em 14/09; retirada de todas as funções (zoom, salas, comunicação); fica só nas fontes |
+| C11 | Calls coletivas | quatro calls (tráfego, copy, Claude, produto), Léo e Darah alternando, aba do Fluxer, inscrições fecham 20h antes (entregas, operação e conhecimento) |
+| C12 | Cadeira de sócio | sócio gratuito só em Pico e Renovação; perpétuo e segundo sócio pagos; sócio não tem acesso ao Fluxer; cadastro em perfil > sócios; contrato ZapSign |
+| C13 | Estúdio Criativo | status "no ar", mas turma fechada de teste; `url` passou para guia-do-estudio.html; manual-estudio.html citado como uso interno |
+| C14 | Miro | novo quadro "Fluxo de Entrada Pico do Fluxo" (Ellen, 17/08) |
+| C15 | Arsenal Viral | acesso e suporte com a Ester (Érica ou Lívia na ausência); passo a passo de redefinição de senha |
+| C16 | Retiro Black | URL mantida; `obs` diz que o cronograma está no Academy desde 03/09 e que a página antiga (com "-2026") não deve ser compartilhada |
+| C17 | Cancelamento | vai direto ao relacionamento, inclusive na garantia de 7 dias; 12x não reparcela |
+| C18 | Ex-mentorado | processo definido: Lyandra/Érica checam pendências; detrator não se vende de novo (Clara, 08/09); sem pendência entra na oferta vigente |
+| C19 | Retiro Levantamento de Caixa | nome corrigido; execução da Ester, Ana com a plataforma; aberto a todos, sem grupo; pré-requisitos em página |
+
+## Divergência N26 (link parcelado de renovação)
+
+O lote 1 registra que desde 07/08/2026 os links parcelados personalizados são pedidos à Lyandra
+(antes era a Ester); o lote 3 registra, de 17 a 29/09/2026, o modelo da Ester postado no
+#fluxo-duvidas-financeiro com a Érica gerando o link depois da aprovação da Fernanda. A base traz as
+duas versões, com as datas e a frase "a confirmar com a Fernanda qual vale hoje", na pergunta "Como
+explicar o parcelamento da renovação e pedir um link personalizado". Quando a Fernanda responder, a
+resposta fica com uma versão só.
+
+## Regras seguidas
+
+- Nada de e-mail, telefone, CPF, senha, código de acesso, lista de mentorados ou link de convite de
+  grupo. Onde o documento dizia "não copiado", a resposta diz o canal, a data e quem tem.
+- Cases de sucesso citados por nome (Mauro Fantini, Lu Vianello, Daniele Rafael, Nolah Lima, Anna
+  Emília, Michelle Jota) entraram porque são os cases públicos usados pelo comercial; os perfis de
+  Instagram ficaram só nas mensagens do Slack.
+- Textos em português do Brasil, sem emoji e sem caixa alta; siglas mantidas (SPP, FLP, PIF).
