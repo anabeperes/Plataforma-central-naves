@@ -279,3 +279,24 @@ O resto seguiu a revisão:
   Slack.
 - Busca geral no Início procura também nas perguntas frequentes de `conhecimento.js`, com
   "Ver resposta".
+
+---
+
+# Bot no Slack (30/09/2026)
+
+Pedido da Ellen: o mesmo chat da central dentro do Slack, sem mexer na página, começando fechado
+(Ellen, Ana e Fernanda). Decisões:
+
+1. **Cérebro compartilhado.** O código do Gemini saiu de `api/chat.js` e foi para `api/_cerebro.js`;
+   `chat.js` e `slack.js` só chamam `responder()`. Mesma base, mesma instrução, mesmo modelo.
+2. **Lista de acesso em variável de ambiente** (`SLACK_USUARIOS`), não no código: liberar alguém não
+   exige commit, só redeploy. Quem está fora não recebe nem aviso, como a Ellen pediu.
+3. **Resposta em duas etapas.** O Slack exige confirmação em 3 segundos e o Gemini demora mais; a
+   função confirma na hora e termina o trabalho com `waitUntil` (`@vercel/functions`, única
+   dependência nova). Reenvios do Slack são ignorados pelo cabeçalho `x-slack-retry-num`.
+4. **Contexto vem do próprio Slack.** Em vez de guardar conversa em servidor, o bot lê as últimas
+   mensagens da DM (ou da thread, num canal) na hora de responder. Nada é armazenado.
+5. **Escopos mínimos** no manifesto: ler DMs e menções, escrever mensagem, reagir com 👀 e ler a
+   thread num canal. Sem acesso a mensagens de canais que não mencionem o bot.
+6. **Rotas internas viram links do site** na resposta (`#/links` vira link para a central), e o
+   markdown do assistente é convertido para o mrkdwn do Slack.

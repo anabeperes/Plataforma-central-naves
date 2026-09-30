@@ -5,12 +5,14 @@
   "description": "Central do Fluxo: página estática + função /api/chat que responde perguntas sobre a operação.",
   "scripts": {
     "servir": "python3 -m http.server 8765",
-    "testar-base": "node api/_testar-base.js"
+    "testar-base": "node api/_testar-base.js",
+    "testar-slack": "node api/_testar-slack.js"
   },
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
-    "@google/genai": "^2.24.0"
+    "@google/genai": "^2.24.0",
+    "@vercel/functions": "^3.9.9"
   }
 }
