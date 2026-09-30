@@ -1,12 +1,12 @@
 {
   "display_information": {
-    "name": "Central do Fluxo",
-    "description": "Responde perguntas sobre a operação do Fluxo com o que está na Central.",
+    "name": "Fellen",
+    "description": "Assistente da Central do Fluxo: responde perguntas sobre a operação com o que está na Central.",
     "background_color": "#14210a"
   },
   "features": {
     "bot_user": {
-      "display_name": "Central do Fluxo",
+      "display_name": "Fellen",
       "always_online": true
     },
     "app_home": {
