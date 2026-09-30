@@ -1,8 +1,6 @@
 /* Links importantes da operação do Fluxo. Agrupados pelo momento em que
    se usa: recorrente (dia a dia), evento, integração, canais do Slack,
-   ferramentas. Só entra aqui o que NÃO é projeto do time: o que o time
-   construiu mora na aba "Projetos e agentes" (dados/projetos.js e agentes.js).
-   Fonte: mensagens no Slack (ver DECISOES.md). */
+   ferramentas. Fonte: mensagens no Slack (ver DECISOES.md). */
 
 const GRUPOS_LINKS = ['Recorrentes', 'Eventos', 'Integração e treinamento', 'Canais do Slack', 'Ferramentas'];
 
@@ -18,7 +16,16 @@ const LINKS = [
   { id: 'feedback-mandala', grupo: 'Recorrentes', nome: 'Feedback da Mandala 360', url: 'https://vtsd.com.br/feedback-mandala360', descricao: 'Formulário de feedback específico da Mandala 360.', obs: '' },
   { id: 'monday-links', grupo: 'Recorrentes', nome: 'Monday: Central de Links da Mentoria', url: 'https://venda-todo-santo-dia.monday.com/boards/2061768785', descricao: 'Quadro com os links de materiais de todos os eventos (Materiais Eventos > evento > pastinha).', obs: '' },
   { id: 'monday-renovacao', grupo: 'Recorrentes', nome: 'Monday: contratos de renovação', url: 'https://venda-todo-santo-dia.monday.com/boards/18420875498', descricao: 'Status dos contratos de renovação enviados aos mentorados (lembrar de assinar quem está como ENVIADO).', obs: '' },
+  { id: 'prints', grupo: 'Recorrentes', nome: 'Página de resultados (prints)', url: 'https://prints-fluxo.vercel.app', descricao: 'Prints de resultado e depoimentos por categoria, para mandar ao mentorado ou lead.', obs: '' },
+  { id: 'depoimentos', grupo: 'Recorrentes', nome: 'Central de depoimentos', url: 'https://depoimentos-five.vercel.app/', descricao: 'Acervo de depoimentos integrado ao Fluxer.', obs: 'Perfil individual por pessoa.' },
+  { id: 'acervo', grupo: 'Recorrentes', nome: 'Acervo do Fluxo', url: 'https://acervo-do-fluxo.vercel.app/referencias', descricao: 'Referências de páginas, anúncios e quizzes por categoria e nicho.', obs: 'Login com e-mail vtsd.' },
+  { id: 'transcricoes', grupo: 'Recorrentes', nome: 'Transcrição de todos os produtos', url: 'https://transcricoes-academy.vercel.app/', descricao: 'Busca no texto inteiro das aulas; download para IA.', obs: 'Uso interno, não compartilhar com mentorado.' },
+  { id: 'fluxer-lab', grupo: 'Recorrentes', nome: 'Fluxer Lab', url: 'https://fluxerlab.com.br/login', descricao: 'Ferramentas do mentorado (Hub, auditor de tráfego, Fluxo Criativo).', obs: 'Tutorial: youtube.com/watch?v=EOnuQwUad0g' },
+  { id: 'plantao', grupo: 'Recorrentes', nome: 'Plantão do Fluxo 24h', url: 'https://severino-chat.vercel.app/', descricao: 'Chatbot de dúvidas do mentorado fora do horário.', obs: 'Código de acesso só para mentorados.' },
   { id: 'central-eventos', grupo: 'Recorrentes', nome: 'Central de Gestão de Eventos', url: 'https://central-do-retiro.vercel.app/', descricao: 'Planejamento, ao vivo e pós-evento num lugar só (versão beta, Retiro Levantamento de Caixa).', obs: 'Login individual enviado pela Ana.' },
+  { id: 'central-projetos', grupo: 'Recorrentes', nome: 'Central de Projetos (esta página, aba Projetos)', url: 'https://plataforma-central-naves.vercel.app/#/projetos', descricao: 'Tudo que o time construiu, com "Como funciona" das automações.', obs: '' },
+  { id: 'estudio-manual', grupo: 'Recorrentes', nome: 'Manual do Estúdio Criativo', url: 'https://flx.vendatodosantodia.com.br/manual-estudio.html', descricao: 'Guia do Estúdio Criativo no Fluxer (ferramentas, nós, Agente Severino, regras).', obs: 'Aula gravada: vtsd.com.br/estudio_criativo' },
+  { id: 'agentes-gpt', grupo: 'Recorrentes', nome: 'Agentes GPT do Fluxo', url: 'https://agentes-fluxo.lovable.app/', descricao: 'Página com os agentes GPT para compartilhar com mentorados.', obs: '' },
 
   /* ---------- Eventos ---------- */
   { id: 'materiais-flp', grupo: 'Eventos', nome: 'Materiais: Fórmula de Lançamento Pago (set/2026)', url: 'https://eventos.vtsd.com.br/evento/formula-de-lancamento-pago/', descricao: 'Página de materiais da imersão FLP (22 a 24/09): PDFs das palestras e skills das partes práticas.', obs: '' },
@@ -34,13 +41,15 @@ const LINKS = [
   { id: 'tally-feedback-modelo', grupo: 'Eventos', nome: 'Tally: modelo de feedback', url: 'https://tally.so/r/MeZy9E', descricao: 'Formulário de feedback do Retiro Black para duplicar em novos eventos.', obs: 'Modelo de inscrição de desafio: tally.so/r/VLX88J' },
 
   /* ---------- Integração e treinamento ---------- */
-  { id: 'integracao-zoom', grupo: 'Integração e treinamento', nome: 'Reunião de integração (Zoom)', url: 'https://us06web.zoom.us/j/82597295248', descricao: 'Link da reunião de integração dos mentorados novos, caso o mentorado não veja no Fluxer.', obs: 'Se não abrir, confirme com a Ester: em 06/2026 também circulou us06web.zoom.us/j/82593341298.' },
+  { id: 'integracao-zoom', grupo: 'Integração e treinamento', nome: 'Reunião de integração (Zoom)', url: 'https://us06web.zoom.us/j/82597295248', descricao: 'Link da reunião de integração dos mentorados novos, caso o mentorado não veja no Fluxer.', obs: '[preencher: confirmar se o link ainda é este; em 06/2026 também circulou us06web.zoom.us/j/82593341298]' },
   { id: 'miro-entrada', grupo: 'Integração e treinamento', nome: 'Mapa mental: fluxo de entrada dos mentorados', url: 'https://miro.com/welcomeonboard/aWoxT09KMWhwWERMQTZXNFYyaFBCUWlyVXhXdWs5VnhRTjl2UG9kTlR1a1hYWmVyWFA5UmZkRDlGRnVBa2E0WGtzWmpvTzhEcjV1VEloeFdSNThSZ2w1K0dIRU9TVzltNjFodzdDL2MySDBwaUlNUnJFZHZDcUdYZTIrUkZ2bjdUb3BVU1JmRldSVm83WnNaWmpWNGlnPT0hdjE=?share_link_id=634908049202', descricao: 'Mapa da Fernanda com o fluxo de entrada dos novos mentorados (SPP).', obs: '' },
   { id: 'pop-terminus', grupo: 'Integração e treinamento', nome: 'POP 314: traqueamento de links na Terminus', url: 'https://docs.google.com/document/d/1JWXcjfTrWv3xxZDa_jUHyrMpMFlm-pgVN1N3YjeoWjA/edit', descricao: 'Passo a passo com prints para criar links curtos e UTMs (vale até o ponto 6).', obs: 'Presets de UTM: DC 107 (planilha).' },
   { id: 'dc-utm', grupo: 'Integração e treinamento', nome: 'DC 107: UTMs para traqueamento', url: 'https://docs.google.com/spreadsheets/d/1uqZF_wYMxpE3qV80ybvvYDUKpcHxU4eeP-mMi9aLAAk/edit', descricao: 'Planilha com os presets de UTM.', obs: '' },
   { id: 'pop-active', grupo: 'Integração e treinamento', nome: 'POP 212: enviar e-mails na ActiveCampaign', url: 'https://docs.google.com/document/d/1KTquDGWmi2rVWGlvtYyX5SuY5UDhS_9YSKPGBHuAJls/edit', descricao: 'Resumo do fluxo: Campanhas, buscar "mf", duplicar, ajustar e agendar.', obs: '' },
   { id: 'tutoriais-internos', grupo: 'Integração e treinamento', nome: 'Pasta: tutoriais dos processos internos', url: 'https://drive.google.com/drive/folders/1dsIN-zs1TVMwzFhd4tVmTKquUAGMyT36', descricao: 'Vídeos da Érica: e-mail no Active, tags, Zoom, termo de imagem, limpar StreamYard, subir Zoom no YouTube.', obs: '' },
   { id: 'banner-email', grupo: 'Integração e treinamento', nome: 'Banner padrão dos e-mails da Mentoria', url: 'https://drive.google.com/file/d/1U0i6cXdvH7Rzb3UQWFOLyGDKpT5aGX7x/view', descricao: 'Imagem padrão para os e-mails da Mentoria Fluxo.', obs: '' },
+  { id: 'severino-passo', grupo: 'Integração e treinamento', nome: 'Passo a passo do Severino (para mentorados)', url: 'https://docs.google.com/document/d/1pDMv-7fEphfHA46yp5mCgOyi0iPIYVNkzbUNWdLu7l0/edit?usp=sharing', descricao: 'Doc da Aline Henriques com toda a comunicação de uso do Severino, para enviar aos mentorados.', obs: '' },
+  { id: 'severino-tutoriais', grupo: 'Integração e treinamento', nome: 'Severino: tutoriais de instalação (Drive)', url: 'https://drive.google.com/drive/folders/1WX4iNW8c8ZLfJjZ36JKQOZ_hWkqfjnMz', descricao: 'Vídeos de instalação Windows e Mac do Gabriel José.', obs: 'Tutorial web: iaseverino.lovable.app/tutorial' },
   { id: 'respostas-padrao', grupo: 'Integração e treinamento', nome: 'Respostas padrão dos navs (doc)', url: 'https://docs.google.com/document/d/15qy9449nfZ9sIkEOb-a7Zi9UPtVZ0H_HO7BxlRCEPGo/edit?tab=t.0', descricao: 'Respostas padrão usadas pelo time de navegação, inclusive sobre agentes GPT.', obs: 'Compartilhado com o suporte em 09/2025.' },
 
   /* ---------- Canais do Slack ---------- */
@@ -60,7 +69,7 @@ const LINKS = [
   { id: 'sl-recados', grupo: 'Canais do Slack', nome: '#rtg-recados-gerais', url: 'https://readytogohq.slack.com/archives/C03R2UYHAQN', descricao: 'Recados para toda a empresa.', obs: '' },
 
   /* ---------- Ferramentas ---------- */
-  { id: 'terminus', grupo: 'Ferramentas', nome: 'Terminus (links curtos)', url: 'https://app.terminusapp.com/', descricao: 'Cria os links vtsd.com.br/... e troca a URL de destino sem mudar o link divulgado.', obs: 'Login no 1Password; nossos links ficam no projeto do Fluxo.' },
+  { id: 'terminus', grupo: 'Ferramentas', nome: 'Terminus (links curtos)', url: 'https://app.terminusapp.com/', descricao: 'Cria os links vtsd.com.br/... e troca a URL de destino sem mudar o link divulgado.', obs: 'Login no 1Password; nossos links ficam no projeto do Fluxo. [preencher: confirmar URL de acesso]' },
   { id: 'active', grupo: 'Ferramentas', nome: 'ActiveCampaign (e-mails)', url: 'https://www.activecampaign.com/login', descricao: 'Disparo de e-mails e newsletter para os mentorados (duplicar um e-mail existente).', obs: 'Login no 1Password.' },
   { id: 'tally', grupo: 'Ferramentas', nome: 'Tally (formulários)', url: 'https://tally.so/', descricao: 'Formulários de feedback e inscrição; sempre duplicar um pronto.', obs: 'Código de login chega no e-mail do Fluxo.' },
   { id: 'zoom', grupo: 'Ferramentas', nome: 'Zoom (contas RTG)', url: 'https://us06web.zoom.us/', descricao: 'Contas do Zoom usadas nas entregas (Conta 3 para zooms diários; Conta 6 usada no Analisador Day).', obs: 'Gravação sempre na nuvem; backup e limpeza quase diários.' },

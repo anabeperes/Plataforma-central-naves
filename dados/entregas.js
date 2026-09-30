@@ -23,7 +23,7 @@ const ENTREGAS = [
     frequencia: 'Diária, seg a sex, 9h às 12h e 13h às 18h (horário das caixas)',
     responsavel: 'Navegadores; liderança: Fernanda Lizzardo e Ellen Cecilia',
     operacao: 'Atendimento pelo WhatsApp conectado ao Fluxer, com sugestões do NavMaster para revisar. Fora do horário, mensagem automática indica o Plantão do Fluxo 24h. O navegador cuida das ações da carteira no Fluxer (higiene: marcar resultado das ações, observações, temperatura), do link e da observação de cada análise, das renovações e da aprovação de sócios nos grupos. Contato ativo e renovação são acompanhados no Lázaro semanal.',
-    links: [{ rotulo: 'NavMaster (Projetos e agentes)', url: '#/projetos?q=navmaster' }, { rotulo: 'Plantão do Fluxo', url: 'https://severino-chat.vercel.app/' }]
+    links: [{ rotulo: 'NavMaster (aba Agentes)', url: '#/agentes' }, { rotulo: 'Plantão do Fluxo', url: 'https://severino-chat.vercel.app/' }]
   },
   {
     nome: 'Ajuste de velas (plano inicial)',
@@ -170,7 +170,7 @@ const ENTREGAS = [
     descricao: 'Retiro temático de Instagram para faturar mais no orgânico, sem precisar investir em tráfego: conteúdo, crescimento e vendas.',
     frequencia: 'Por ciclo',
     responsavel: 'Time de Eventos e Entregáveis',
-    operacao: 'Data e formato da próxima edição ainda não foram definidos pelo time de Eventos e Entregáveis.',
+    operacao: '[preencher: data e formato da próxima edição]',
     links: []
   },
   {
@@ -197,8 +197,8 @@ const ENTREGAS = [
     descricao: 'A IA própria do Fluxo: as ferramentas e agentes de IA do programa com toda a inteligência da mentoria para aplicar em minutos.',
     frequencia: 'Contínua',
     responsavel: 'Fernanda Lizzardo e time de no-code',
-    operacao: 'Ver a seção Agentes de IA em Projetos e agentes: Fluxer Lab, Severino, Estúdio Criativo, NavMaster e agentes.',
-    links: [{ rotulo: 'Agentes de IA', url: '#/projetos?categoria=Agentes+de+IA' }]
+    operacao: 'Ver a aba Agentes de IA: Fluxer Lab, Severino, Estúdio Criativo, NavMaster e agentes.',
+    links: [{ rotulo: 'Agentes de IA', url: '#/agentes' }]
   },
   {
     nome: 'Desafio Mandala Mão na Massa',
@@ -245,6 +245,6 @@ const ENTREGAS = [
     frequencia: 'Contínua, com atualizações comunicadas aos mentorados',
     responsavel: 'Fernanda Lizzardo, Gabriel José e Nono',
     operacao: 'Comunicações de release saem pelo time de Eventos e Entregáveis; suporte de instalação do Severino com tutoriais e call de Claude.',
-    links: [{ rotulo: 'Agentes de IA', url: '#/projetos?categoria=Agentes+de+IA' }]
+    links: [{ rotulo: 'Agentes de IA', url: '#/agentes' }]
   }
 ];

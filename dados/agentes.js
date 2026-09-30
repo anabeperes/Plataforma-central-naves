@@ -1,7 +1,5 @@
 /* Agentes de IA que o Fluxo tem hoje: o que fazem, onde ficam, para quem
-   são e como usar. Aparecem na aba "Projetos e agentes", seção "Agentes de IA".
-   Fonte: anúncios no Slack (ver DECISOES.md). Campos opcionais: `git`,
-   `links` ([{ rotulo, url }], botões extras no painel) e `detalhe.oQueFazerSeQuebrar`. */
+   são e como usar. Fonte: anúncios no Slack (ver DECISOES.md). */
 
 const AGENTES = [
   {
@@ -14,14 +12,12 @@ const AGENTES = [
     responsavel: 'Gabriel José (no-code)',
     autores: ['Gabriel José', 'AnaBe', 'Fernanda Lizzardo'],
     data: '2026-09',
-    git: 'https://github.com/anabeperes/Projeto-Nave-Master',
     detalhe: {
       oQueFaz: 'Lê a conversa do mentorado e escreve uma sugestão de resposta para o navegador revisar e enviar. Ele não responde sozinho e não substitui a avaliação do navegador em cada mensagem.',
       comoUsar: '1. Conecte seu WhatsApp ao Fluxer (Atendimento). 2. Em Atendimento, menu lateral, item "Tom de voz", revise a ficha gerada a partir das suas mensagens, preencha seus jargões e bordões e clique em Salvar ficha. 3. Na lista de conversas, passe o mouse na linha e clique em "Gerar sugestão" (no celular o botão fica sempre visível); dentro da conversa, o botão fica acima do campo de mensagem e vira "Gerar de novo". 4. Revise, ajuste e envie. Usou, marque como usada; não serviu, descarte e conte no #fluxo-ia o que estava ruim: é esse retorno que calibra a ferramenta.',
       ondeFica: 'Fluxer, área de Atendimento. Nasceu como MVP fora do Fluxer (Projeto Nave Master, n8n, da Ana e da Fernanda) e foi integrado pelo time de no-code.',
       atencao: 'Desde 21/09/2026 o modo automático (sugestão de hora em hora) está desligado: só gera quando você pede. A camada fixa proíbe travessão, promessa de resultado e "cara de IA" (emoji de IA, "não é X, é Y", "boa pergunta"); a ficha de tom ajusta o tom, nunca as regras. Sem ficha de tom de voz a sugestão sai ruim.',
-      ondeVerSeEstaFuncionando: 'O botão "Gerar sugestão" devolve uma sugestão nas conversas do Fluxer. Bugs e melhorias: canal #fluxo-ia marcando o Gabriel José.',
-      oQueFazerSeQuebrar: '1. Sem sugestão: confira se o tom de voz está cadastrado e gere de novo. 2. Conversa duplicada ou com o nome errado: relate no #fluxo-ia marcando o Gabriel José. 3. Nunca envie uma sugestão sem revisar. A documentação oficial do NavMaster ainda não existe: falta o Gabriel José escrever (o repositório do MVP, Projeto Nave Master, está no botão "Ver no Git").'
+      ondeVerSeEstaFuncionando: 'O botão "Gerar sugestão" devolve uma sugestão nas conversas do Fluxer. Bugs e melhorias: canal #fluxo-ia marcando o Gabriel José.'
     }
   },
   {
@@ -61,6 +57,24 @@ const AGENTES = [
     }
   },
   {
+    nome: 'Plantão do Fluxo 24h',
+    descricao: 'Chatbot que tira dúvidas do mentorado a qualquer hora, primeiro pelo FAQ e depois pela base de conhecimento do Fluxo.',
+    onde: 'Site próprio',
+    paraQuem: ['mentorados'],
+    status: 'no ar',
+    url: 'https://severino-chat.vercel.app/',
+    responsavel: 'Fernanda Lizzardo',
+    autores: ['Fernanda Lizzardo'],
+    data: '2026-06',
+    detalhe: {
+      oQueFaz: 'Responde dúvidas fora do horário de atendimento para o mentorado não depender do navegador na hora. Também entrega skills sob demanda (quem pede feedback de produto recebe a skill para rodar no Claude).',
+      comoUsar: 'O mentorado abre severino-chat.vercel.app, entra com o código de acesso e pergunta. Respostas novas caem no painel de aprovação (/admin.html) para alimentar o FAQ.',
+      ondeFica: 'Vercel (severino-chat.vercel.app), repositório fbrier-commits/severino-chat.',
+      atencao: 'Indicado na integração e na mensagem automática fora do horário. O código de acesso é compartilhado só com mentorados.',
+      ondeVerSeEstaFuncionando: 'Faça uma pergunta de teste. Se não responder, avise a Fernanda.'
+    }
+  },
+  {
     nome: 'Severino (Fluxo Criativo)',
     descricao: 'Aplicativo instalado no computador do mentorado com as skills, comandos e agentes do Fluxo para rodar no Claude.',
     onde: 'Computador do mentorado',
@@ -70,18 +84,12 @@ const AGENTES = [
     responsavel: 'Gabriel José',
     autores: ['Gabriel José', 'Ellen Cecilia', 'Vitor'],
     data: '2026-08',
-    git: 'https://github.com/ReadyToGo-Education/fluxo_criativo',
-    links: [
-      { rotulo: 'Tutoriais de instalação (Drive)', url: 'https://drive.google.com/drive/folders/1WX4iNW8c8ZLfJjZ36JKQOZ_hWkqfjnMz' },
-      { rotulo: 'Passo a passo para mentorados (doc)', url: 'https://docs.google.com/document/d/1pDMv-7fEphfHA46yp5mCgOyi0iPIYVNkzbUNWdLu7l0/edit?usp=sharing' }
-    ],
     detalhe: {
       oQueFaz: 'Coloca a inteligência da mentoria no Claude do mentorado: agentes por etapa (estrategista, comercial), skills de produto, copy, tráfego, carrossel e criativo, dashboards de concorrentes, LinkedIn e biblioteca de anúncios. Recebe atualizações frequentes, comunicadas aos mentorados e registradas na página de releases dentro do Fluxer.',
-      comoUsar: '1. O mentorado abre iaseverino.lovable.app/tutorial (login em iaseverino.lovable.app/auth), baixa o instalador do seu sistema e segue o vídeo (Tutorial Windows ou Tutorial Mac, na pasta "Tutorial de instalação" do Drive). 2. Mac com chip Apple usa o instalador arm64 em arquivos.vtsd.com.br/flx-criativo/FluxoCriativo-1.0.2-arm64.dmg e precisa do Node (nodejs.org). 3. Com o Severino instalado, usa os comandos dentro do Claude. Navegadores também instalam para acompanhar o mentorado. O doc da Aline Henriques tem toda a comunicação de uso para enviar aos mentorados.',
-      ondeFica: 'No computador do mentorado. Aplicativo Fluxo Criativo, repositório ReadyToGo-Education/fluxo_criativo; instaladores em arquivos.vtsd.com.br/flx-criativo; tutorial em iaseverino.lovable.app. Releases e atualizações também ficam na página de releases do Severino dentro do Fluxer.',
-      atencao: 'Algumas skills citadas na documentação (trilha High Ticket, /ht-*) ainda não existem no projeto: orientar o mentorado a pedir em linguagem natural pela skill vtsd-completo. Mac com chip Apple precisa do instalador arm64 e do Node. Os tutoriais em vídeo mostram os erros mais comuns de cada sistema (no de Mac, o Gabriel zerou a máquina para mostrar todos).',
-      ondeVerSeEstaFuncionando: 'Mentorado instalou, abriu o Severino e os comandos respondem. Dúvidas e bugs vão no #fluxo-ia.',
-      oQueFazerSeQuebrar: 'Mac: baixar a versão arm64 e clicar em "Colar mesmo assim"; instalar o Node (minuto 16 do tutorial). Persistindo, encaminhar para a call de Claude com o Gabriel José (quintas) ou postar no #fluxo-ia.'
+      comoUsar: 'Instalar pelo tutorial (Windows ou Mac) e usar os comandos dentro do Claude. Navegadores também instalam para acompanhar o mentorado. Dúvidas de instalação: tutoriais em vídeo e call de Claude com o Gabriel José.',
+      ondeFica: 'Repositório ReadyToGo-Education/fluxo_criativo; instaladores em arquivos.vtsd.com.br/flx-criativo; tutorial em iaseverino.lovable.app.',
+      atencao: 'Algumas skills citadas na documentação (trilha High Ticket, /ht-*) ainda não existem no projeto: orientar o mentorado a pedir em linguagem natural pela skill vtsd-completo. Mac com chip Apple precisa do instalador arm64 e do Node.',
+      ondeVerSeEstaFuncionando: 'Mentorado instalou e os comandos respondem. Problemas: #fluxo-ia.'
     }
   },
   {
@@ -134,8 +142,44 @@ const AGENTES = [
       oQueFaz: 'É como o pitch chama o conjunto de IA do Fluxo: "as ferramentas e agentes de IA do programa com toda a inteligência da mentoria pra aplicar em minutos". Na prática reúne o Fluxer Lab (Hub, auditor de tráfego), o Severino, o Estúdio Criativo e os agentes.',
       comoUsar: 'Quando o mentorado perguntar "o que é a IAF", apontar para o Fluxer Lab e para o Severino, e para as aulas de IA no Academy.',
       ondeFica: 'Fluxer Lab (fluxerlab.com.br) e Fluxer.',
-      atencao: 'O escopo oficial do que entra na IAF ainda está sendo confirmado com a Fernanda e a Ellen.',
+      atencao: '[preencher: confirmar com a Fernanda e a Ellen o escopo oficial do que entra na IAF]',
       ondeVerSeEstaFuncionando: 'Fluxer Lab abrindo.'
+    }
+  },
+  {
+    nome: 'Skill de diagnóstico comercial (ficha de qualificação)',
+    descricao: 'Skill do Claude que transforma a ficha preenchida pelo SDR no diagnóstico pronto para o closer, com gargalo, solução pelo método e projeção de ganho.',
+    onde: 'Claude (skill) e site da ficha',
+    paraQuem: ['comercial'],
+    status: 'no ar',
+    url: 'https://ficha-qualificacao.vercel.app/',
+    responsavel: 'AnaBe',
+    autores: ['AnaBe'],
+    data: '2026-09',
+    detalhe: {
+      oQueFaz: 'O SDR preenche a ficha e copia; o closer cola no Claude com a skill e recebe gargalo, o que fazer, como o Fluxo resolve (mandala de anúncios, página 8D e outros nomes do método) e projeção de ganho mensal, para quem tem e para quem não tem produto.',
+      comoUsar: '1. SDR preenche ficha-qualificacao.vercel.app na call e clica em copiar. 2. Envia ao closer. 3. Closer cola num chat do Claude com a skill (pasta do projeto no Drive) e usa o briefing na call.',
+      ondeFica: 'Site na Vercel (repositório anabeperes/ficha-qualificacao) e skill/agente em github.com/anabeperes/Agente-diagnostico-comercial; PRD na pasta do Drive do projeto.',
+      atencao: 'Aprovado pela Clara; alinhado com Gandara e Raphael (time de High). Douglas Matos tem acesso ao repositório desde 09/2026.',
+      ondeVerSeEstaFuncionando: 'Ficha gerando o texto ao copiar; skill respondendo no Claude.'
+    }
+  },
+  {
+    nome: 'Skills do time no Claude',
+    descricao: 'Skills avulsas criadas pelo time para uso interno: contexto do mentorado e relatório de análises, carrossel editorial, análise de produto, comunicação.',
+    onde: 'Claude (skills)',
+    paraQuem: ['navegadores', 'analisadores'],
+    status: 'em construção',
+    url: '',
+    responsavel: 'Cada autor',
+    autores: ['Felipe Faé Schwade', 'AnaBe', 'Fernanda Lizzardo'],
+    data: '2026-09',
+    detalhe: {
+      oQueFaz: 'Skills que rodam no Claude de cada pessoa: geradora de contexto do mentorado e relatório HTML das últimas análises (Felipe, comandos /pre-analise-etapa1 e seguintes), carrossel editorial (Ana), /analisar-produto (Fernanda, distribuída pelo Plantão), skill de criação de link da análise (Ana, origem da automação), skills das palestras dos eventos (páginas de materiais).',
+      comoUsar: 'Baixar o arquivo da skill, anexar no Claude e pedir para rodar. Cada autor mantém a sua.',
+      ondeFica: 'Repositórios e Drives de cada autor. [preencher: centralizar os links; ver LINKS-PENDENTES.md]',
+      atencao: 'Algumas exigem modelo específico (ex.: carrossel editorial só no Opus). O Claude da empresa fica sem tokens em alguns períodos do mês.',
+      ondeVerSeEstaFuncionando: 'A skill responde no Claude.'
     }
   }
 ];
