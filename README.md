@@ -121,8 +121,8 @@ Teste local sem chave: `npm run testar-base` mostra a base montada. Com a chave 
 
 ## Bot no Slack
 
-O mesmo assistente dentro do Slack: a pessoa abre a DM do app "Central do Fluxo" e pergunta como
-perguntaria a alguém do time; num canal, basta mencionar `@Central do Fluxo`. O bot lê os mesmos
+O mesmo assistente dentro do Slack, com o nome **Fellen**: a pessoa abre a DM do app e pergunta como
+perguntaria a alguém do time; num canal, basta mencionar `@Fellen`. O bot lê os mesmos
 `dados/*.js` e `conhecimento.js` da página, então é uma fonte só: atualizou lá, mudou nos dois.
 
 Como funciona: o Slack manda cada mensagem para `/api/slack`. A função confere a assinatura do
@@ -149,7 +149,7 @@ pensa, marca a pergunta com 👀. Quem não está na lista não recebe resposta 
 6. De volta ao app, em **Event Subscriptions**, confira se o Request URL
    `https://plataforma-central-naves.vercel.app/api/slack` aparece como **Verified**. Se não, clique
    em Retry (isso só funciona depois do deploy com as variáveis).
-7. No Slack, procure o app "Central do Fluxo" na barra lateral (em Apps), abra a DM e pergunte.
+7. No Slack, procure o app "Fellen" na barra lateral (em Apps), abra a DM e pergunte.
 
 Para liberar mais gente: acrescente o ID em `SLACK_USUARIOS` e faça redeploy. Para mudar o que o bot
 sabe: edite `dados/*.js`, como sempre.
