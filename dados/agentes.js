@@ -19,7 +19,7 @@ const AGENTES = [
       oQueFaz: 'Lê a conversa do mentorado e escreve uma sugestão de resposta para o navegador revisar e enviar. Ele não responde sozinho e não substitui a avaliação do navegador em cada mensagem.',
       comoUsar: '1. Conecte seu WhatsApp ao Fluxer (Atendimento). 2. Em Atendimento, menu lateral, item "Tom de voz", revise a ficha gerada a partir das suas mensagens, preencha seus jargões e bordões e clique em Salvar ficha. 3. Na lista de conversas, passe o mouse na linha e clique em "Gerar sugestão" (no celular o botão fica sempre visível); dentro da conversa, o botão fica acima do campo de mensagem e vira "Gerar de novo". 4. Revise, ajuste e envie. Usou, marque como usada; não serviu, descarte e conte no #fluxo-ia o que estava ruim: é esse retorno que calibra a ferramenta.',
       ondeFica: 'Fluxer, área de Atendimento. Nasceu como MVP fora do Fluxer (Projeto Nave Master, n8n, da Ana e da Fernanda) e foi integrado pelo time de no-code.',
-      atencao: 'Desde 21/09/2026 o modo automático (sugestão de hora em hora) está desligado: só gera quando você pede. A camada fixa proíbe travessão, promessa de resultado e "cara de IA" (emoji de IA, "não é X, é Y", "boa pergunta"); a ficha de tom ajusta o tom, nunca as regras. Sem ficha de tom de voz a sugestão sai ruim.',
+      atencao: 'Faz feedback de página na conversa individual (em grupo com sócio ainda não). Desde 22/09/2026 o feedback gerado pode ser editado antes de enviar e a versão editada fica salva (usada na geração de contexto). Sugestões em aberto no #fluxo-ia: ícone e filtro de plano atrasado, inadimplente e renovação, aba de renovação, mensagens rápidas próprias, notas e perfil em grupos com sócio, ditado por voz, exportar conversa. Desde 21/09/2026 o modo automático (sugestão de hora em hora) está desligado: só gera quando você pede. A camada fixa proíbe travessão, promessa de resultado e "cara de IA" (emoji de IA, "não é X, é Y", "boa pergunta"); a ficha de tom ajusta o tom, nunca as regras. Sem ficha de tom de voz a sugestão sai ruim.',
       ondeVerSeEstaFuncionando: 'O botão "Gerar sugestão" devolve uma sugestão nas conversas do Fluxer. Bugs e melhorias: canal #fluxo-ia marcando o Gabriel José.',
       oQueFazerSeQuebrar: '1. Sem sugestão: confira se o tom de voz está cadastrado e gere de novo. 2. Conversa duplicada ou com o nome errado: relate no #fluxo-ia marcando o Gabriel José. 3. Nunca envie uma sugestão sem revisar. A documentação oficial do NavMaster ainda não existe: falta o Gabriel José escrever (o repositório do MVP, Projeto Nave Master, está no botão "Ver no Git").'
     }
@@ -38,7 +38,7 @@ const AGENTES = [
       oQueFaz: 'Monta a observação do navegador para a próxima análise: perfil, status, o que vinha acontecendo, facilidades e dificuldades, orientações passadas e links. É um rascunho para revisar, não um substituto do que você escreve. Nasceu da skill geradora de contexto do Felipe Faé e foi internalizado no Fluxer pelo Gabriel José.',
       comoUsar: '1. Abra o plano de ação do mentorado, Quadro de Análise e Agendamento, aba "Observação do Navegador". 2. Clique em "Gerar contexto" (ao lado de Editar/Adicionar). 3. Escolha período (padrão: desde a última análise), status, perfil e tamanho; se já tiver algo escrito, dá para aproveitar o rascunho ou gerar do zero. 4. O texto cai no campo em modo de edição: revise, complete o que só você sabe e clique em Salvar.',
       ondeFica: 'Fluxer, plano de ação do mentorado, aba Observação do Navegador.',
-      atencao: 'Gerar não salva: se sair da tela sem clicar em Salvar, o texto se perde e o analisador não recebe nada. Quando o mentorado tem grupo de acompanhamento, o grupo e a conversa individual entram juntos; confira o que é realmente do mentorado (sócio e familiares também falam no grupo).',
+      atencao: 'Gerar não salva: se sair da tela sem clicar em Salvar, o texto se perde e o analisador não recebe nada. Desde 22/09/2026 existe uma caixa de seleção para incluir as conversas vinculadas ao mentorado (grupos e sócios); quando só o sócio conversa com você, vincule pela entrada do mentorado principal. Com o grupo incluído, confira o que é realmente do mentorado (sócio e familiares também falam no grupo).',
       ondeVerSeEstaFuncionando: 'O botão "Gerar contexto" aparece na aba e devolve texto. Problemas: #fluxo-ia.'
     }
   },
@@ -81,7 +81,7 @@ const AGENTES = [
       ondeFica: 'No computador do mentorado. Aplicativo Fluxo Criativo, repositório ReadyToGo-Education/fluxo_criativo; instaladores em arquivos.vtsd.com.br/flx-criativo; tutorial em iaseverino.lovable.app. Releases e atualizações também ficam na página de releases do Severino dentro do Fluxer.',
       atencao: 'Algumas skills citadas na documentação (trilha High Ticket, /ht-*) ainda não existem no projeto: orientar o mentorado a pedir em linguagem natural pela skill vtsd-completo. Mac com chip Apple precisa do instalador arm64 e do Node. Os tutoriais em vídeo mostram os erros mais comuns de cada sistema (no de Mac, o Gabriel zerou a máquina para mostrar todos).',
       ondeVerSeEstaFuncionando: 'Mentorado instalou, abriu o Severino e os comandos respondem. Dúvidas e bugs vão no #fluxo-ia.',
-      oQueFazerSeQuebrar: 'Mac: baixar a versão arm64 e clicar em "Colar mesmo assim"; instalar o Node (minuto 16 do tutorial). Persistindo, encaminhar para a call de Claude com o Gabriel José (quintas) ou postar no #fluxo-ia.'
+      oQueFazerSeQuebrar: '1. Mac com erro "Access Denied" ao baixar o Apple Silicon: usar o link direto do instalador arm64 (arquivos.vtsd.com.br/flx-criativo/FluxoCriativo-1.0.2-arm64.dmg; o tutorial Mac resolve no minuto 12:40) e clicar em "Colar mesmo assim"; instalar o Node (minuto 16 do tutorial). 2. Reinstalação que não abre: pedir ao mentorado para abrir o Terminal, colar "brew install git" e responder y. 3. Pasta fluxo-criativo sem skills ou comandos: numa conversa com a pasta selecionada, pedir para instalar o repositório github.com/ReadyToGo-Education/fluxo_criativo na pasta. 4. Persistindo, encaminhar para a call de Claude com o Gabriel José (quintas) ou postar no #fluxo-ia. As skills /ht-* (trilha High Ticket) ainda serão colocadas no Severino.'
     }
   },
   {
@@ -90,16 +90,17 @@ const AGENTES = [
     onde: 'Fluxer',
     paraQuem: ['mentorados', 'navegadores'],
     status: 'no ar',
-    url: 'https://flx.vendatodosantodia.com.br/manual-estudio.html',
+    url: 'https://flx.vendatodosantodia.com.br/guia-do-estudio.html',
     responsavel: 'Nono (no-code)',
     autores: ['Nono'],
-    data: '2026-08',
+    data: '2026-09',
+    links: [{ rotulo: 'Feedback da aula (Tally)', url: 'https://tally.so/r/0QWjEZ' }],
     detalhe: {
-      oQueFaz: 'Cria artes de anúncio sem designer, em vários formatos, a partir dos dados do projeto do mentorado no Fluxer. Liberado aos mentorados como overdelivery em agosto/2026, com aula ao vivo do Nono em 01/09.',
-      comoUsar: 'Dentro do Fluxer, área Estúdio Criativo. O manual (ferramentas, nós, Agente Severino, importação de dados e regras de uso) está em flx.vendatodosantodia.com.br/manual-estudio.html. Navegadores devem assistir à aula para responder as dúvidas dos mentorados.',
+      oQueFaz: 'Cria artes de anúncio sem designer, em vários formatos, a partir dos dados do projeto do mentorado no Fluxer. Está numa turma fechada de teste: teste com o time em 11/08/2026, depois 23 mentorados e, em 24/08, turma de até 100 (lista na mensagem da Ellen em #fluxo-infos-navegadores). Em 29/09/2026 a Ellen disse que não será liberado a todos os mentorados por enquanto (no dia da liberação o Fluxer caiu). Aula ao vivo do Nono em 01/09 (vtsd.com.br/estudio_criativo), gravada; gravação liberada para quem responder o feedback. Recurso "Camadas PRO" (editar título e texto sem gerar de novo) liberado em 19/08.',
+      comoUsar: 'Dentro do Fluxer, área Estúdio Criativo. O que se compartilha com o mentorado é o guia em flx.vendatodosantodia.com.br/guia-do-estudio.html (a comunicação coloca o link do guia de propósito, para ele ler antes de usar). O manual completo (ferramentas, nós, Agente Severino, importação de dados e regras de uso) em flx.vendatodosantodia.com.br/manual-estudio.html é de uso interno do time. Liberar acesso para um mentorado da turma: falar direto com o Nono. Navegadores devem assistir à aula para responder as dúvidas dos mentorados.',
       ondeFica: 'Fluxer.',
-      atencao: 'Regras de uso estão no manual. Feedbacks na conversa do anúncio em #fluxo-infos-navegadores (11/08/2026).',
-      ondeVerSeEstaFuncionando: 'Área abrindo no Fluxer e gerando artes.'
+      atencao: 'Não é para todos os mentorados ainda: só a turma de teste. Regras de uso estão no manual interno. Feedbacks na conversa do anúncio em #fluxo-infos-navegadores (11/08/2026).',
+      ondeVerSeEstaFuncionando: 'Área abrindo no Fluxer e gerando artes para a turma de teste.'
     }
   },
   {
@@ -116,8 +117,27 @@ const AGENTES = [
       oQueFaz: 'Agentes GPT criados pelo time para as etapas do método: gerador de ideias de produto, quadros, furadeiras, decorados, carrosséis, reels, agentes Light Copy, agentes dos retiros (UpSell, Caixa Rápido) e outros.',
       comoUsar: 'Abrir a página e escolher o agente; o mentorado precisa de conta no ChatGPT.',
       ondeFica: 'agentes-fluxo.lovable.app (Lovable) e links diretos em chatgpt.com/g/.',
-      atencao: 'Desde 20/08/2026 a OpenAI não permite criar nem duplicar GPTs personalizados em contas pessoais, só em workspace Business/Enterprise; usar continua liberado. Alternativa indicada pela Ellen: Gems do Gemini (09/09/2026). Não vendemos agentes GPT diretamente (política da OpenAI): só como bônus. Conferir se a página está atualizada.',
+      atencao: 'Em dezembro/2026 todos os GPTs dos produtos vão parar de funcionar pela nova regra do GPT (Ellen, 29/09/2026). Proposta em avaliação: produto "Agentes Fluxo" (ou "Levantamento de Caixa") na Hotmart, acessado pelo Academy, com os agentes subidos do zero a partir dos prompts das skills novas (não migrar); a migração precisa ser feita pela Hotmart com antecedência e a aula de uso dos agentes do VTSD precisa ser regravada (Lívia). Decisão fica para o próximo sprint. Desde 20/08/2026 a OpenAI não permite criar nem duplicar GPTs personalizados em contas pessoais, só em workspace Business/Enterprise. Mentorado que quer vender agente de IA ou automatizar (Ellen, 03/09/2026): indicar o Agente de IA da Hotmart (produto no Hotmart Club; desde 21/08 gera imagens, arquivos PDF, DOCX, XLSX, PPTX e TXT, executa código e faz busca na web, que vem desligada por padrão); para uso interno ou compartilhamento, Gems do Gemini. Não existe aula atualizada sobre criar agentes (no radar, sem data) nem aula de automação genérica: caminhos n8n (Automações Inteligentes), GitHub Actions e rotinas do Claude Code (Formação Claude). Não vendemos agentes GPT diretamente (política da OpenAI): só como bônus.',
       ondeVerSeEstaFuncionando: 'Links dos agentes abrindo no ChatGPT.'
+    },
+    links: [{ rotulo: 'Agentes de IA da Hotmart (ajuda)', url: 'https://help.hotmart.com/pt-br/article/39865088542349' }]
+  },
+  {
+    nome: 'Agentes do quiz (refeitos pela Ellen)',
+    descricao: 'Três agentes para a estratégia de quiz: gerador de perguntas, checkpoint do quiz e gerador de página final, que substituem os agentes do Gabriel Muniz.',
+    onde: 'Agente externo (conta da Ellen)',
+    paraQuem: ['mentorados', 'navegadores'],
+    status: 'no ar',
+    url: '',
+    responsavel: 'Ellen Cecilia',
+    autores: ['Ellen Cecilia'],
+    data: '2026-09',
+    detalhe: {
+      oQueFaz: 'Os agentes de quiz do Gabriel Muniz caíram em 24/08/2026 (ele cancelou a conta). A Ellen refez os três: gerador de perguntas do quiz, checkpoint do quiz e gerador de página final.',
+      comoUsar: 'Os navegadores indicam esses agentes aos mentorados no lugar dos antigos. O acesso e a senha estão na thread de 04/09/2026 em #fluxo-time-rtg (Ester); não ficam na central.',
+      ondeFica: 'Links e acesso na thread de 04/09/2026 em #fluxo-time-rtg.',
+      atencao: 'No diagnóstico o padrão continua sendo página de vendas; o quiz entra como teste depois, com a página já rodando.',
+      ondeVerSeEstaFuncionando: 'Agentes respondendo com o acesso da thread. Problema: avisar a Ellen ou a Ester.'
     }
   },
   {
