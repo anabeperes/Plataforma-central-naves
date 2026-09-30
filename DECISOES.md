@@ -235,3 +235,47 @@ coisa da operação e recebe a resposta, inclusive links.
     (instruções + base) vai sempre idêntico e a API reaproveita sozinha. Temperatura 0,2 para a
     resposta ficar presa à base. Limite do plano gratuito vira a mensagem "Limite do plano
     gratuito atingido" na tela, sem quebrar a página.
+
+---
+
+# Revisão de 30/09/2026 (documento "Central do Fluxo: o que foi aplicado e o que eu mudaria")
+
+Aplicado o que a revisão de 29/09/2026 pediu, com dois ajustes definidos pela Ana:
+
+1. **O assistente ficou no Início, em destaque**, logo abaixo da busca geral (a revisão o colocava
+   como apoio no fim da tela). Motivo: o chat é um dos maiores valores da central para pesquisar a
+   operação. Depois dele vêm os mais usados, as três portas e os últimos acessos.
+2. **Classificações mantidas exatamente como estavam** (categorias de projetos, grupos de links,
+   tipos de entrega, "para quem" e "onde" dos agentes). A revisão sugeria trocar as categorias por
+   "momento de uso", dividir Recorrentes e transformar grupos em abas; em vez disso, cada seção
+   virou colapsável: nasce fechada com título e contagem e abre ao clicar. Pelo mesmo motivo os
+   filtros continuam atrás do botão "Filtros", não à vista.
+
+O resto seguiu a revisão:
+
+- Card de projeto com tag colorida do tipo, contextos, descrição de uma linha (as longas foram
+  para `detalhe.oQueFaz`), "por autores · data" e botões que dizem o que fazem ("Abrir",
+  "Como funciona", "Guia", "PRD", "Git"). Ordem padrão dentro da seção: mais recentes primeiro,
+  com seletor "A a Z"; em construção e sem link vão para o fim da seção, com a frase do que falta.
+- Agentes viraram o tipo `agente` na seção "Agentes de IA" da aba Projetos e agentes. Menu com 4
+  itens: Início, Projetos e agentes, Links, Entregas. Rotas antigas redirecionam.
+- Duplicados resolvidos, um lugar por item: Plantão do Fluxo 24h, Skills do time e a ficha de
+  qualificação ficaram como projeto (cards de agente removidos); Agentes GPT, Severino e NavMaster
+  ficaram como agente (cards de projeto "Página com todos os agentes GPT", "Instaladores do Severino"
+  e "Documentação do NavMaster" removidos, com o conteúdo fundido no agente). Saíram de Links:
+  Página de resultados, Central de depoimentos, Acervo, Transcrição, Fluxer Lab, Plantão, Agentes
+  GPT, Manual do Estúdio Criativo, os dois links do Severino (foram para o agente) e o link desta
+  própria página. A entrega "Fluxer Lab, Severino e Estúdio Criativo" ficou, porque é o item do
+  pitch, não o projeto.
+- Links viraram cards dentro de cada grupo, com a observação como etiqueta em destaque e "Copiar"
+  como botão principal.
+- Textos técnicos trocados: rodapé do menu ("Faltou algum projeto ou link? Avise a AnaBe no
+  Slack"), rodapé do assistente ("O assistente só conhece o que está cadastrado aqui...") e o rodapé
+  de Links. Nenhum `[preencher]` aparece mais na tela (viraram frases para humanos, listadas em
+   LINKS-PENDENTES.md).
+- Mecanismo único: `autores` preenchido com Ellen Cecilia (responsável pela página; a confirmar).
+- Calculadora de Black (Vilas Boas): a Ana confirmou que é a calculadora dada no Zoom tira-dúvidas,
+  não o playbook. Card criado em Calculadoras com `status: 'link pendente'`; o link não apareceu no
+  Slack.
+- Busca geral no Início procura também nas perguntas frequentes de `conhecimento.js`, com
+  "Ver resposta".

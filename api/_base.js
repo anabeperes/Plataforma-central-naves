@@ -13,7 +13,7 @@ const NOMES = [
   'AGENTES',
   'LINKS', 'GRUPOS_LINKS',
   'ENTREGAS', 'TIPOS_ENTREGA',
-  'JORNADA', 'ROTINAS', 'ACESSO_RAPIDO',
+  'JORNADA', 'ROTINAS', 'MAIS_USADOS',
   'CONHECIMENTO'
 ];
 
@@ -58,7 +58,7 @@ const ROTULOS_PROJETO = [
 ];
 const ROTULOS_AGENTE = [
   ['oQueFaz', 'O que faz'], ['comoUsar', 'Como usar'], ['ondeFica', 'Onde fica'],
-  ['atencao', 'Atenção'], ['ondeVerSeEstaFuncionando', 'Onde ver se está funcionando']
+  ['atencao', 'Atenção'], ['ondeVerSeEstaFuncionando', 'Onde ver se está funcionando'], ['oQueFazerSeQuebrar', 'O que fazer se quebrar']
 ];
 
 export function montarBase(d = carregarDados()) {
@@ -90,6 +90,8 @@ export function montarBase(d = carregarDados()) {
     t += linha('Autores', a.autores);
     t += linha('Data', a.data);
     t += linha('Link', a.url);
+    t += linha('Repositório', a.git);
+    (a.links || []).forEach(l => { if (l.url) t += `  Link: ${l.rotulo}: ${l.url}\n`; });
     t += bloco(a.detalhe, ROTULOS_AGENTE);
   });
 
@@ -104,6 +106,7 @@ export function montarBase(d = carregarDados()) {
     t += linha('Contexto', p.contexto);
     t += linha('Autores', p.autores);
     t += linha('Data', p.data);
+    t += linha('O que falta', p.falta);
     t += bloco(p.detalhe, ROTULOS_PROJETO);
   });
 
@@ -149,4 +152,4 @@ Regras:
 5. Perguntas de diretoria (números, comparecimento, contratos, faturamento, NPS) geralmente não têm o dado bruto na base: diga onde o dado vive e quem tem acesso, em vez de estimar valores.
 6. Nunca peça nem repita senhas, códigos de acesso ou credenciais. Se perguntarem, diga que ficam no 1Password com a liderança.
 7. Se a pergunta não for sobre a operação do Fluxo, diga em uma frase que você só responde sobre a central e ofereça ajudar com isso.
-8. Quando fizer sentido, feche com uma linha "Onde ver na central: #/rota" (rotas: #/recentes últimos acessos, #/agentes, #/projetos, #/links, #/entregas).`;
+8. Quando fizer sentido, feche com uma linha "Onde ver na central: #/rota" (rotas: #/ início com busca geral e últimos acessos, #/projetos projetos e agentes de IA, #/links, #/entregas). Agentes de IA ficam na seção "Agentes de IA" da aba Projetos e agentes.`;
