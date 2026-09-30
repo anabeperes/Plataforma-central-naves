@@ -39,15 +39,19 @@ desktop, barra inferior no celular, fonte Manrope, cartões brancos e verde-lim�
 | `dados/entregas.js` | Entregas (`ENTREGAS`, `TIPOS_ENTREGA`) |
 | `dados/operacao.js` | Jornada do mentorado, rotinas do time e os mais usados do Início (`JORNADA`, `ROTINAS`, `MAIS_USADOS`) |
 | `dados/conhecimento.js` | Perguntas frequentes e combinados que só o assistente usa (`CONHECIMENTO`, `SUGESTOES_CHAT`) |
-| `api/chat.js` | Função da Vercel que recebe a pergunta e responde com o Gemini (streaming) |
+| `api/chat.js` | Função da Vercel que recebe a pergunta da página e responde em streaming |
+| `api/slack.js` | Função da Vercel que recebe as mensagens do Slack e responde na DM ou na thread |
+| `api/_cerebro.js` | O cérebro compartilhado: escolhe o modelo do Gemini, manda a base e devolve a resposta |
+| `slack-manifest.json` | Manifesto para criar o app do Slack em um clique (escopos, eventos, endereço) |
 | `api/_base.js` | Transforma `dados/*.js` no texto que o assistente lê (base de conhecimento) |
 | `LEVANTAMENTO-CLARA.md` | O que a diretoria pergunta sobre o Fluxo e o que falta reunir |
 | `DECISOES.md` | Decisões tomadas e a fonte no Slack de cada informação |
 | `LINKS-PENDENTES.md` | O que falta preencher e o que já foi buscado |
 | `prompts/central-do-fluxo-ideacao.md` | Prompt para pensar a próxima versão da central com o Claude |
 
-A página continua estática e sem login. A única parte com servidor é o assistente do Início: uma
-função em `api/chat.js` que a Vercel roda sob demanda. Deploy é servir a raiz na Vercel; ela
+A página continua estática e sem login. A única parte com servidor é o assistente: a função
+`api/chat.js` (página) e a `api/slack.js` (bot do Slack), que a Vercel roda sob demanda e que usam
+o mesmo cérebro (`api/_cerebro.js`) e os mesmos dados. Deploy é servir a raiz na Vercel; ela
 instala `@google/genai` sozinha a partir do `package.json`.
 **Os arquivos em `dados/` são a única fonte de verdade.** Nunca coloque senha, código de acesso ou
 credencial neles: isso fica no 1Password.
@@ -111,6 +115,47 @@ conversa. A conversa fica só no navegador de quem pergunta (sessionStorage) e s
 
 Teste local sem chave: `npm run testar-base` mostra a base montada. Com a chave exportada em
 `GEMINI_API_KEY`, use `npx vercel dev` para rodar página e função juntas.
+
+## Bot no Slack
+
+O mesmo assistente dentro do Slack: a pessoa abre a DM do app "Central do Fluxo" e pergunta como
+perguntaria a alguém do time; num canal, basta mencionar `@Central do Fluxo`. O bot lê os mesmos
+`dados/*.js` e `conhecimento.js` da página, então é uma fonte só: atualizou lá, mudou nos dois.
+
+Como funciona: o Slack manda cada mensagem para `/api/slack`. A função confere a assinatura do
+Slack, olha se quem perguntou está na lista de acesso, confirma o recebimento na hora (o Slack exige
+resposta em 3 segundos) e continua trabalhando: busca as últimas mensagens da conversa no próprio
+Slack (na DM, o histórico; num canal, a thread), manda para o cérebro e publica a resposta. Enquanto
+pensa, marca a pergunta com 👀. Quem não está na lista não recebe resposta nenhuma.
+
+### Criar o app (uma vez)
+
+1. Entre em api.slack.com/apps, clique em **Create New App** > **From a manifest**, escolha o
+   workspace da RTG e cole o conteúdo de `slack-manifest.json`. Confirme.
+2. Em **Basic Information**, copie o **Signing Secret**.
+3. Em **Install App**, clique em **Install to Workspace** e copie o **Bot User OAuth Token** (`xoxb-...`).
+4. Na Vercel (Settings > Environment Variables, Production e Preview), crie:
+
+| Variável | Para quê |
+| --- | --- |
+| `SLACK_BOT_TOKEN` | O token `xoxb-...` do passo 3 |
+| `SLACK_SIGNING_SECRET` | O Signing Secret do passo 2 |
+| `SLACK_USUARIOS` | IDs de quem pode usar, separados por vírgula (ex.: `U012ABC,U034DEF`). Para achar o ID: perfil da pessoa no Slack > três pontos > "Copy member ID". |
+
+5. Faça um redeploy na Vercel (Deployments > três pontos > Redeploy) para as variáveis valerem.
+6. De volta ao app, em **Event Subscriptions**, confira se o Request URL
+   `https://plataforma-central-naves.vercel.app/api/slack` aparece como **Verified**. Se não, clique
+   em Retry (isso só funciona depois do deploy com as variáveis).
+7. No Slack, procure o app "Central do Fluxo" na barra lateral (em Apps), abra a DM e pergunte.
+
+Para liberar mais gente: acrescente o ID em `SLACK_USUARIOS` e faça redeploy. Para mudar o que o bot
+sabe: edite `dados/*.js`, como sempre.
+
+Teste local sem Slack nem Gemini: `npm run testar-slack` confere assinatura, desafio de
+configuração, lista de acesso e conversão de texto.
+
+O bot usa a mesma chave `GEMINI_API_KEY` e o mesmo limite do plano gratuito do chat da página. Ele
+não responde a mensagens de outros bots, nem a edições, e ignora os reenvios do Slack.
 
 ## Como editar cada aba
 
