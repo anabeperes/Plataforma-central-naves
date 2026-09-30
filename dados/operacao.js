@@ -22,5 +22,14 @@ const ROTINAS = [
   { quando: 'Por evento', titulo: 'Checklist de comunicação', texto: 'Antes: anúncio, reforço, escala por turno, materiais de apoio. No dia: escala por sala, link dos materiais, alinhamentos. Canal certo: navs-info para consultar depois, time-rtg para o dia a dia, evento-flp para escala e alinhamentos.' }
 ];
 
-// IDs de LINKS que aparecem como acesso rápido na visão geral.
-const ACESSO_RAPIDO = ['fluxer', 'zoom-semanal', 'live-semanal', 'feedback', 'monday-links', 'sl-navs-info', 'sl-links', 'central-eventos', 'prints', 'transcricoes', 'plantao', 'acervo'];
+// Os 6 "mais usados pelo time" da tela inicial. Cada item aponta para um link
+// (`link`, pelo id em links.js), um projeto ou um agente (`projeto`/`agente`, pelo nome).
+// `rotulo` é o nome curto mostrado no botão (opcional).
+const MAIS_USADOS = [
+  { link: 'fluxer', rotulo: 'Fluxer' },
+  { link: 'zoom-semanal', rotulo: 'Zoom semanal' },
+  { projeto: 'Página de resultados do Fluxo', rotulo: 'Página de resultados' },
+  { projeto: 'Página de respostas rápidas (FLP)', rotulo: 'Respostas rápidas FLP' },
+  { projeto: 'Transcrição de todos os produtos', rotulo: 'Transcrição dos produtos' },
+  { link: 'materiais-flp', rotulo: 'Materiais do FLP' }
+];

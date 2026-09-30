@@ -7,6 +7,7 @@
 // Ordem das seções da página. Um projeto só aparece se a categoria
 // dele estiver nesta lista.
 const CATEGORIAS = [
+  'Agentes de IA',            // vem de dados/agentes.js (AGENTES), aparece na mesma página
   'Resultados e método do Fluxo',
   'Ferramentas do dia a dia',
   'Calculadoras',
@@ -18,7 +19,7 @@ const CATEGORIAS = [
 const CONTEXTOS = ['pico', 'fluxo', 'perpétuo', 'evento'];
 
 // Tipos aceitos no campo `tipo`.
-const TIPOS = ['página', 'lovable', 'skill', 'extensão', 'automação', 'documentação', 'calculadora', 'link'];
+const TIPOS = ['agente', 'página', 'lovable', 'skill', 'extensão', 'automação', 'documentação', 'calculadora', 'link'];
 
 const PROJETOS = [
 
@@ -26,7 +27,7 @@ const PROJETOS = [
 
   {
     nome: 'Página de resultados do Fluxo',
-    descricao: 'Prints de resultado e depoimentos da Mentoria Fluxo num lugar só, organizados por categoria, para mandar ao aluno no lugar do PDF.',
+    descricao: 'Prints de resultado e depoimentos por categoria, para mandar ao aluno.',
     url: 'https://prints-fluxo.vercel.app',
     tipo: 'página',
     categoria: 'Resultados e método do Fluxo',
@@ -48,12 +49,12 @@ const PROJETOS = [
 
   {
     nome: 'Mecanismo único do Fluxo',
-    descricao: 'Página que explica o método da Mentoria Fluxo: os 6 pilares, os níveis de faturamento, as 7 estratégias e o ciclo plano de ação, execução e análise, com o Severino e o Fluxer como apoio.',
+    descricao: 'Página que explica o método do Fluxo: pilares, níveis e estratégias.',
     url: 'https://mecanismo-fluxo.vercel.app/',
     tipo: 'página',
     categoria: 'Resultados e método do Fluxo',
     contexto: ['fluxo'],
-    autores: [],
+    autores: ['Ellen Cecilia'],
     data: '2026-09',
     prd: '',
     git: '',
@@ -70,7 +71,7 @@ const PROJETOS = [
 
   {
     nome: 'Transcrição de todos os produtos',
-    descricao: 'Transcrições de todas as aulas de todos os cursos, com busca no texto inteiro, materiais de apoio e download pronto para jogar numa IA.',
+    descricao: 'Transcrição de todas as aulas, com busca no texto e download para IA.',
     url: 'https://transcricoes-academy.vercel.app/',
     tipo: 'página',
     categoria: 'Resultados e método do Fluxo',
@@ -92,7 +93,7 @@ const PROJETOS = [
 
   {
     nome: 'Central de depoimentos',
-    descricao: 'Acervo de depoimentos e provas sociais dos mentorados, integrado ao Fluxer, com perfil individual para cada pessoa do time.',
+    descricao: 'Acervo de depoimentos dos mentorados, integrado ao Fluxer.',
     url: 'https://depoimentos-five.vercel.app/',
     tipo: 'página',
     categoria: 'Resultados e método do Fluxo',
@@ -114,7 +115,7 @@ const PROJETOS = [
 
   {
     nome: 'Links das páginas de materiais dos eventos',
-    descricao: 'Quadro "Central de Links da Mentoria" no Monday: em Materiais Eventos, cada evento tem a pasta com a página de materiais.',
+    descricao: 'Quadro do Monday com a página de materiais de cada evento.',
     url: 'https://venda-todo-santo-dia.monday.com/boards/2061768785',
     tipo: 'link',
     categoria: 'Resultados e método do Fluxo',
@@ -138,7 +139,7 @@ const PROJETOS = [
 
   {
     nome: 'Página de respostas rápidas (FLP)',
-    descricao: 'Respostas prontas para colar no chat do Zoom durante o FLP, separadas por dia e por palestra, com os conceitos que o Leandro usa.',
+    descricao: 'Respostas prontas para colar no chat do Zoom durante o FLP.',
     url: 'https://respostas-rapidas-flp.vercel.app',
     tipo: 'página',
     categoria: 'Ferramentas do dia a dia',
@@ -160,7 +161,7 @@ const PROJETOS = [
 
   {
     nome: 'Extensão de respostas rápidas (FLP)',
-    descricao: 'Extensão do Chrome que abre a página de respostas rápidas no painel lateral, na mesma tela do chat do Zoom.',
+    descricao: 'Abre as respostas rápidas ao lado do chat do Zoom, no Chrome.',
     url: 'https://plataforma-central-naves.vercel.app/arquivos/extensao-respostas-rapidas.zip',
     guia: 'https://plataforma-central-naves.vercel.app/arquivos/guia-extensao-respostas-rapidas-flp.pdf',
     tipo: 'extensão',
@@ -183,7 +184,7 @@ const PROJETOS = [
 
   {
     nome: 'Acervo do Fluxo',
-    descricao: 'Banco de referências de páginas de vendas, captura, quizzes, anúncios e outros materiais, organizado por categoria e nicho.',
+    descricao: 'Referências de páginas, anúncios e quizzes por categoria e nicho.',
     url: 'https://acervo-do-fluxo.vercel.app/referencias',
     tipo: 'página',
     categoria: 'Ferramentas do dia a dia',
@@ -204,22 +205,8 @@ const PROJETOS = [
   },
 
   {
-    nome: 'Página com todos os agentes GPT do Fluxo',
-    descricao: 'Site que reúne os agentes GPT do Fluxo para o time compartilhar com os mentorados.',
-    url: 'https://agentes-fluxo.lovable.app/',
-    tipo: 'lovable',
-    categoria: 'Ferramentas do dia a dia',
-    contexto: ['fluxo'],
-    autores: ['Sabrina Oliveira'],
-    data: '2025-07',
-    prd: '',
-    git: '',
-    status: 'no ar'
-  },
-
-  {
     nome: 'Fluxer Lab',
-    descricao: 'Plataforma de ferramentas para o mentorado (Fluxer Hub, auditor de tráfego, Fluxo Criativo) e laboratório onde os MVPs nascem antes de entrar no Fluxer.',
+    descricao: 'Ferramentas do mentorado (Hub, auditor de tráfego) e laboratório de MVPs.',
     url: 'https://fluxerlab.com.br/login',
     tipo: 'página',
     categoria: 'Ferramentas do dia a dia',
@@ -241,7 +228,7 @@ const PROJETOS = [
 
   {
     nome: 'Plantão do Fluxo 24h',
-    descricao: 'Chatbot que tira dúvidas do mentorado a qualquer hora com base no FAQ e na base de conhecimento do Fluxo (antigo Severino Chat).',
+    descricao: 'Chatbot que tira dúvidas do mentorado a qualquer hora, pelo FAQ do Fluxo.',
     url: 'https://severino-chat.vercel.app/',
     tipo: 'página',
     categoria: 'Ferramentas do dia a dia',
@@ -265,7 +252,7 @@ const PROJETOS = [
 
   {
     nome: 'Calculadora de lançamento pago',
-    descricao: 'Simula investimento, custos, conversão, CPA, ROAS, exposição de caixa, upsell e lucro de um lançamento pago.',
+    descricao: 'Simula investimento, CPA, ROAS e lucro de um lançamento pago.',
     url: 'https://flancamentopago.lovable.app',
     tipo: 'calculadora',
     categoria: 'Calculadoras',
@@ -285,11 +272,26 @@ const PROJETOS = [
     }
   },
 
+  {
+    nome: 'Calculadora de Black (Vilas Boas)',
+    descricao: 'Calculadora da Black Friday que o Gabriel Vilas Boas apresentou no Zoom tira-dúvidas.',
+    url: '',
+    tipo: 'calculadora',
+    categoria: 'Calculadoras',
+    contexto: ['fluxo'],
+    autores: ['Gabriel Vilas Boas'],
+    data: '2026-09',
+    prd: '',
+    git: '',
+    status: 'link pendente',
+    falta: 'Falta o link da calculadora (não é o Playbook Black Friday).'
+  },
+
   /* ================= Skills e instaladores ================= */
 
   {
     nome: 'Skills do time',
-    descricao: 'Skills avulsas criadas pelo time para rodar no Claude: geradora de contexto e relatório de análises, carrossel editorial, análise de produto, ideias de produto e outras.',
+    descricao: 'Skills avulsas do time para rodar no Claude: contexto, carrossel, análise de produto.',
     url: '',
     tipo: 'skill',
     categoria: 'Skills e instaladores',
@@ -298,28 +300,15 @@ const PROJETOS = [
     data: '2026-09',
     prd: '',
     git: '',
-    status: 'em construção'
-  },
-
-  {
-    nome: 'Instaladores do Severino',
-    descricao: 'Tutorial e instaladores do Severino (Fluxo Criativo) para Windows e Mac, com vídeo passo a passo de cada sistema.',
-    url: 'https://iaseverino.lovable.app/tutorial',
-    tipo: 'lovable',
-    categoria: 'Skills e instaladores',
-    contexto: ['fluxo'],
-    autores: ['Gabriel José'],
-    data: '2026-08',
-    prd: '',
-    git: 'https://github.com/ReadyToGo-Education/fluxo_criativo',
-    status: 'no ar',
+    status: 'em construção',
+    falta: 'Falta listar as skills e subir os arquivos.',
     detalhe: {
-      oQueFaz: 'Ensina o mentorado a instalar o Severino no computador dele. Os tutoriais em vídeo mostram os erros mais comuns de cada sistema e como resolver (no de Mac, o Gabriel zerou a máquina para mostrar todos os erros possíveis).',
-      comoFunciona: 'O mentorado abre iaseverino.lovable.app/tutorial (login em iaseverino.lovable.app/auth), baixa o instalador do seu sistema e segue o vídeo: Tutorial Windows e Tutorial Mac estão no Drive (pasta "Tutorial de instalação"). Mac com chip Apple usa o instalador arm64 em arquivos.vtsd.com.br/flx-criativo/FluxoCriativo-1.0.2-arm64.dmg e precisa do Node (nodejs.org).',
-      ondeRoda: 'No computador do mentorado. O aplicativo é o Fluxo Criativo, repositório ReadyToGo-Education/fluxo_criativo. Releases e atualizações também ficam na página de releases do Severino dentro do Fluxer.',
-      responsavel: 'Gabriel José.',
-      ondeVerSeEstaFuncionando: 'Mentorado instalou e abriu o Severino. Dúvidas e bugs vão no #fluxo-ia.',
-      oQueFazerSeQuebrar: 'Mac: baixar a versão arm64 e clicar em "Colar mesmo assim"; instalar o Node (minuto 16 do tutorial). Persistindo, encaminhar para a call de Claude com o Gabriel José (quintas) ou postar no #fluxo-ia.'
+      oQueFaz: 'Skills que rodam no Claude de cada pessoa: geradora de contexto do mentorado e relatório HTML das últimas análises (Felipe, comandos /pre-analise-etapa1 e seguintes), carrossel editorial (Ana), /analisar-produto (Fernanda, distribuída pelo Plantão), skill de criação de link da análise (Ana, origem da automação), skills das palestras dos eventos (páginas de materiais).',
+      comoFunciona: 'Baixar o arquivo da skill, anexar no Claude e pedir para rodar. Cada autor mantém a sua. Algumas exigem modelo específico (ex.: carrossel editorial só no Opus). O Claude da empresa fica sem tokens em alguns períodos do mês.',
+      ondeRoda: 'No Claude de cada pessoa. Os arquivos ficam nos repositórios e Drives de cada autor; os links ainda vão ser centralizados aqui.',
+      responsavel: 'Cada autor.',
+      ondeVerSeEstaFuncionando: 'A skill responde no Claude.',
+      oQueFazerSeQuebrar: 'Falar com o autor da skill no #fluxo-ia.'
     }
   },
 
@@ -327,7 +316,7 @@ const PROJETOS = [
 
   {
     nome: 'Automação de links das análises',
-    descricao: 'Cria sozinha o link da StreamYard e do YouTube de cada análise agendada no Fluxer e avisa no Slack o que deu certo e o que falhou.',
+    descricao: 'Cria os links da StreamYard e do YouTube de cada análise e avisa no Slack.',
     url: 'https://readytogohq.slack.com/archives/C0B6CUW2FPB',
     tipo: 'automação',
     categoria: 'Automações e documentações',
@@ -349,7 +338,7 @@ const PROJETOS = [
 
   {
     nome: 'Automação de exclusão de grupos',
-    descricao: 'Remove dos grupos do WhatsApp e priva as análises de quem ficou inativo no Fluxer; o mesmo robô aprova a entrada de mentorados nos grupos.',
+    descricao: 'Remove inativos dos grupos do WhatsApp e aprova a entrada de mentorados.',
     url: 'https://github.com/fbrier-commits/remover-acesso-mentorado',
     tipo: 'automação',
     categoria: 'Automações e documentações',
@@ -371,7 +360,7 @@ const PROJETOS = [
 
   {
     nome: 'Documentação do projeto da ficha de qualificação',
-    descricao: 'Ficha que o SDR preenche na call e skill do Claude que devolve ao closer o diagnóstico pronto do lead.',
+    descricao: 'Ficha que o SDR preenche e skill que devolve ao closer o diagnóstico do lead.',
     url: 'https://ficha-qualificacao.vercel.app/',
     tipo: 'documentação',
     categoria: 'Automações e documentações',
@@ -392,30 +381,8 @@ const PROJETOS = [
   },
 
   {
-    nome: 'Documentação do NavMaster',
-    descricao: 'Assistente dentro do Fluxer que sugere respostas para as conversas de WhatsApp dos navegadores, no tom de voz de cada um.',
-    url: '',
-    tipo: 'documentação',
-    categoria: 'Automações e documentações',
-    contexto: ['fluxo'],
-    autores: ['Gabriel José', 'AnaBe', 'Fernanda Lizzardo'],
-    data: '2026-09',
-    prd: '',
-    git: 'https://github.com/anabeperes/Projeto-Nave-Master',
-    status: 'em construção',
-    detalhe: {
-      oQueFaz: 'O NavMaster (Nave Master) lê as conversas de WhatsApp dos mentorados dentro do Fluxer e sugere uma resposta para o navegador revisar e enviar. Ele não responde sozinho: a decisão e a revisão de cada mensagem são do navegador.',
-      comoFunciona: '1. O WhatsApp de cada navegador fica conectado ao Fluxer. 2. Cada navegador cadastra e calibra o próprio tom de voz no NavMaster (sem isso a sugestão fica ruim). 3. Desde 21/09/2026 o modo automático, que gerava sugestão de hora em hora, está desligado. Na lista de conversas, passe o mouse na linha e clique em "Gerar sugestão" (no celular o botão fica sempre visível); dentro da conversa o botão fica acima do campo de mensagem e vira "Gerar de novo". 4. O navegador revisa, ajusta e envia.',
-      ondeRoda: 'Dentro do Fluxer, mantido pelo time de no-code (Gabriel José e Vitor). Nasceu como MVP fora do Fluxer, o Projeto Nave Master (n8n), da Ana e da Fernanda.',
-      responsavel: 'Gabriel José.',
-      ondeVerSeEstaFuncionando: 'O botão "Gerar sugestão" aparece nas conversas do Fluxer e devolve uma sugestão. Bugs e melhorias são tratados no canal #fluxo-ia.',
-      oQueFazerSeQuebrar: '1. Sem sugestão: confira se o tom de voz está cadastrado e gere de novo. 2. Conversa duplicada ou com o nome errado: relate no #fluxo-ia marcando o Gabriel José. 3. Nunca envie uma sugestão sem revisar. A documentação oficial ainda não existe: pedir ao Gabriel José.'
-    }
-  },
-
-  {
     nome: 'Documentação dos projetos de IA dentro do Fluxer',
-    descricao: 'Como funcionam os recursos de IA que o time de no-code colocou dentro do Fluxer: NavMaster, Estúdio Criativo, releases do Severino, calls coletivas.',
+    descricao: 'Como funcionam os recursos de IA do Fluxer: NavMaster, Estúdio Criativo, releases.',
     url: '',
     tipo: 'documentação',
     categoria: 'Automações e documentações',
@@ -425,12 +392,13 @@ const PROJETOS = [
     prd: '',
     git: '',
     status: 'em construção',
+    falta: 'Falta o Gabriel José enviar o conteúdo.',
     detalhe: {
       oQueFaz: 'Ponto único para o time consultar o funcionamento dos projetos de IA implementados no Fluxer, em vez de perguntar a quem desenvolveu. Hoje se sabe que existem: NavMaster (sugestão de respostas), Estúdio Criativo (criação de anúncios estáticos, do Nono), página de releases do Severino e o cadastro de calls coletivas.',
-      comoFunciona: '[preencher] A documentação ainda não foi escrita. A Ellen sugeriu pedir ao próprio Gabriel José.',
+      comoFunciona: 'Em construção. Falta o Gabriel José enviar o conteúdo.',
       ondeRoda: 'Dentro do Fluxer (time de no-code).',
       responsavel: 'Gabriel José.',
-      ondeVerSeEstaFuncionando: '[preencher]',
+      ondeVerSeEstaFuncionando: 'Em construção. Enquanto isso, cada recurso está explicado no card do agente (NavMaster, Estúdio Criativo).',
       oQueFazerSeQuebrar: 'Relatar no canal #fluxo-ia marcando o Gabriel José.'
     }
   }
